@@ -1,0 +1,87 @@
+﻿<Window x:Class="Main.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow"
+        Height="800"
+        Width="900"
+        DataContext="{Binding}"
+        WindowStartupLocation="CenterScreen"
+        xmlns:Xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        Closing="WindowClosing"
+        HorizontalContentAlignment="Right">
+
+    <Grid x:Name="m_LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Xcad:DockingManager Grid.Row="0"
+                             x:Name="m_DockManager"
+                             AllowMixedOrientation="True">
+            <Xcad:DockingManager.Theme>
+                <Xcad:AeroTheme />
+            </Xcad:DockingManager.Theme>
+
+            <Xcad:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconSource}"
+                               Margin="0,0,4,0" />
+                        <TextBlock Text="{Binding Title}"
+                                   TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </DataTemplate>
+            </Xcad:DockingManager.DocumentHeaderTemplate>
+
+            <Xcad:LayoutRoot>
+                <Xcad:LayoutPanel Orientation="Vertical">
+                    <Xcad:LayoutAnchorablePaneGroup DockWidth="*">
+                        <Xcad:LayoutAnchorablePane>
+                            <Xcad:LayoutAnchorable ContentId="dockWindow1"
+                                                   Title="Dock Panel 1">
+                            </Xcad:LayoutAnchorable>
+                        </Xcad:LayoutAnchorablePane>
+                        <Xcad:LayoutAnchorablePane>
+                            <Xcad:LayoutAnchorable ContentId="dockWindow2"
+                                                   Title="Dock Panel 2">
+                            </Xcad:LayoutAnchorable>
+                        </Xcad:LayoutAnchorablePane>
+                    </Xcad:LayoutAnchorablePaneGroup>
+
+                    <Xcad:LayoutAnchorablePaneGroup DockWidth="*">
+                        <Xcad:LayoutAnchorablePane>
+                            <Xcad:LayoutAnchorable ContentId="dockWindow1"
+                                                   Title="Dock Panel 3">
+                            </Xcad:LayoutAnchorable>
+                        </Xcad:LayoutAnchorablePane>
+                        <Xcad:LayoutAnchorablePane>
+                            <Xcad:LayoutAnchorable ContentId="dockWindow2"
+                                                   Title="Dock Panel 4">
+                            </Xcad:LayoutAnchorable>
+                        </Xcad:LayoutAnchorablePane>
+                    </Xcad:LayoutAnchorablePaneGroup>
+
+
+                    <Xcad:LayoutAnchorablePaneGroup DockWidth="*">
+                        <Xcad:LayoutAnchorablePane>
+                            <Xcad:LayoutAnchorable ContentId="dockWindow1"
+                                                   Title="Dock Panel 5">
+                            </Xcad:LayoutAnchorable>
+                        </Xcad:LayoutAnchorablePane>
+                        <Xcad:LayoutAnchorablePane>
+                            <Xcad:LayoutAnchorable ContentId="dockWindow2"
+                                                   Title="Dock Panel 6">
+                            </Xcad:LayoutAnchorable>
+                        </Xcad:LayoutAnchorablePane>
+                    </Xcad:LayoutAnchorablePaneGroup>
+
+
+
+                </Xcad:LayoutPanel>
+
+            </Xcad:LayoutRoot>
+        </Xcad:DockingManager>
+
+    </Grid>
+
+</Window>

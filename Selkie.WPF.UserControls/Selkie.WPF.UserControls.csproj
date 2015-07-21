@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DC8926EB-15BE-4B1C-8F7A-6A6EA180CB65}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Selkie.WPF.UserControls</RootNamespace>
+    <AssemblyName>Selkie.WPF.UserControls</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DisplayEndNode.xaml.cs">
+      <DependentUpon>DisplayEndNode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayLineDetails.xaml.cs">
+      <DependentUpon>DisplayLineDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayLineDirection.xaml.cs">
+      <DependentUpon>DisplayLineDirection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayLines.xaml.cs">
+      <DependentUpon>DisplayLines.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayNodes.xaml.cs">
+      <DependentUpon>DisplayNodes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayPath.xaml.cs">
+      <DependentUpon>DisplayPath.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayPathDirection.xaml.cs">
+      <DependentUpon>DisplayPathDirection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayPheromones.xaml.cs">
+      <DependentUpon>DisplayPheromones.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayRacetrack.xaml.cs">
+      <DependentUpon>DisplayRacetrack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayRacetracks.xaml.cs">
+      <DependentUpon>DisplayRacetracks.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplaySettings.xaml.cs">
+      <DependentUpon>DisplaySettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayShortestPath.xaml.cs">
+      <DependentUpon>DisplayShortestPath.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DisplayStartNode.xaml.cs">
+      <DependentUpon>DisplayStartNode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="DisplayEndNode.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayLineDetails.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayLineDirection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayLines.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayNodes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayPath.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayPathDirection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayPheromones.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayRacetrack.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayRacetracks.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplaySettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayShortestPath.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayStartNode.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Selkie.WPF.Common.Interfaces\Selkie.WPF.Common.Interfaces.csproj">
+      <Project>{a9dae5c9-8c6d-4028-ac4c-0a48763ec527}</Project>
+      <Name>Selkie.WPF.Common.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Selkie.WPF.Common\Selkie.WPF.Common.csproj">
+      <Project>{0840ec66-1b85-4ae7-8881-e6277cb0ef6f}</Project>
+      <Name>Selkie.WPF.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

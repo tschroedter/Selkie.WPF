@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8268B7DA-E3F9-4383-B9AB-BA426DB83161}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Selkie.Framework.Common</RootNamespace>
+    <AssemblyName>Selkie.Framework.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Facilities.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.LoggingFacility.3.3.0\lib\net45\Castle.Facilities.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Services.Logging.NLogIntegration, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core-NLog.3.3.3\lib\net45\Castle.Services.Logging.NLogIntegration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=7.1.0.0, Culture=neutral, PublicKeyToken=db26512813023263, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.Redist.7.1\lib\net40\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=3.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NSubstitute, Version=1.8.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Common, Version=0.6.166.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Common.0.6.166.0\lib\net45\Selkie.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Geometry, Version=0.6.86.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Geometry.0.6.86.0\lib\net45\Selkie.Geometry.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Windsor, Version=0.6.220.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Windsor.0.6.220.0\lib\net45\Selkie.Windsor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Messages\ColonyBestTrailMessage.cs" />
+    <Compile Include="Messages\ColonyCostMatrixChangedMessage.cs" />
+    <Compile Include="Messages\ColonyFinishedMessage.cs" />
+    <Compile Include="Messages\ColonyLinesChangedMessage.cs" />
+    <Compile Include="Messages\ColonyLinesRequestMessage.cs" />
+    <Compile Include="Messages\ColonyPheromonesMessage.cs" />
+    <Compile Include="Messages\ColonyPheromonesRequestMessage.cs" />
+    <Compile Include="Messages\ColonyRacetracksChangedMessage.cs" />
+    <Compile Include="Messages\ColonyRacetrackSettingsChangedMessage.cs" />
+    <Compile Include="Messages\ColonyRacetrackSettingsRequestMessage.cs" />
+    <Compile Include="Messages\ColonyRacetrackSettingsSetMessage.cs" />
+    <Compile Include="Messages\ColonyRacetracksRequestMessage.cs" />
+    <Compile Include="Messages\ColonyStartedMessage.cs" />
+    <Compile Include="Messages\ColonyStartRequestMessage.cs" />
+    <Compile Include="Messages\ColonyStoppedMessage.cs" />
+    <Compile Include="Messages\ColonyStopRequestMessage.cs" />
+    <Compile Include="Messages\ColonyTestLinesChangedMessage.cs" />
+    <Compile Include="Messages\ColonyTestLineSetMessage.cs" />
+    <Compile Include="Messages\ColonyTestLinesRequestMessage.cs" />
+    <Compile Include="Messages\ColonyTestLinesResponseMessage.cs" />
+    <Compile Include="NUnit\PathTests.cs" />
+    <Compile Include="Path.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Selkie.Framework.Interfaces\Selkie.Framework.Interfaces.csproj">
+      <Project>{3617609c-cb6a-4bf7-881f-d428b6eef2d4}</Project>
+      <Name>Selkie.Framework.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
