@@ -17,6 +17,8 @@
 * [Selkie Services Monitor](https://github.com/tschroedter/Selkie.Services.Monitor)
 * [Selkie Services Racetracks](https://github.com/tschroedter/Selkie.Services.Racetracks)
 * [Selkie Services Racetracks Common](https://github.com/tschroedter/Selkie.Services.Racetracks.Common)
+* [Selkie.Scripts (Bamboo)](https://github.com/tschroedter/Selkie.Scripts)
+* [Selkie.Tools (Bamboo)](https://github.com/tschroedter/Selkie.Tools)
 * Selkie Web
 * [Selkie Windsor](https://github.com/tschroedter/Selkie.Windsor)
 * [Selkie WPF](https://github.com/tschroedter/Selkie.WPF)
