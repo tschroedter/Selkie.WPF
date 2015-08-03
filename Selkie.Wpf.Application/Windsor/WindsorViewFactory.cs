@@ -2,7 +2,7 @@
 using Castle.Windsor;
 using Selkie.WPF.Common.Interfaces.Windsor;
 
-namespace Selkie.Wpf.Application.Windsor
+namespace Selkie.WPF.Application.Windsor
 {
     [ExcludeFromCodeCoverage]
     public class WindsorViewFactory : IViewFactory

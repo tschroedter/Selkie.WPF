@@ -6,7 +6,7 @@ using EasyNetQ;
 using JetBrains.Annotations;
 using Selkie.EasyNetQ.Extensions;
 using Selkie.Framework.Common.Messages;
-using Selkie.Framework.Converter;
+using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
 using Selkie.Framework.Messages;
 using Selkie.Geometry.Shapes;

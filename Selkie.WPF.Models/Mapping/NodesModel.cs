@@ -87,35 +87,4 @@ namespace Selkie.WPF.Models.Mapping
             return models;
         }
     }
-
-    // todo important write lines validator
-    /*
-             internal bool AreLineIdsValidate([NotNull] IEnumerable<ILine> lines)
-        {
-            ILine[] array = lines.ToArray();
-
-            if (array.All(x => x.Id != 0))
-            {
-                m_Logger.Error("Couldn't find line with id = 0!");
-
-                return false;
-            }
-
-            int minId = array.Min().Id;
-            int maxId = array.Max().Id;
-
-            for (int i = minId; i <= maxId; i++)
-            {
-                if (array.All(x => x.Id != i))
-                {
-                    m_Logger.Error("Duplicated line id {0} detected!".Inject(i));
-
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-     */
 }

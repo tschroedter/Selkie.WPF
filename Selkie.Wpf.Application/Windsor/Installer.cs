@@ -11,7 +11,7 @@ using Castle.Windsor.Installer;
 using JetBrains.Annotations;
 using Selkie.WPF.Common.Interfaces.Windsor;
 
-namespace Selkie.Wpf.Application.Windsor
+namespace Selkie.WPF.Application.Windsor
 {
     [ExcludeFromCodeCoverage]
     public class Installer : IWindsorInstaller
@@ -25,8 +25,13 @@ namespace Selkie.Wpf.Application.Windsor
 
             DisplayAssemblies(allAssemblies);
 
-            Assembly selkieWindsor = GetSelkieWindsor(allAssemblies); // need to install first, other depend on it
+            Assembly selkieWindsor = GetSelkieAssembly("Selkie.Windsor.dll",
+                                                       allAssemblies); // need to install first, other depend on it
+            Assembly easyNetQ = GetSelkieAssembly("Selkie.EasyNetQ.dll",
+                                                  allAssemblies); // need to install second, other depend on it
+
             container.Install(FromAssembly.Instance(selkieWindsor));
+            container.Install(FromAssembly.Instance(easyNetQ));
 
             foreach ( Assembly assembly in allAssemblies )
             {
@@ -53,24 +58,29 @@ namespace Selkie.Wpf.Application.Windsor
         }
 
         [NotNull]
-        private Assembly GetSelkieWindsor([NotNull] IEnumerable <Assembly> all)
+        private Assembly GetSelkieAssembly([NotNull] string assemblyName,
+                                           [NotNull] IEnumerable <Assembly> all)
         {
-            Assembly assembly = all.First(IsSelkieWindsorAssembly);
+            Assembly assembly = all.First(x => IsSelkieAssembly(assemblyName,
+                                                                x));
 
             return assembly;
         }
 
-        private bool IsSelkieWindsorAssembly([NotNull] Assembly assembly)
+        private bool IsSelkieAssembly([NotNull] string assemblyName,
+                                      [NotNull] Assembly assembly)
         {
             string name = assembly.ManifestModule.Name;
 
-            return IsSelkieWindsorAssemblyName(name);
+            return IsSelkieAssemblyName(assemblyName,
+                                        name);
         }
 
-        private bool IsSelkieWindsorAssemblyName(string name)
+        private bool IsSelkieAssemblyName([NotNull] string assemblyName,
+                                          string name)
         {
             return string.Compare(name,
-                                  "Selkie.Windsor.dll",
+                                  assemblyName,
                                   StringComparison.CurrentCultureIgnoreCase) == 0;
         }
 
@@ -108,10 +118,16 @@ namespace Selkie.Wpf.Application.Windsor
         private bool IsIgnoredAssemblyName(string name)
         {
             return name.IndexOf("Console",
-                                StringComparison.InvariantCultureIgnoreCase) >= 0 || name.IndexOf("SpecFlow",
-                                                                                                  StringComparison
-                                                                                                      .InvariantCultureIgnoreCase) >=
-                   0 || IsSelkieWindsorAssemblyName(name);
+                                StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                   name.IndexOf("SpecFlow",
+                                StringComparison
+                                    .InvariantCultureIgnoreCase) >= 0 ||
+                   name.IndexOf("Selkie.Windsor",
+                                StringComparison
+                                    .InvariantCultureIgnoreCase) >= 0 ||
+                   name.IndexOf("Selkie.EasyNetQ",
+                                StringComparison
+                                    .InvariantCultureIgnoreCase) >= 0;
         }
 
         [NotNull]

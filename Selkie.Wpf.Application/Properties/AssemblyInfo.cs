@@ -9,9 +9,9 @@ using System.Windows;
 [assembly : AssemblyTitle("Selkie.Wpf.Application")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("Microsoft")]
+[assembly : AssemblyCompany("Thomas Schroedter")]
 [assembly : AssemblyProduct("Selkie.Wpf.Application")]
-[assembly : AssemblyCopyright("Copyright © Microsoft 2015")]
+[assembly : AssemblyCopyright("Copyright © Thomas Schroedter 2015")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 

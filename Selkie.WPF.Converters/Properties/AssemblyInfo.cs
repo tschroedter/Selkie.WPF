@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -8,9 +9,9 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyTitle("Selkie.WPF.Converters")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("Microsoft")]
+[assembly : AssemblyCompany("Thomas Schroedter")]
 [assembly : AssemblyProduct("Selkie.WPF.Converters")]
-[assembly : AssemblyCopyright("Copyright © Microsoft 2015")]
+[assembly : AssemblyCopyright("Copyright © Thomas Schroedter 2015")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 
@@ -37,3 +38,4 @@ using System.Runtime.InteropServices;
 
 [assembly : AssemblyVersion("1.0.0.0")]
 [assembly : AssemblyFileVersion("1.0.0.0")]
+[assembly : InternalsVisibleTo("Selkie.WPF.Converters.Tests")]

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyTitle("Selkie.WPF.Views")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("Microsoft")]
+[assembly : AssemblyCompany("Thomas Schroedter")]
 [assembly : AssemblyProduct("Selkie.WPF.Views")]
-[assembly : AssemblyCopyright("Copyright © Microsoft 2015")]
+[assembly : AssemblyCopyright("Copyright © Thomas Schroedter 2015")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 

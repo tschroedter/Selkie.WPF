@@ -49,7 +49,6 @@ namespace Selkie.WPF.Converters
                 m_Converter.Path = racetrack;
                 m_Converter.Convert();
                 m_Converter.FiguresCollection.Freeze();
-                // todo check "The calling thread cannot access this object because a different thread owns it."
 
                 list.Add(m_Converter.FiguresCollection);
             }

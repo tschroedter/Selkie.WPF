@@ -24,7 +24,7 @@ namespace Selkie.Framework
         {
             m_Lines = lines.ToArray();
 
-            converter.Lines = m_Lines; // todo doing to much in the converter?
+            converter.Lines = m_Lines;
             converter.Convert();
 
             m_CostPerLine = converter.CostPerLine;

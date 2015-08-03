@@ -1,15 +1,11 @@
 using Selkie.Framework.Interfaces;
+using Selkie.Windsor;
 
 namespace Selkie.Framework
 {
+    [ProjectComponent(Lifestyle.Transient)]
     public class RacetrackSettingsSource : IRacetrackSettingsSource
     {
-        internal static readonly double DefaultRadius = 30.0;
-
-        public static readonly RacetrackSettingsSource Default = new RacetrackSettingsSource(DefaultRadius,
-                                                                                             true,
-                                                                                             true);
-
         private readonly bool m_IsPortTurnAllowed;
         private readonly bool m_IsStarboardTurnAllowed;
         private readonly double m_TurnRadius;

@@ -4,7 +4,6 @@ using Selkie.WPF.Common.Interfaces.Converters;
 
 namespace Selkie.WPF.Common.Converters
 {
-    // todo: Use real calculates racetracks
     public class CostForLineSwitchCalculator : ICostForLineSwitchCalculator
     {
         public CostForLineSwitchCalculator(ILine from,
@@ -39,26 +38,22 @@ namespace Selkie.WPF.Common.Converters
         {
             double cost = double.MaxValue;
 
-            if ( fromDirection == Constants.LineDirection.Forward
-                 &&
+            if ( fromDirection == Constants.LineDirection.Forward &&
                  toDirection == Constants.LineDirection.Forward )
             {
                 cost = from.EndPoint.DistanceTo(to.StartPoint);
             }
-            else if ( fromDirection == Constants.LineDirection.Forward
-                      &&
+            else if ( fromDirection == Constants.LineDirection.Forward &&
                       toDirection == Constants.LineDirection.Reverse )
             {
                 cost = from.EndPoint.DistanceTo(to.EndPoint);
             }
-            else if ( fromDirection == Constants.LineDirection.Reverse
-                      &&
+            else if ( fromDirection == Constants.LineDirection.Reverse &&
                       toDirection == Constants.LineDirection.Forward )
             {
                 cost = from.StartPoint.DistanceTo(to.StartPoint);
             }
-            else if ( fromDirection == Constants.LineDirection.Reverse
-                      &&
+            else if ( fromDirection == Constants.LineDirection.Reverse &&
                       toDirection == Constants.LineDirection.Reverse )
             {
                 cost = from.StartPoint.DistanceTo(to.EndPoint);

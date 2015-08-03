@@ -9,7 +9,7 @@ using Selkie.Framework.Interfaces;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Common.Interfaces.Windsor;
 
-namespace Selkie.Wpf.Application
+namespace Selkie.WPF.Application
 {
     [ExcludeFromCodeCoverage]
     public partial class App

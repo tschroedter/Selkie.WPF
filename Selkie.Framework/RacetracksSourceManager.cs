@@ -5,14 +5,13 @@ using EasyNetQ;
 using JetBrains.Annotations;
 using Selkie.EasyNetQ.Extensions;
 using Selkie.Framework.Common.Messages;
-using Selkie.Framework.Converter;
+using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
 using Selkie.Services.Racetracks.Common.Messages;
 using Selkie.Windsor;
 
 namespace Selkie.Framework
 {
-    // todo subscribe to message, testing
     [ProjectComponent(Lifestyle.Singleton)]
     public class RacetracksSourceManager : IRacetracksSourceManager
     {

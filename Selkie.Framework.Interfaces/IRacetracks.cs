@@ -15,5 +15,7 @@ namespace Selkie.Framework.Interfaces
 
         [NotNull]
         IPath[][] ReverseToReverse { get; }
+
+        bool IsUnknown { get; }
     }
 }

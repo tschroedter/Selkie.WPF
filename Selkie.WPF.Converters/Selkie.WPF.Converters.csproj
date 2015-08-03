@@ -62,34 +62,22 @@
       <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute, Version=1.8.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RabbitMQ.Client, Version=3.5.3.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <HintPath>..\packages\RabbitMQ.Client.3.5.3\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Common, Version=0.6.166.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Common.0.6.166.0\lib\net45\Selkie.Common.dll</HintPath>
+    <Reference Include="Selkie.Common, Version=0.6.167.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Common.0.6.167.0\lib\net45\Selkie.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.EasyNetQ, Version=0.6.147.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.EasyNetQ.0.6.147.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
+    <Reference Include="Selkie.EasyNetQ, Version=0.6.153.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.EasyNetQ.0.6.153.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Geometry, Version=0.6.86.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Geometry.0.6.86.0\lib\net45\Selkie.Geometry.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Selkie.NUnit.Extensions, Version=0.6.107.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.NUnit.Extensions.0.6.107.0\lib\net45\Selkie.NUnit.Extensions.dll</HintPath>
+    <Reference Include="Selkie.Geometry, Version=0.6.87.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Geometry.0.6.87.0\lib\net45\Selkie.Geometry.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Selkie.Windsor, Version=0.6.220.0, Culture=neutral, processorArchitecture=MSIL">
@@ -119,23 +107,6 @@
     <Compile Include="NodeIndexToLineConverter.cs" />
     <Compile Include="NodesToDisplayNodesConverter.cs" />
     <Compile Include="NodeModelToDisplayNodeConverter.cs" />
-    <Compile Include="NUnit\BitmapSourceConverterTests.cs" />
-    <Compile Include="NUnit\DoubleToIntegerConverterTests.cs" />
-    <Compile Include="NUnit\GrayscaleConverterTests.cs" />
-    <Compile Include="NUnit\LineNodesToDisplayNodesConverterTests.cs" />
-    <Compile Include="NUnit\LineToLineNodeConverterTests.cs" />
-    <Compile Include="NUnit\LineToLineNodeConverterToDisplayLineConverter.cs" />
-    <Compile Include="NUnit\NodeIndexHelperTests.cs" />
-    <Compile Include="NUnit\NodeIndexToLineConverterTests.cs" />
-    <Compile Include="NUnit\NodesToDisplayNodesConverterTests.cs" />
-    <Compile Include="NUnit\NodeToDisplayNodeConverterTests.cs" />
-    <Compile Include="NUnit\PathSegmentHelperTests.cs" />
-    <Compile Include="NUnit\PathToLineToLineNodeConverterTests.cs" />
-    <Compile Include="NUnit\PathToRacetracksConverterTests.cs" />
-    <Compile Include="NUnit\RacetrackPathsToFiguresConverterTests.cs" />
-    <Compile Include="NUnit\RacetrackPathToFiguresConverterTests.cs" />
-    <Compile Include="NUnit\RacetrackPathTurnToFiguresConverterTests.cs" />
-    <Compile Include="NUnit\RacetrackPathUTurnToFiguresConverterTests.cs" />
     <Compile Include="PathSegmentHelper.cs" />
     <Compile Include="PathToLineToLineNodeConverter.cs" />
     <Compile Include="PathToRacetrackConverter.cs" />

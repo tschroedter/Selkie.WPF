@@ -54,7 +54,7 @@ namespace Selkie.WPF.Views
             }
         }
 
-        public object GetContent() // todo this is a not required for MainView
+        public object GetContent()
         {
             return Content;
         }

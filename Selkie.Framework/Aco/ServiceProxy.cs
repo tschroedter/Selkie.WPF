@@ -14,6 +14,7 @@ namespace Selkie.Framework.Aco
     [ProjectComponent(Lifestyle.Transient)]
     public class ServiceProxy : IServiceProxy
     {
+        internal const int DefaultNumberOfIterations = 2000;
         private readonly IAcoProxyLogger m_AcoProxylogger;
         private readonly IBus m_Bus;
         private readonly ICostMatrixSourceManager m_CostMatrixSourceManager;
@@ -70,7 +71,7 @@ namespace Selkie.Framework.Aco
             var createMessage = new CreateColonyMessage
                                 {
                                     CostMatrix = m_CostMatrixSourceManager.Matrix,
-                                    CostPerLine = m_LinesSourceManager.CostPerLine.ToArray() // todo .ToArray() not nice
+                                    CostPerLine = m_LinesSourceManager.CostPerLine.ToArray()
                                 };
 
             m_Bus.PublishAsync(createMessage);
@@ -87,7 +88,7 @@ namespace Selkie.Framework.Aco
 
             m_Bus.PublishAsync(new StartMessage
                                {
-                                   Times = 2000 // todo configure this value
+                                   Times = DefaultNumberOfIterations
                                });
 
             return true;

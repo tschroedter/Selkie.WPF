@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Common.Interface
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Models", "Selkie.WPF.Models\Selkie.WPF.Models.csproj", "{389D345D-C0A2-4AB4-BF4E-DDCB0DEB73DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.Wpf.Application", "Selkie.Wpf.Application\Selkie.Wpf.Application.csproj", "{55FAA657-5816-44B5-BFED-5E6BAB08884A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Application", "Selkie.WPF.Application\Selkie.WPF.Application.csproj", "{55FAA657-5816-44B5-BFED-5E6BAB08884A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Models.Interfaces", "Selkie.WPF.Models.Interfaces\Selkie.WPF.Models.Interfaces.csproj", "{7C62B53B-F78D-4652-89DC-AE450400402A}"
 EndProject
@@ -34,6 +34,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.Framework.Common", "Selkie.Framework.Common\Selkie.Framework.Common.csproj", "{8268B7DA-E3F9-4383-B9AB-BA426DB83161}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Models.Common", "Selkie.WPF.Models.Common\Selkie.WPF.Models.Common.csproj", "{3A354897-DD9B-416C-A4CC-C8A53A8EF808}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.Framework.Tests", "Selkie.Framework.Tests\Selkie.Framework.Tests.csproj", "{151747A0-3230-43C6-97C0-DC2FE0045614}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Common.Tests", "Selkie.WPF.Common.Tests\Selkie.WPF.Common.Tests.csproj", "{C808B795-77EE-4BAF-8BE8-64488AB9812C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.Framework.Common.Tests", "Selkie.Framework.Common.Tests\Selkie.Framework.Common.Tests.csproj", "{2AFA9565-F792-4D6F-A31C-D58EB5D348DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Converters.Tests", "Selkie.WPF.Converters.Tests\Selkie.WPF.Converters.Tests.csproj", "{3CBC93D4-8C21-40F7-AC11-32D0C1EE26A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Models.Tests", "Selkie.WPF.Models.Tests\Selkie.WPF.Models.Tests.csproj", "{642DAB82-8841-47BC-AC42-BA1404E4BE18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.ViewModels.Tests", "Selkie.WPF.ViewModels.Tests\Selkie.WPF.ViewModels.Tests.csproj", "{B86162FB-44F9-4ADF-B416-7A0863BDDD54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +117,30 @@ Global
 		{3A354897-DD9B-416C-A4CC-C8A53A8EF808}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A354897-DD9B-416C-A4CC-C8A53A8EF808}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A354897-DD9B-416C-A4CC-C8A53A8EF808}.Release|Any CPU.Build.0 = Release|Any CPU
+		{151747A0-3230-43C6-97C0-DC2FE0045614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{151747A0-3230-43C6-97C0-DC2FE0045614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{151747A0-3230-43C6-97C0-DC2FE0045614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{151747A0-3230-43C6-97C0-DC2FE0045614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C808B795-77EE-4BAF-8BE8-64488AB9812C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C808B795-77EE-4BAF-8BE8-64488AB9812C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C808B795-77EE-4BAF-8BE8-64488AB9812C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C808B795-77EE-4BAF-8BE8-64488AB9812C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AFA9565-F792-4D6F-A31C-D58EB5D348DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AFA9565-F792-4D6F-A31C-D58EB5D348DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AFA9565-F792-4D6F-A31C-D58EB5D348DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AFA9565-F792-4D6F-A31C-D58EB5D348DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CBC93D4-8C21-40F7-AC11-32D0C1EE26A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CBC93D4-8C21-40F7-AC11-32D0C1EE26A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CBC93D4-8C21-40F7-AC11-32D0C1EE26A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CBC93D4-8C21-40F7-AC11-32D0C1EE26A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{642DAB82-8841-47BC-AC42-BA1404E4BE18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{642DAB82-8841-47BC-AC42-BA1404E4BE18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{642DAB82-8841-47BC-AC42-BA1404E4BE18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{642DAB82-8841-47BC-AC42-BA1404E4BE18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B86162FB-44F9-4ADF-B416-7A0863BDDD54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86162FB-44F9-4ADF-B416-7A0863BDDD54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86162FB-44F9-4ADF-B416-7A0863BDDD54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86162FB-44F9-4ADF-B416-7A0863BDDD54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Castle.Core;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Interfaces.Converters;
 using Selkie.Windsor;
 
@@ -21,6 +23,13 @@ namespace Selkie.Framework
                                       .BasedOn <IConverter>()
                                       .WithServiceFromInterface(typeof ( IConverter ))
                                       .Configure(c => c.LifeStyle.Is(LifestyleType.Transient)));
+
+            var consumers = container.Resolve <IRegisterMessageConsumers>();
+
+            consumers.Register(container,
+                               Assembly.GetAssembly(typeof ( Installer )));
+
+            container.Release(consumers);
         }
     }
 }

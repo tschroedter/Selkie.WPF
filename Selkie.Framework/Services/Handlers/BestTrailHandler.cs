@@ -1,6 +1,6 @@
-using Castle.Core.Logging;
 using EasyNetQ;
 using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Services.Aco.Common.Messages;
 using Selkie.Windsor;
@@ -8,27 +8,27 @@ using Selkie.Windsor;
 namespace Selkie.Framework.Services.Handlers
 {
     [ProjectComponent(Lifestyle.Startable)]
-    public class BestTrailHandler : BaseHandler <BestTrailMessage>
+    public class BestTrailHandler : SelkieMessageConsumer <BestTrailMessage>
     {
-        public BestTrailHandler([NotNull] ILogger logger,
-                                [NotNull] IBus bus)
-            : base(logger,
-                   bus)
+        private readonly IBus m_Bus;
+
+        public BestTrailHandler([NotNull] IBus bus)
         {
+            m_Bus = bus;
         }
 
-        internal override void Handle(BestTrailMessage message)
+        public override void Handle(BestTrailMessage message)
         {
-            Bus.PublishAsync(new ColonyBestTrailMessage
-                             {
-                                 Alpha = message.Alpha,
-                                 Beta = message.Beta,
-                                 Gamma = message.Gamma,
-                                 Iteration = message.Iteration,
-                                 Trail = message.Trail,
-                                 Type = message.Type,
-                                 Length = message.Length
-                             });
+            m_Bus.PublishAsync(new ColonyBestTrailMessage
+                               {
+                                   Alpha = message.Alpha,
+                                   Beta = message.Beta,
+                                   Gamma = message.Gamma,
+                                   Iteration = message.Iteration,
+                                   Trail = message.Trail,
+                                   Type = message.Type,
+                                   Length = message.Length
+                               });
         }
     }
 }

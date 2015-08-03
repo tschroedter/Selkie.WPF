@@ -9,7 +9,7 @@ using Castle.MicroKernel.ComponentActivator;
 using Castle.MicroKernel.Context;
 using Selkie.WPF.Common.Interfaces.Windsor;
 
-namespace Selkie.Wpf.Application.Windsor
+namespace Selkie.WPF.Application.Windsor
 {
     [ExcludeFromCodeCoverage]
     public class WpfWindowActivator : DefaultComponentActivator

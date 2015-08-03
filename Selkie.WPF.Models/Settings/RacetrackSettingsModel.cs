@@ -17,7 +17,7 @@ namespace Selkie.WPF.Models.Settings
 
         public RacetrackSettingsModel([NotNull] ILogger logger,
                                       [NotNull] IBus bus,
-                                      [NotNull] IRacetrackSettingsSourceManager manager) // todo add values to message
+                                      [NotNull] IRacetrackSettingsSourceManager manager)
         {
             m_Bus = bus;
             m_Manager = manager;

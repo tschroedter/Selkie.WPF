@@ -28,7 +28,7 @@ namespace Selkie.WPF.Models.Mapping
                                                                GetType().FullName,
                                                                ColonyBestTrailHandler);
 
-            bus.SubscribeHandlerAsync <ColonyLinesChangedMessage>(logger, // todo testing
+            bus.SubscribeHandlerAsync <ColonyLinesChangedMessage>(logger,
                                                                   GetType().ToString(),
                                                                   ColonyLinesChangedHandler);
         }

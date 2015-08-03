@@ -51,7 +51,7 @@ namespace Selkie.WPF.ViewModels.Control
             bus.PublishAsync(new ControlModelTestLinesRequestMessage());
         }
 
-        public IView Parent { get; set; } // todo check if we still need this property
+        public IView Parent { get; set; }
 
         public ICommand ApplyCommand
         {

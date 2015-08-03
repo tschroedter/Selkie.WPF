@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyTitle("Selkie.Framework.Common")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("Microsoft")]
+[assembly : AssemblyCompany("Thomas Schroedter")]
 [assembly : AssemblyProduct("Selkie.Framework.Common")]
-[assembly : AssemblyCopyright("Copyright © Microsoft 2015")]
+[assembly : AssemblyCopyright("Copyright © Thomas Schroedter 2015")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 

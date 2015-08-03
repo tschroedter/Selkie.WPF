@@ -1,6 +1,6 @@
-using Castle.Core.Logging;
 using EasyNetQ;
 using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Services.Aco.Common.Messages;
 using Selkie.Windsor;
@@ -8,16 +8,16 @@ using Selkie.Windsor;
 namespace Selkie.Framework.Services.Handlers
 {
     [ProjectComponent(Lifestyle.Startable)]
-    public class PheromonesHandler : BaseHandler <PheromonesMessage>
+    public class PheromonesHandler : SelkieMessageConsumer <PheromonesMessage>
     {
-        public PheromonesHandler([NotNull] ILogger logger,
-                                 [NotNull] IBus bus)
-            : base(logger,
-                   bus)
+        private readonly IBus m_Bus;
+
+        public PheromonesHandler([NotNull] IBus bus)
         {
+            m_Bus = bus;
         }
 
-        internal override void Handle(PheromonesMessage message)
+        public override void Handle(PheromonesMessage message)
         {
             var colonyPheromonesMessage = new ColonyPheromonesMessage
                                           {
@@ -27,7 +27,7 @@ namespace Selkie.Framework.Services.Handlers
                                               Average = message.Average
                                           };
 
-            Bus.PublishAsync(colonyPheromonesMessage);
+            m_Bus.PublishAsync(colonyPheromonesMessage);
         }
     }
 }

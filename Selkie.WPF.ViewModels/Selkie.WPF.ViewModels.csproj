@@ -63,30 +63,18 @@
       <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute, Version=1.8.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RabbitMQ.Client">
       <HintPath>..\packages\RabbitMQ.Client.3.5.3\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Common, Version=0.6.166.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Common.0.6.166.0\lib\net45\Selkie.Common.dll</HintPath>
+    <Reference Include="Selkie.Common, Version=0.6.167.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Common.0.6.167.0\lib\net45\Selkie.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.EasyNetQ, Version=0.6.147.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.EasyNetQ.0.6.147.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Selkie.NUnit.Extensions, Version=0.6.107.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.NUnit.Extensions.0.6.107.0\lib\net45\Selkie.NUnit.Extensions.dll</HintPath>
+    <Reference Include="Selkie.EasyNetQ, Version=0.6.153.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.EasyNetQ.0.6.153.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Selkie.Windsor, Version=0.6.220.0, Culture=neutral, processorArchitecture=MSIL">
@@ -106,24 +94,13 @@
   <ItemGroup>
     <Compile Include="CommandManager.cs" />
     <Compile Include="Control\ControlViewModel.cs" />
-    <Compile Include="Control\NUnit\ControlViewModelTests.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Mapping\MapViewModel.cs" />
-    <Compile Include="Mapping\NUnit\MapViewModelTests.cs" />
-    <Compile Include="NUnit\DelegateCommandTests.cs" />
-    <Compile Include="NUnit\MainViewModelTests.cs" />
-    <Compile Include="NUnit\TestNotifyPropertyChanged.cs" />
-    <Compile Include="NUnit\ViewModelTests.cs" />
-    <Compile Include="NUnit\TestImmediateDispatcher.cs" />
-    <Compile Include="Pheromones\NUnit\PheromonesViewModelTests.cs" />
-    <Compile Include="Settings\NUnit\RacetrackSettingsViewModelTests.cs" />
     <Compile Include="TrailHistory\Converters\ITrailDetailsToDisplayHistoryRowsConverter.cs" />
-    <Compile Include="TrailHistory\Converters\NUnit\TrailDetailsToDisplayDisplayHistoryRowsConverterTests.cs" />
     <Compile Include="TrailHistory\Converters\TrailDetailsToDisplayHistoryRowsConverter.cs" />
     <Compile Include="TrailHistory\DisplayHistoryRow.cs" />
     <Compile Include="TrailHistory\IDisplayHistoryRowFactory.cs" />
-    <Compile Include="TrailHistory\NUnit\DisplayHistoryRowTests.cs" />
     <Compile Include="TrailHistory\TrailHistoryViewModel.cs" />
     <Compile Include="Installer.cs" />
     <Compile Include="MainViewModel.cs" />

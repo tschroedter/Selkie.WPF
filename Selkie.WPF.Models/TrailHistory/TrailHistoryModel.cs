@@ -99,7 +99,6 @@ namespace Selkie.WPF.Models.TrailHistory
 
                 if ( m_Dictionary.ContainsKey(details.Interation) )
                 {
-                    // todo testing for if
                     m_Dictionary.Remove(details.Interation);
                 }
 

@@ -62,36 +62,24 @@
       <HintPath>..\packages\NLog.3.1.0.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute, Version=1.8.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="RabbitMQ.Client">
       <HintPath>..\packages\RabbitMQ.Client.3.5.3\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Common, Version=0.6.166.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Common.0.6.166.0\lib\net45\Selkie.Common.dll</HintPath>
+    <Reference Include="Selkie.Common, Version=0.6.167.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Common.0.6.167.0\lib\net45\Selkie.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.EasyNetQ, Version=0.6.147.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.EasyNetQ.0.6.147.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
+    <Reference Include="Selkie.EasyNetQ, Version=0.6.153.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.EasyNetQ.0.6.153.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Geometry, Version=0.6.86.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Geometry.0.6.86.0\lib\net45\Selkie.Geometry.dll</HintPath>
+    <Reference Include="Selkie.Geometry, Version=0.6.87.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Geometry.0.6.87.0\lib\net45\Selkie.Geometry.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.NUnit.Extensions, Version=0.6.107.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.NUnit.Extensions.0.6.107.0\lib\net45\Selkie.NUnit.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Selkie.Services.Racetracks.Common, Version=0.6.51.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Services.Racetracks.Common.0.6.51.0\lib\net45\Selkie.Services.Racetracks.Common.dll</HintPath>
+    <Reference Include="Selkie.Services.Racetracks.Common, Version=0.6.53.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Racetracks.Common.0.6.53.0\lib\net45\Selkie.Services.Racetracks.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Selkie.Windsor, Version=0.6.220.0, Culture=neutral, processorArchitecture=MSIL">
@@ -108,7 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control\ControlModel.cs" />
-    <Compile Include="Control\NUnit\ControlModelTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Installer.cs" />
     <Compile Include="Mapping\BaseNodeModel.cs" />
@@ -116,26 +103,13 @@
     <Compile Include="Mapping\LinesModel.cs" />
     <Compile Include="Mapping\NodeModel.cs" />
     <Compile Include="Mapping\NodesModel.cs" />
-    <Compile Include="Mapping\NUnit\BaseNodeModelTests.cs" />
-    <Compile Include="Mapping\NUnit\EndNodeModelTests.cs" />
-    <Compile Include="Mapping\NUnit\LinesModelTests.cs" />
-    <Compile Include="Mapping\NUnit\NodeModelTests.cs" />
-    <Compile Include="Mapping\NUnit\NodesModelTests.cs" />
-    <Compile Include="Mapping\NUnit\RacetrackModelTests.cs" />
-    <Compile Include="Mapping\NUnit\ShortestPathDirectionModelTests.cs" />
-    <Compile Include="Mapping\NUnit\ShortestPathModelTests.cs" />
-    <Compile Include="Mapping\NUnit\StartNodeModelTests.cs" />
     <Compile Include="Mapping\RacetrackModel.cs" />
     <Compile Include="Mapping\ShortestPathDirectionModel.cs" />
     <Compile Include="Mapping\ShortestPathModel.cs" />
     <Compile Include="Mapping\StartNodeModel.cs" />
-    <Compile Include="Pheromones\NUnit\PheromonesModelTests.cs" />
     <Compile Include="Pheromones\PheromonesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\NUnit\RacetrackSettingsModelTests.cs" />
     <Compile Include="Settings\RacetrackSettingsModel.cs" />
-    <Compile Include="TrailHistory\NUnit\TrailDetailsTests.cs" />
-    <Compile Include="TrailHistory\NUnit\TrailHistoryModelTests.cs" />
     <Compile Include="TrailHistory\TrailDetails.cs" />
     <Compile Include="TrailHistory\TrailHistoryModel.cs" />
   </ItemGroup>

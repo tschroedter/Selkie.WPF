@@ -42,7 +42,7 @@ namespace Selkie.WPF.ViewModels.TrailHistory
             }
         }
 
-        private void TrailHistoryModelChangedHandler(TrailHistoryModelChangedMessage message)
+        internal void TrailHistoryModelChangedHandler(TrailHistoryModelChangedMessage message)
         {
             m_Converter.Trails = m_TrailHistoryModel.Trails;
             m_Converter.Convert();
@@ -50,7 +50,7 @@ namespace Selkie.WPF.ViewModels.TrailHistory
             m_ApplicationDispatcher.BeginInvoke(() => Update(m_Converter.DisplayHistoryRows));
         }
 
-        private void Update(IEnumerable <IDisplayHistoryRow> displayHistoryRows)
+        internal void Update(IEnumerable <IDisplayHistoryRow> displayHistoryRows)
         {
             m_Rows = new List <IDisplayHistoryRow>();
             m_Rows.AddRange(displayHistoryRows);

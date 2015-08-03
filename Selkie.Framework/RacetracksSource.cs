@@ -3,17 +3,22 @@ using Selkie.Framework.Interfaces;
 
 namespace Selkie.Framework
 {
-    public class RacetracksSource : IRacetracks // todo rename interface
+    public class RacetracksSource : IRacetracks
     {
-        public static IRacetracks Unknown = new RacetracksSource(new IPath[0][],
-                                                                 new IPath[0][],
-                                                                 new IPath[0][],
-                                                                 new IPath[0][]);
-
+        public static IRacetracks Unknown = new RacetracksSource(true);
         private readonly IPath[][] m_ForwardToForward;
         private readonly IPath[][] m_ForwardToReverse;
         private readonly IPath[][] m_ReverseToForward;
         private readonly IPath[][] m_ReverseToReverse;
+
+        private RacetracksSource(bool isUnknown)
+            : this(new IPath[0][],
+                   new IPath[0][],
+                   new IPath[0][],
+                   new IPath[0][])
+        {
+            IsUnknown = isUnknown;
+        }
 
         public RacetracksSource([NotNull] IPath[][] forwardToForward,
                                 [NotNull] IPath[][] forwardToReverse,
@@ -57,5 +62,7 @@ namespace Selkie.Framework
                 return m_ReverseToReverse;
             }
         }
+
+        public bool IsUnknown { get; private set; }
     }
 }

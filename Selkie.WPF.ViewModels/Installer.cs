@@ -1,4 +1,5 @@
-﻿using Castle.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using Castle.Core;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
@@ -8,7 +9,8 @@ using Selkie.WPF.ViewModels.Interfaces;
 
 namespace Selkie.WPF.ViewModels
 {
-    //ncrunch: no coverage start 
+    //ncrunch: no coverage start
+    [ExcludeFromCodeCoverage]
     public class Installer : BaseInstaller <Installer>
     {
         protected override void InstallComponents(IWindsorContainer container,

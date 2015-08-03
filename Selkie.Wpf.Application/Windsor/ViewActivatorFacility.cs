@@ -5,7 +5,7 @@ using System.Linq;
 using Castle.Core;
 using Castle.MicroKernel.Facilities;
 
-namespace Selkie.Wpf.Application.Windsor
+namespace Selkie.WPF.Application.Windsor
 {
     [ExcludeFromCodeCoverage]
     public class ViewActivatorFacility : AbstractFacility

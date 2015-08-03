@@ -11,13 +11,20 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Singleton)]
     public class RacetrackSettingsSourceManager : IRacetrackSettingsSourceManager
     {
+        internal static readonly double DefaultRadius = 30.0;
         private readonly IBus m_Bus;
-        private IRacetrackSettingsSource m_Source = RacetrackSettingsSource.Default;
+        private readonly IRacetrackSettingsSourceFactory m_Factory;
 
         public RacetrackSettingsSourceManager([NotNull] ILogger logger,
-                                              [NotNull] IBus bus)
+                                              [NotNull] IBus bus,
+                                              [NotNull] IRacetrackSettingsSourceFactory factory)
         {
             m_Bus = bus;
+            m_Factory = factory;
+
+            Source = m_Factory.Create(DefaultRadius,
+                                      true,
+                                      true);
 
             string subscriptionId = GetType().FullName;
             m_Bus.SubscribeHandlerAsync <ColonyRacetrackSettingsSetMessage>(logger,
@@ -29,13 +36,7 @@ namespace Selkie.Framework
                                                                                 ColonyRacetrackSettingsRequestHandler);
         }
 
-        public IRacetrackSettingsSource Source
-        {
-            get
-            {
-                return m_Source;
-            }
-        }
+        public IRacetrackSettingsSource Source { get; private set; }
 
         internal void ColonyRacetrackSettingsRequestHandler(ColonyRacetrackSettingsRequestMessage message)
         {
@@ -44,10 +45,11 @@ namespace Selkie.Framework
 
         internal void ColonyRacetrackSettingsSetHandler(ColonyRacetrackSettingsSetMessage message)
         {
-            // todo replace with factory
-            m_Source = new RacetrackSettingsSource(message.TurnRadius,
-                                                   message.IsPortTurnAllowed,
-                                                   message.IsStarboardTurnAllowed);
+            m_Factory.Release(Source);
+
+            Source = m_Factory.Create(message.TurnRadius,
+                                      message.IsPortTurnAllowed,
+                                      message.IsStarboardTurnAllowed);
 
             m_Bus.PublishAsync(new ColonyRacetrackSettingsChangedMessage());
         }

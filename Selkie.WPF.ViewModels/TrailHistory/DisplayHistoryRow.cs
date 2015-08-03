@@ -5,7 +5,6 @@ using Selkie.WPF.ViewModels.Interfaces;
 
 namespace Selkie.WPF.ViewModels.TrailHistory
 {
-    // todo testing
     [ProjectComponent(Lifestyle.Transient)]
     public class DisplayHistoryRow : IDisplayHistoryRow
     {

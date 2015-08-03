@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Selkie.Windsor;
 using Selkie.WPF.ViewModels.Interfaces;
 
 namespace Selkie.WPF.ViewModels
 {
-    //ncrunch: no coverage start 
+    //ncrunch: no coverage start
+    [ExcludeFromCodeCoverage]
     [ProjectComponent(Lifestyle.Singleton)]
     public class CommandManager : ICommandManager
     {
