@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
@@ -20,14 +18,14 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Singleton)]
     public class LinesSourceManager : ILinesSourceManager
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
         private readonly ITestLinesDtoToLinesConverter m_Converter;
         private readonly ILinesSourceFactory m_Factory;
-        private readonly ILogger m_Logger;
+        private readonly ISelkieLogger m_Logger;
         private ILinesSource m_Source = LinesSource.Unknown;
 
-        public LinesSourceManager([NotNull] ILogger logger,
-                                  [NotNull] IBus bus,
+        public LinesSourceManager([NotNull] ISelkieLogger logger,
+                                  [NotNull] ISelkieBus bus,
                                   [NotNull] ILinesSourceFactory factory,
                                   [NotNull] ITestLinesDtoToLinesConverter converter)
         {
@@ -44,21 +42,17 @@ namespace Selkie.Framework
                                          }
                              });
 
-            bus.SubscribeHandlerAsync <TestLineResponseMessage>(logger,
-                                                                GetType().FullName,
-                                                                TestLineResponseHandler);
+            bus.SubscribeAsync <TestLineResponseMessage>(GetType().FullName,
+                                                         TestLineResponseHandler);
 
-            bus.SubscribeHandlerAsync <ColonyLinesRequestMessage>(logger,
-                                                                  GetType().FullName,
-                                                                  ColonyLinesRequestHandler);
+            bus.SubscribeAsync <ColonyLinesRequestMessage>(GetType().FullName,
+                                                           ColonyLinesRequestHandler);
 
-            bus.SubscribeHandlerAsync <ColonyTestLinesRequestMessage>(logger,
-                                                                      GetType().FullName,
-                                                                      ColonyTestLinesRequestHandler);
+            bus.SubscribeAsync <ColonyTestLinesRequestMessage>(GetType().FullName,
+                                                               ColonyTestLinesRequestHandler);
 
-            bus.SubscribeHandlerAsync <ColonyTestLineSetMessage>(logger,
-                                                                 GetType().FullName,
-                                                                 ColonyTestLineSetHandler);
+            bus.SubscribeAsync <ColonyTestLineSetMessage>(GetType().FullName,
+                                                          ColonyTestLineSetHandler);
         }
 
         public IEnumerable <ILine> Lines

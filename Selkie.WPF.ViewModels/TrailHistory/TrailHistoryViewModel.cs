@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Castle.Core.Logging;
-using EasyNetQ;
-using Selkie.EasyNetQ.Extensions;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces;
@@ -19,19 +18,17 @@ namespace Selkie.WPF.ViewModels.TrailHistory
         private readonly ITrailHistoryModel m_TrailHistoryModel;
         private List <IDisplayHistoryRow> m_Rows = new List <IDisplayHistoryRow>();
 
-        public TrailHistoryViewModel(ILogger logger,
-                                     IBus bus,
-                                     IApplicationDispatcher applicationDispatcher,
-                                     ITrailDetailsToDisplayHistoryRowsConverter converter,
-                                     ITrailHistoryModel trailHistoryModel)
+        public TrailHistoryViewModel([NotNull] ISelkieInMemoryBus bus,
+                                     [NotNull] IApplicationDispatcher applicationDispatcher,
+                                     [NotNull] ITrailDetailsToDisplayHistoryRowsConverter converter,
+                                     [NotNull] ITrailHistoryModel trailHistoryModel)
         {
             m_ApplicationDispatcher = applicationDispatcher;
             m_Converter = converter;
             m_TrailHistoryModel = trailHistoryModel;
 
-            bus.SubscribeHandlerAsync <TrailHistoryModelChangedMessage>(logger,
-                                                                        GetType().ToString(),
-                                                                        TrailHistoryModelChangedHandler);
+            bus.SubscribeAsync <TrailHistoryModelChangedMessage>(GetType().ToString(),
+                                                                 TrailHistoryModelChangedHandler);
         }
 
         public IEnumerable <IDisplayHistoryRow> Rows

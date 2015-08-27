@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using Castle.Core.Logging;
 using JetBrains.Annotations;
+using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Common.Interfaces.Windsor;
@@ -15,10 +15,10 @@ namespace Selkie.WPF.Views
     {
         private readonly IMainViewModel m_MainViewModel;
 
-        public MainView(ILogger logger,
+        public MainView([NotNull] ISelkieLogger logger,
                         [NotNull] IMainViewModel mainViewModel,
-                        IViewFactory viewFactory,
-                        IDockingCenter dockingCenter)
+                        [NotNull] IViewFactory viewFactory,
+                        [NotNull] IDockingCenter dockingCenter)
         {
             m_MainViewModel = mainViewModel;
             InitializeComponent();
@@ -65,7 +65,7 @@ namespace Selkie.WPF.Views
             m_MainViewModel.ShutDown();
         }
 
-        private string LogException(ILogger logger,
+        private string LogException(ISelkieLogger logger,
                                     Exception exception)
         {
             string message = "Failed to create components: {0}\r\n\r\n{1}".Inject(exception.Message,

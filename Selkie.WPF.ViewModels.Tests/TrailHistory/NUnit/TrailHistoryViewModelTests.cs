@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces;
@@ -32,13 +30,9 @@ namespace Selkie.WPF.ViewModels.Tests.TrailHistory.NUnit
             m_Model.Trails.Returns(m_Detailses);
             m_Converter = Substitute.For <ITrailDetailsToDisplayHistoryRowsConverter>();
 
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
-            m_Logger = Substitute.For <ILogger>();
-            m_Logger = Substitute.For <ILogger>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
 
-            m_Sut = CreateSut(m_Logger,
-                              m_Bus,
+            m_Sut = CreateSut(m_Bus,
                               new TestImmediateDispatcher(),
                               m_Converter,
                               m_Model);
@@ -47,8 +41,7 @@ namespace Selkie.WPF.ViewModels.Tests.TrailHistory.NUnit
         private ITrailHistoryModel m_Model;
         private ITrailDetails[] m_Detailses;
         private ITrailDetailsToDisplayHistoryRowsConverter m_Converter;
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieInMemoryBus m_Bus;
         private TrailHistoryViewModel m_Sut;
 
         private IDisplayHistoryRow[] CreateDisplayHistoryRows()
@@ -66,8 +59,7 @@ namespace Selkie.WPF.ViewModels.Tests.TrailHistory.NUnit
 
         private TrailHistoryViewModel CreateSut([NotNull] IApplicationDispatcher dispatcher)
         {
-            TrailHistoryViewModel sut = CreateSut(Substitute.For <ILogger>(),
-                                                  Substitute.For <IBus>(),
+            TrailHistoryViewModel sut = CreateSut(Substitute.For <ISelkieInMemoryBus>(),
                                                   dispatcher,
                                                   Substitute.For <ITrailDetailsToDisplayHistoryRowsConverter>(),
                                                   Substitute.For <ITrailHistoryModel>());
@@ -75,14 +67,12 @@ namespace Selkie.WPF.ViewModels.Tests.TrailHistory.NUnit
             return sut;
         }
 
-        private TrailHistoryViewModel CreateSut([NotNull] ILogger logger,
-                                                [NotNull] IBus bus,
+        private TrailHistoryViewModel CreateSut([NotNull] ISelkieInMemoryBus bus,
                                                 [NotNull] IApplicationDispatcher dispatcher,
                                                 [NotNull] ITrailDetailsToDisplayHistoryRowsConverter converter,
                                                 [NotNull] ITrailHistoryModel model)
         {
-            var sut = new TrailHistoryViewModel(logger,
-                                                bus,
+            var sut = new TrailHistoryViewModel(bus,
                                                 dispatcher,
                                                 converter,
                                                 model);
@@ -94,7 +84,7 @@ namespace Selkie.WPF.ViewModels.Tests.TrailHistory.NUnit
         public void Constructor_SubscribeToPheromonesModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Sut.GetType().FullName,
-                                            Arg.Any <Func <TrailHistoryModelChangedMessage, Task>>());
+                                            Arg.Any <Action <TrailHistoryModelChangedMessage>>());
         }
 
         [Test]

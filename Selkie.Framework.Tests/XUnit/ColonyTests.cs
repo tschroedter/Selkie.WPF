@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
-using EasyNetQ;
 using JetBrains.Annotations;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces.Aco;
 using Selkie.Services.Aco.Common.Messages;
@@ -76,7 +75,7 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyPheromonesRequestHandler_SendsMessage_WhenCalled([NotNull, Frozen] IBus bus,
+        public void ColonyPheromonesRequestHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                                            [NotNull] Colony sut,
                                                                            [NotNull] ColonyPheromonesRequestMessage
                                                                                message)
@@ -91,29 +90,29 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToColonyStartRequestMessage_WhenCreated([NotNull, Frozen] IBus bus,
+        public void Constructor_SubscribeToColonyStartRequestMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
                                                                                  [NotNull] Colony sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <ColonyStartRequestMessage, Task>>());
+                                          Arg.Any <Action <ColonyStartRequestMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToColonyStopRequestMessage_WhenCreated([NotNull, Frozen] IBus bus,
+        public void Constructor_SubscribeToColonyStopRequestMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
                                                                                 [NotNull] Colony sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <ColonyStopRequestMessage, Task>>());
+                                          Arg.Any <Action <ColonyStopRequestMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToColonyPheromonesRequestMessage_WhenCreated([NotNull, Frozen] IBus bus,
+        public void Constructor_SubscribeToColonyPheromonesRequestMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
                                                                                       [NotNull] Colony sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <ColonyPheromonesRequestMessage, Task>>());
+                                          Arg.Any <Action <ColonyPheromonesRequestMessage>>());
         }
 
         [Theory]

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Logging;
-using EasyNetQ;
-using Selkie.EasyNetQ.Extensions;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Geometry.Primitives;
 using Selkie.Geometry.Shapes;
@@ -12,31 +11,39 @@ namespace Selkie.WPF.Models.Mapping
 {
     public abstract class BaseNodeModel
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly INodeIdHelper m_NodeIdHelper;
         private INodeModel m_NodeModel = NodeModel.Unknown;
 
-        protected BaseNodeModel(ILogger logger,
-                                IBus bus,
-                                INodeIdHelper nodeIdHelper)
+        protected BaseNodeModel([NotNull] ISelkieBus bus,
+                                [NotNull] ISelkieInMemoryBus memoryBus,
+                                [NotNull] INodeIdHelper nodeIdHelper)
         {
             m_Bus = bus;
+            m_MemoryBus = memoryBus;
             m_NodeIdHelper = nodeIdHelper;
 
-            bus.SubscribeHandlerAsync <ColonyBestTrailMessage>(logger,
-                                                               GetType().ToString(),
-                                                               ColonyBestTrailHandler);
+            bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().ToString(),
+                                                        ColonyBestTrailHandler);
 
-            bus.SubscribeHandlerAsync <ColonyLinesChangedMessage>(logger,
-                                                                  GetType().ToString(),
-                                                                  ColonyLinesChangedHandler);
+            bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
+                                                           ColonyLinesChangedHandler);
         }
 
-        protected IBus Bus
+        protected ISelkieBus Bus
         {
             get
             {
                 return m_Bus;
+            }
+        }
+
+        protected ISelkieInMemoryBus MemoryBus
+        {
+            get
+            {
+                return m_MemoryBus;
             }
         }
 

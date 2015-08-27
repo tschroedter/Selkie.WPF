@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry.Primitives;
+using Selkie.Windsor;
 using Selkie.WPF.Common;
 
 namespace Selkie.WPF.Converters.Tests.NUnit
@@ -37,8 +36,8 @@ namespace Selkie.WPF.Converters.Tests.NUnit
                          2
                      };
 
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Logger = Substitute.For <ISelkieLogger>();
+            m_Bus = Substitute.For <ISelkieBus>();
             m_Helper = new NodeIdHelper(Substitute.For <ILinesSourceManager>());
             m_Manager = Substitute.For <IRacetracksSourceManager>();
             m_Manager.Racetracks.Returns(m_Racetracks);
@@ -53,7 +52,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
 
         private IRacetracksSourceManager m_Manager;
         private PathToRacetracksConverter m_Converter;
-        private ILogger m_Logger;
+        private ISelkieLogger m_Logger;
         private IPath m_Racetrack1;
         private IPath m_Racetrack2;
         private IPath[] m_Paths1And2;
@@ -85,7 +84,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
         private int[] m_SimplePath;
         private int[] m_Path;
         private NodeIdHelper m_Helper;
-        private IBus m_Bus;
+        private ISelkieBus m_Bus;
         private IRacetracks m_Racetracks;
 
         private void SetupManager()
@@ -195,7 +194,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
         public void ConstructorSubscribesToColonyRacetracksChangedMessageTest()
         {
             m_Bus.Received().SubscribeAsync(m_Converter.GetType().FullName,
-                                            Arg.Any <Func <ColonyRacetracksChangedMessage, Task>>());
+                                            Arg.Any <Action <ColonyRacetracksChangedMessage>>());
         }
 
         [Test]

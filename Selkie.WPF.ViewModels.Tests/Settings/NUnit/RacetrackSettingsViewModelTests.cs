@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
+using Selkie.Windsor;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces;
@@ -22,8 +22,8 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Logger = Substitute.For <ISelkieLogger>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Dispatcher = new TestImmediateDispatcher();
             m_Manager = Substitute.For <ICommandManager>();
 
@@ -35,10 +35,10 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
         }
 
         private RacetrackSettingsViewModel m_Model;
-        private ILogger m_Logger;
+        private ISelkieLogger m_Logger;
         private IApplicationDispatcher m_Dispatcher;
         private ICommandManager m_Manager;
-        private IBus m_Bus;
+        private ISelkieInMemoryBus m_Bus;
 
         private void SetModelPropertiesToSettingsModel()
         {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Castle.Core.Logging;
 using JetBrains.Annotations;
 using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
@@ -27,7 +26,7 @@ namespace Selkie.WPF.Common
             m_DisplayMap = new Dictionary <string, LayoutAnchorablePane>();
         }
 
-        public ILogger Logger { get; set; }
+        public ISelkieLogger Logger { get; set; }
 
         public void AssignToArea([NotNull] IView view,
                                  [NotNull] string title)

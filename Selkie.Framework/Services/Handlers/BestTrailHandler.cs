@@ -1,4 +1,3 @@
-using EasyNetQ;
 using JetBrains.Annotations;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
@@ -8,11 +7,11 @@ using Selkie.Windsor;
 namespace Selkie.Framework.Services.Handlers
 {
     [ProjectComponent(Lifestyle.Startable)]
-    public class BestTrailHandler : SelkieMessageConsumer <BestTrailMessage>
+    public class BestTrailHandler : SelkieMessageHandlerAsync <BestTrailMessage>
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
 
-        public BestTrailHandler([NotNull] IBus bus)
+        public BestTrailHandler([NotNull] ISelkieBus bus)
         {
             m_Bus = bus;
         }

@@ -1,9 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
@@ -15,14 +13,14 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Singleton)]
     public class RacetracksSourceManager : IRacetracksSourceManager
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
         private readonly IRacetracksDtoToRacetracksConverter m_Converter;
-        private readonly ILogger m_Logger;
+        private readonly ISelkieLogger m_Logger;
         private readonly object m_Padlock = new object();
         private IRacetracks m_Racetracks = RacetracksSource.Unknown;
 
-        public RacetracksSourceManager([NotNull] ILogger logger,
-                                       [NotNull] IBus bus,
+        public RacetracksSourceManager([NotNull] ISelkieLogger logger,
+                                       [NotNull] ISelkieBus bus,
                                        [NotNull] IRacetracksDtoToRacetracksConverter converter)
         {
             m_Logger = logger;
@@ -31,13 +29,11 @@ namespace Selkie.Framework
 
             string subscriptionId = GetType().FullName;
 
-            m_Bus.SubscribeHandlerAsync <ColonyRacetracksRequestMessage>(logger,
-                                                                         subscriptionId,
-                                                                         ColonyRacetracksGetHandler);
+            m_Bus.SubscribeAsync <ColonyRacetracksRequestMessage>(subscriptionId,
+                                                                  ColonyRacetracksGetHandler);
 
-            m_Bus.SubscribeHandlerAsync <RacetracksChangedMessage>(logger,
-                                                                   subscriptionId,
-                                                                   RacetracksChangedHandler);
+            m_Bus.SubscribeAsync <RacetracksChangedMessage>(subscriptionId,
+                                                            RacetracksChangedHandler);
 
             m_Bus.PublishAsync(new RacetracksGetMessage()); // todo rename message to ...Request...
         }
@@ -94,7 +90,7 @@ namespace Selkie.Framework
                 {
                     builder.Append(path + ", ");
                 }
-                m_Logger.Info(builder.ToString);
+                m_Logger.Info(builder.ToString());
             }
         }
     }

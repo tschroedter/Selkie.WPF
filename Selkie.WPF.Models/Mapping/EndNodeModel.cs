@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Logging;
-using EasyNetQ;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces.Mapping;
@@ -12,11 +12,11 @@ namespace Selkie.WPF.Models.Mapping
         : BaseNodeModel,
           IEndNodeModel
     {
-        public EndNodeModel(ILogger logger,
-                            IBus bus,
-                            INodeIdHelper nodeIdHelper)
-            : base(logger,
-                   bus,
+        public EndNodeModel([NotNull] ISelkieBus bus,
+                            [NotNull] ISelkieInMemoryBus memoryBus,
+                            [NotNull] INodeIdHelper nodeIdHelper)
+            : base(bus,
+                   memoryBus,
                    nodeIdHelper)
         {
         }
@@ -32,7 +32,7 @@ namespace Selkie.WPF.Models.Mapping
 
         public override void SendMessage()
         {
-            Bus.Publish(new EndNodeModelChangedMessage());
+            MemoryBus.Publish(new EndNodeModelChangedMessage());
         }
     }
 }

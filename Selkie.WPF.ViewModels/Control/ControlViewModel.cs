@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Input;
-using Castle.Core.Logging;
-using EasyNetQ;
-using Selkie.EasyNetQ.Extensions;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Common.Interfaces.Windsor;
 using Selkie.WPF.Models.Common.Messages;
@@ -18,7 +17,7 @@ namespace Selkie.WPF.ViewModels.Control
         : ViewModel,
           IControlViewModel
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieInMemoryBus m_Bus;
         private readonly ICommandManager m_CommandManager;
         private readonly IControlModel m_ControlModel;
         private readonly IApplicationDispatcher m_Dispatcher;
@@ -29,24 +28,21 @@ namespace Selkie.WPF.ViewModels.Control
         private ICommand m_StopCommand;
         private IEnumerable <string> m_TestLines = new string[0];
 
-        public ControlViewModel(ILogger logger,
-                                IBus bus,
-                                IApplicationDispatcher dispatcher,
-                                IControlModel controlModel,
-                                ICommandManager commandManager)
+        public ControlViewModel([NotNull] ISelkieInMemoryBus bus,
+                                [NotNull] IApplicationDispatcher dispatcher,
+                                [NotNull] IControlModel controlModel,
+                                [NotNull] ICommandManager commandManager)
         {
             m_Bus = bus;
             m_Dispatcher = dispatcher;
             m_ControlModel = controlModel;
             m_CommandManager = commandManager;
 
-            bus.SubscribeHandlerAsync <ControlModelChangedMessage>(logger,
-                                                                   GetType().ToString(),
-                                                                   ControlModelChangedHandler);
+            bus.SubscribeAsync <ControlModelChangedMessage>(GetType().ToString(),
+                                                            ControlModelChangedHandler);
 
-            bus.SubscribeHandlerAsync <ControlModelTestLinesChangedMessage>(logger,
-                                                                            GetType().ToString(),
-                                                                            ControlModelTestLinesChangedHandler);
+            bus.SubscribeAsync <ControlModelTestLinesChangedMessage>(GetType().ToString(),
+                                                                     ControlModelTestLinesChangedHandler);
 
             bus.PublishAsync(new ControlModelTestLinesRequestMessage());
         }

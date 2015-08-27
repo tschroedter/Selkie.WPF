@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
+using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
@@ -14,14 +13,14 @@ namespace Selkie.WPF.Converters
 {
     public class PathToRacetracksConverter : IPathToRacetracksConverter
     {
-        private readonly ILogger m_Logger;
+        private readonly ISelkieLogger m_Logger;
         private readonly INodeIdHelper m_NodeIdHelper;
         private readonly List <IPath> m_Paths = new List <IPath>();
         private readonly IRacetracksSourceManager m_RacetracksSourceManager;
         private int[] m_Path;
 
-        public PathToRacetracksConverter([NotNull] ILogger logger,
-                                         [NotNull] IBus bus,
+        public PathToRacetracksConverter([NotNull] ISelkieLogger logger,
+                                         [NotNull] ISelkieBus bus,
                                          [NotNull] INodeIdHelper nodeIdHelper,
                                          [NotNull] IRacetracksSourceManager racetracksSourceManager)
         {
@@ -31,9 +30,8 @@ namespace Selkie.WPF.Converters
 
             Update();
 
-            bus.SubscribeHandlerAsync <ColonyRacetracksChangedMessage>(logger,
-                                                                       GetType().FullName,
-                                                                       ColonyRacetracksChangedHandler);
+            bus.SubscribeAsync <ColonyRacetracksChangedMessage>(GetType().FullName,
+                                                                ColonyRacetracksChangedHandler);
         }
 
         internal IRacetracks Racetracks { get; private set; }

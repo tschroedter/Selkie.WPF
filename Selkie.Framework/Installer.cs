@@ -24,7 +24,7 @@ namespace Selkie.Framework
                                       .WithServiceFromInterface(typeof ( IConverter ))
                                       .Configure(c => c.LifeStyle.Is(LifestyleType.Transient)));
 
-            var consumers = container.Resolve <IRegisterMessageConsumers>();
+            var consumers = container.Resolve <IRegisterMessageHandlers>();
 
             consumers.Register(container,
                                Assembly.GetAssembly(typeof ( Installer )));

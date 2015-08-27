@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Windows.Media;
-using Castle.Core.Logging;
 using JetBrains.Annotations;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry.Shapes;
+using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Converters.Interfaces;
 
@@ -23,7 +23,7 @@ namespace Selkie.WPF.Converters
             m_RacetrackPathUTurn = racetrackPathUTurn;
         }
 
-        public ILogger Logger { get; set; }
+        public ISelkieLogger Logger { get; set; }
 
         public IPath Path
         {

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.WPF.Converters.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
@@ -21,19 +19,19 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For <ISelkieBus>();
+            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Converter = Substitute.For <IPathToRacetracksConverter>();
 
-            m_Model = new RacetrackModel(m_Logger,
-                                         m_Bus,
+            m_Model = new RacetrackModel(m_Bus,
+                                         m_MemoryBus,
                                          m_Converter);
         }
 
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieBus m_Bus;
         private IPathToRacetracksConverter m_Converter;
         private RacetrackModel m_Model;
+        private ISelkieInMemoryBus m_MemoryBus;
 
         private ColonyBestTrailMessage CreateBestTrailMessage()
         {
@@ -78,7 +76,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.ColonyLinesChangedHandler(message);
 
             // Assert
-            m_Bus.Received().Publish(Arg.Any <RacetrackModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .Publish(Arg.Any <RacetrackModelChangedMessage>());
         }
 
         [Test]
@@ -91,21 +90,22 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.ColonyLinesChangedHandler(message);
 
             // Assert
-            m_Bus.Received().Publish(Arg.Any <RacetrackModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .Publish(Arg.Any <RacetrackModelChangedMessage>());
         }
 
         [Test]
         public void Constructor_SubscribeToBestTrailMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ColonyBestTrailMessage, Task>>());
+                                            Arg.Any <Action <ColonyBestTrailMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribeToColonyLinesChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ColonyLinesChangedMessage, Task>>());
+                                            Arg.Any <Action <ColonyLinesChangedMessage>>());
         }
 
         [Test]

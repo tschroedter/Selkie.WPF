@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
 using Selkie.Common;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Pheromones;
@@ -20,19 +18,19 @@ namespace Selkie.WPF.Models.Tests.Pheromones.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For <ISelkieBus>();
+            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Timer = Substitute.For <ITimer>();
 
-            m_Model = new PheromonesModel(m_Logger,
-                                          m_Bus,
+            m_Model = new PheromonesModel(m_Bus,
+                                          m_MemoryBus,
                                           m_Timer);
         }
 
         private PheromonesModel m_Model;
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieBus m_Bus;
         private ITimer m_Timer;
+        private ISelkieInMemoryBus m_MemoryBus;
 
         private ColonyPheromonesMessage CreatePheromonesMessage()
         {
@@ -149,7 +147,8 @@ namespace Selkie.WPF.Models.Tests.Pheromones.NUnit
 
             m_Model.PheromonesHandler(message);
 
-            m_Bus.Received().PublishAsync(Arg.Any <PheromonesModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .PublishAsync(Arg.Any <PheromonesModelChangedMessage>());
         }
 
         [Test]
@@ -220,28 +219,28 @@ namespace Selkie.WPF.Models.Tests.Pheromones.NUnit
         public void SubscribeToColonyStartedMessageTest()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().ToString(),
-                                            Arg.Any <Func <ColonyStartedMessage, Task>>());
+                                            Arg.Any <Action <ColonyStartedMessage>>());
         }
 
         [Test]
         public void SubscribeToColonyStoppedMessageTest()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().ToString(),
-                                            Arg.Any <Func <ColonyStoppedMessage, Task>>());
+                                            Arg.Any <Action <ColonyStoppedMessage>>());
         }
 
         [Test]
         public void SubscribeToFinishedMessageTest()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().ToString(),
-                                            Arg.Any <Func <ColonyFinishedMessage, Task>>());
+                                            Arg.Any <Action <ColonyFinishedMessage>>());
         }
 
         [Test]
         public void SubscribeToPheromonesMessageTest()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().ToString(),
-                                            Arg.Any <Func <ColonyPheromonesMessage, Task>>());
+                                            Arg.Any <Action <ColonyPheromonesMessage>>());
         }
     }
 }

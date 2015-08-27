@@ -1,4 +1,3 @@
-using EasyNetQ;
 using JetBrains.Annotations;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
@@ -8,11 +7,11 @@ using Selkie.Windsor;
 namespace Selkie.Framework.Services.Handlers
 {
     [ProjectComponent(Lifestyle.Startable)]
-    public class PheromonesHandler : SelkieMessageConsumer <PheromonesMessage>
+    public class PheromonesHandler : SelkieMessageHandlerAsync <PheromonesMessage>
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
 
-        public PheromonesHandler([NotNull] IBus bus)
+        public PheromonesHandler([NotNull] ISelkieBus bus)
         {
             m_Bus = bus;
         }

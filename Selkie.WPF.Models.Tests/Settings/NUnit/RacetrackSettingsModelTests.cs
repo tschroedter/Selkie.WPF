@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
@@ -21,8 +19,8 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For <ISelkieBus>();
+            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Source = new RacetrackSettingsSource(300.0,
                                                    true,
                                                    true);
@@ -30,8 +28,8 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
             m_Manager = Substitute.For <IRacetrackSettingsSourceManager>();
             m_Manager.Source.Returns(m_Source);
 
-            m_Model = new RacetrackSettingsModel(m_Logger,
-                                                 m_Bus,
+            m_Model = new RacetrackSettingsModel(m_Bus,
+                                                 m_MemoryBus,
                                                  m_Manager);
         }
 
@@ -39,8 +37,8 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
         private RacetrackSettingsModel m_Model;
         private IRacetrackSettingsSourceManager m_Manager;
         private RacetrackSettingsSource m_Source;
-        private IBus m_Bus;
-        private ILogger m_Logger;
+        private ISelkieBus m_Bus;
+        private ISelkieInMemoryBus m_MemoryBus;
 
         [Test]
         public void ColonyCostMatrixChangedHandler_SendsMessage_WhenCalled()
@@ -52,21 +50,39 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
             m_Model.ColonyCostMatrixChangedHandler(message);
 
             // Assert
-            m_Bus.Received().PublishAsync(Arg.Is <RacetrackSettingsChangedMessage>(x =>
-                                                                                   Math.Abs(x.TurnRadius -
-                                                                                            m_Source.TurnRadius) <
-                                                                                   Tolerance &&
-                                                                                   x.IsPortTurnAllowed ==
-                                                                                   m_Source.IsPortTurnAllowed &&
-                                                                                   x.IsStarboardTurnAllowed ==
-                                                                                   m_Source.IsStarboardTurnAllowed));
+            m_MemoryBus.Received()
+                       .PublishAsync(Arg.Is <RacetrackSettingsChangedMessage>(x =>
+                                                                              Math.Abs(x.TurnRadius -
+                                                                                       m_Source.TurnRadius) <
+                                                                              Tolerance &&
+                                                                              x.IsPortTurnAllowed ==
+                                                                              m_Source.IsPortTurnAllowed &&
+                                                                              x.IsStarboardTurnAllowed ==
+                                                                              m_Source.IsStarboardTurnAllowed));
         }
 
         [Test]
-        public void ConstructorSubscribesToMessageTest()
+        public void ConstructorSubscribesToRacetrackSettingsSetMessageTest()
         {
-            m_Bus.Received().SubscribeAsync(m_Model.GetType().ToString(),
-                                            Arg.Any <Func <RacetrackSettingsSetMessage, Task>>());
+            m_MemoryBus.Received()
+                       .SubscribeAsync(m_Model.GetType().ToString(),
+                                       Arg.Any <Action <RacetrackSettingsSetMessage>>());
+        }
+
+        [Test]
+        public void ConstructorSubscribesToRacetrackSettingsRequestMessageTest()
+        {
+            m_MemoryBus.Received()
+                       .SubscribeAsync(m_Model.GetType().ToString(),
+                                       Arg.Any<Action<RacetrackSettingsRequestMessage>>());
+        }
+
+        [Test]
+        public void ConstructorSubscribesToColonyCostMatrixChangedMessageTest()
+        {
+            m_Bus.Received()
+                 .SubscribeAsync(m_Model.GetType().ToString(),
+                                 Arg.Any <Action <ColonyCostMatrixChangedMessage>>());
         }
 
         [Test]

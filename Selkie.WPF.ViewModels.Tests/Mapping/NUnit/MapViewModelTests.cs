@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Media;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Interfaces;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
@@ -24,8 +22,7 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For<ISelkieInMemoryBus>();
             m_Dispatcher = new TestImmediateDispatcher();
             m_ConverterNodes = Substitute.For <ILineNodeToDisplayLineNodeConverter>();
             m_ConverterStartNodeModel = Substitute.For <INodeModelToDisplayNodeConverter>();
@@ -45,8 +42,7 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
 
         private MapViewModel CreateModel([NotNull] IApplicationDispatcher dispatcher)
         {
-            return new MapViewModel(m_Logger,
-                                    m_Bus,
+            return new MapViewModel(m_Bus,
                                     dispatcher,
                                     m_ConverterNodes,
                                     m_ConverterStartNodeModel,
@@ -62,8 +58,7 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
                                     m_RacetrackModel);
         }
 
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieInMemoryBus m_Bus;
         private TestImmediateDispatcher m_Dispatcher;
         private ILineNodeToDisplayLineNodeConverter m_ConverterNodes;
         private INodeModelToDisplayNodeConverter m_ConverterStartNodeModel;
@@ -78,6 +73,12 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
         private IShortestPathDirectionModel m_ShortestPathDirectionModel;
         private IRacetrackModel m_RacetrackModel;
         private MapViewModel m_Model;
+
+        [Test]
+        public void Constructor_SendsLinesModelLinesRequestMessage_WhenCreated()
+        {
+            m_Bus.Received().PublishAsync(Arg.Any <LinesModelLinesRequestMessage>());
+        }
 
         [Test]
         public void Constructor_SetsFillBrushToRedForEndNodes_WhenCreated()
@@ -95,49 +96,49 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
         public void Constructor_SubscribeToColonyFinishedMessageLinesModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <LinesModelChangedMessage, Task>>());
+                                            Arg.Any <Action <LinesModelChangedMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribeToEndNodeModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <EndNodeModelChangedMessage, Task>>());
+                                            Arg.Any <Action <EndNodeModelChangedMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribeToNodesModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <NodesModelChangedMessage, Task>>());
+                                            Arg.Any <Action <NodesModelChangedMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribeToRacetrackModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <RacetrackModelChangedMessage, Task>>());
+                                            Arg.Any <Action <RacetrackModelChangedMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribeToShortestPathDirectionModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ShortestPathDirectionModelChangedMessage, Task>>());
+                                            Arg.Any <Action <ShortestPathDirectionModelChangedMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribeToShortestPathModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ShortestPathModelChangedMessage, Task>>());
+                                            Arg.Any <Action <ShortestPathModelChangedMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribeToStartNodeModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <StartNodeModelChangedMessage, Task>>());
+                                            Arg.Any <Action <StartNodeModelChangedMessage>>());
         }
 
         [Test]

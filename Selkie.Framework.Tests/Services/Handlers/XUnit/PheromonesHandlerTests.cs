@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using EasyNetQ;
 using JetBrains.Annotations;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Services.Handlers;
 using Selkie.Services.Aco.Common.Messages;
@@ -18,7 +18,7 @@ namespace Selkie.Framework.Tests.Services.Handlers.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Handle_SendsMessage_WhenCalled([NotNull, Frozen] IBus bus,
+        public void Handle_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                    [NotNull] PheromonesMessage message,
                                                    [NotNull] PheromonesHandler sut)
         {

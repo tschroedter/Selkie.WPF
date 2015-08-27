@@ -1,7 +1,5 @@
-﻿using Castle.Core.Logging;
-using EasyNetQ;
-using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+﻿using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.Windsor;
@@ -12,11 +10,10 @@ namespace Selkie.Framework
     public class RacetrackSettingsSourceManager : IRacetrackSettingsSourceManager
     {
         internal static readonly double DefaultRadius = 30.0;
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
         private readonly IRacetrackSettingsSourceFactory m_Factory;
 
-        public RacetrackSettingsSourceManager([NotNull] ILogger logger,
-                                              [NotNull] IBus bus,
+        public RacetrackSettingsSourceManager([NotNull] ISelkieBus bus,
                                               [NotNull] IRacetrackSettingsSourceFactory factory)
         {
             m_Bus = bus;
@@ -27,13 +24,11 @@ namespace Selkie.Framework
                                       true);
 
             string subscriptionId = GetType().FullName;
-            m_Bus.SubscribeHandlerAsync <ColonyRacetrackSettingsSetMessage>(logger,
-                                                                            subscriptionId,
-                                                                            ColonyRacetrackSettingsSetHandler);
+            m_Bus.SubscribeAsync <ColonyRacetrackSettingsSetMessage>(subscriptionId,
+                                                                     ColonyRacetrackSettingsSetHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyRacetrackSettingsRequestMessage>(logger,
-                                                                                subscriptionId,
-                                                                                ColonyRacetrackSettingsRequestHandler);
+            m_Bus.SubscribeAsync <ColonyRacetrackSettingsRequestMessage>(subscriptionId,
+                                                                         ColonyRacetrackSettingsRequestHandler);
         }
 
         public IRacetrackSettingsSource Source { get; private set; }

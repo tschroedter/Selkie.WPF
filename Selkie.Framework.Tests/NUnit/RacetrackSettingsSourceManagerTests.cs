@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NSubstitute.Core;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 
@@ -18,15 +16,13 @@ namespace Selkie.Framework.Tests.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For <ISelkieBus>();
             m_Factory = Substitute.For <IRacetrackSettingsSourceFactory>();
             m_Factory.Create(Arg.Any <double>(),
                              Arg.Any <bool>(),
                              Arg.Any <bool>()).Returns(CreateSource);
 
-            m_Sut = new RacetrackSettingsSourceManager(m_Logger,
-                                                       m_Bus,
+            m_Sut = new RacetrackSettingsSourceManager(m_Bus,
                                                        m_Factory);
         }
 
@@ -37,8 +33,7 @@ namespace Selkie.Framework.Tests.NUnit
                                                ( bool ) arg [ 2 ]);
         }
 
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieBus m_Bus;
         private RacetrackSettingsSourceManager m_Sut;
         private IRacetrackSettingsSourceFactory m_Factory;
 
@@ -56,14 +51,14 @@ namespace Selkie.Framework.Tests.NUnit
         public void Constructor_SubscribesToColonyRacetrackSettingsRequestMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Sut.GetType().FullName,
-                                            Arg.Any <Func <ColonyRacetrackSettingsRequestMessage, Task>>());
+                                            Arg.Any <Action <ColonyRacetrackSettingsRequestMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribesToColonyRacetrackSettingsSetMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Sut.GetType().FullName,
-                                            Arg.Any <Func <ColonyRacetrackSettingsSetMessage, Task>>());
+                                            Arg.Any <Action <ColonyRacetrackSettingsSetMessage>>());
         }
 
         [Test]

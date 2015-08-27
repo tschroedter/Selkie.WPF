@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
@@ -24,15 +22,13 @@ namespace Selkie.WPF.ViewModels.Tests.Pheromones.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Dispatcher = Substitute.For <IApplicationDispatcher>();
             m_PheromonesModel = Substitute.For <IPheromonesModel>();
             m_GrayscaleConverter = Substitute.For <IGrayscaleConverter>();
             m_ImageSourceConverter = Substitute.For <IBitmapSourceConverter>();
 
-            m_Model = new PheromonesViewModel(m_Logger,
-                                              m_Bus,
+            m_Model = new PheromonesViewModel(m_Bus,
                                               m_Dispatcher,
                                               m_PheromonesModel,
                                               m_GrayscaleConverter,
@@ -40,8 +36,7 @@ namespace Selkie.WPF.ViewModels.Tests.Pheromones.NUnit
         }
 
         private PheromonesViewModel m_Model;
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieInMemoryBus m_Bus;
         private IApplicationDispatcher m_Dispatcher;
         private IPheromonesModel m_PheromonesModel;
         private IGrayscaleConverter m_GrayscaleConverter;
@@ -51,7 +46,7 @@ namespace Selkie.WPF.ViewModels.Tests.Pheromones.NUnit
         public void Constructor_SubscribeToPheromonesModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <PheromonesModelChangedMessage, Task>>());
+                                            Arg.Any <Action <PheromonesModelChangedMessage>>());
         }
 
         [Test]

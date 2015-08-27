@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry.Shapes;
 using Selkie.Services.Racetracks.Common.Dto;
 using Selkie.Services.Racetracks.Common.Messages;
+using Selkie.Windsor;
 using Selkie.XUnit.Extensions;
 using Xunit;
 using Xunit.Extensions;
@@ -25,46 +24,46 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void Constructor_SubscribesToCostMatrixChangedMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
             // Act
             // Assert
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <CostMatrixChangedMessage, Task>>());
+                                          Arg.Any <Action <CostMatrixChangedMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
         public void Constructor_SubscribesToColonyLinesChangedMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
             // Act
             // Assert
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <ColonyLinesChangedMessage, Task>>());
+                                          Arg.Any <Action <ColonyLinesChangedMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
         public void Constructor_SubscribesToColonyRacetrackSettingsChangedMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
             // Act
             // Assert
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <ColonyRacetrackSettingsChangedMessage, Task>>());
+                                          Arg.Any <Action <ColonyRacetrackSettingsChangedMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
         public void Constructor_SubscribesToCostMatrixGetMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
@@ -76,7 +75,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void Constructor_SetsMatrix_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
@@ -88,7 +87,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void SendRacetrackSettingsSetMessage_SendsMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] IRacetrackSettingsSourceManager manager,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
@@ -112,7 +111,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void SendLinesSetMessage_SendsMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
@@ -126,7 +125,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CreateLineDtos_ReturnsDtos_ForLines(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
@@ -155,7 +154,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CreateLineDtos_ReturnsDto_ForLine(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
@@ -191,7 +190,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void SendCostMatrixCalculateMessage_SendsMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
@@ -205,7 +204,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void ColonyLinesChangedHandler_CallsRecalculateCostMatrix_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut,
             [NotNull] ColonyLinesChangedMessage message)
         {
@@ -220,7 +219,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void ColonyRacetrackSettingsChangedHandler_CallsRecalculateCostMatrix_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut,
             [NotNull] ColonyRacetrackSettingsChangedMessage message)
         {
@@ -235,7 +234,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void RecalculateCostMatrix_SendsRacetrackSettingsSetMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
@@ -249,7 +248,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void RecalculateCostMatrix_SendsLinesSetMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
@@ -263,7 +262,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void RecalculateCostMatrix_SendsCostMatrixCalculateMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut)
         {
             // Arrange
@@ -277,7 +276,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CostMatrixChangedHandler_SendsMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut,
             [NotNull] CostMatrixChangedMessage message)
         {
@@ -292,7 +291,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CostMatrixChangedHandler_DoesNotSendsMessage_WhenMatrixIsNull(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] CostMatrixSourceManager sut,
             [NotNull] CostMatrixChangedMessage message)
         {
@@ -309,7 +308,7 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CostMatrixChangedHandler_LogsMessage_WhenMatrixIsNull(
-            [NotNull, Frozen] ILogger logger,
+            [NotNull, Frozen] ISelkieLogger logger,
             [NotNull, Frozen] CostMatrixSourceManager sut,
             [NotNull] CostMatrixChangedMessage message)
         {

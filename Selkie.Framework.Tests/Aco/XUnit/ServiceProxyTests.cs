@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
-using EasyNetQ;
 using JetBrains.Annotations;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Aco;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
@@ -24,43 +23,43 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToCreatedColonyMessage_WhenCreated([NotNull, Frozen] IBus bus,
+        public void Constructor_SubscribeToCreatedColonyMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
                                                                             [NotNull] ServiceProxy sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <CreatedColonyMessage, Task>>());
+                                          Arg.Any <Action <CreatedColonyMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToStartedMessage_WhenCreated([NotNull, Frozen] IBus bus,
+        public void Constructor_SubscribeToStartedMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
                                                                       [NotNull] ServiceProxy sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <StartedMessage, Task>>());
+                                          Arg.Any <Action <StartedMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToStoppedMessage_WhenCreated([NotNull, Frozen] IBus bus,
+        public void Constructor_SubscribeToStoppedMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
                                                                       [NotNull] ServiceProxy sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <StoppedMessage, Task>>());
+                                          Arg.Any <Action <StoppedMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToFinishedMessage_WhenCreated([NotNull, Frozen] IBus bus,
+        public void Constructor_SubscribeToFinishedMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
                                                                        [NotNull] ServiceProxy sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Func <FinishedMessage, Task>>());
+                                          Arg.Any <Action <FinishedMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void BestTrailHandler_SendsMessage_WhenCalled([NotNull, Frozen] IBus bus,
+        public void BestTrailHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                              [NotNull] ServiceProxy sut,
                                                              [NotNull] BestTrailMessage message)
         {
@@ -82,7 +81,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Stop_SendsMessage_WhenCalled([NotNull, Frozen] IBus bus,
+        public void Stop_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                  [NotNull] ServiceProxy sut)
         {
             // Arrange
@@ -147,7 +146,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void StartedHandler_SendsMessage_WhenCalled([NotNull, Frozen] IBus bus,
+        public void StartedHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                            [NotNull] ServiceProxy sut,
                                                            [NotNull] StartedMessage message)
         {
@@ -161,7 +160,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void StoppedHandler_SetsIsRunningToFalse_WhenCalled([NotNull, Frozen] IBus bus,
+        public void StoppedHandler_SetsIsRunningToFalse_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                                    [NotNull] ServiceProxy sut,
                                                                    [NotNull] StoppedMessage message)
         {
@@ -175,7 +174,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void StoppedHandler_SetsIsColonyCreatedToFalse_WhenCalled([NotNull, Frozen] IBus bus,
+        public void StoppedHandler_SetsIsColonyCreatedToFalse_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                                          [NotNull] ServiceProxy sut,
                                                                          [NotNull] StoppedMessage message)
         {
@@ -189,7 +188,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void StoppedHandler_SetsIsFinishedToFalse_WhenCalled([NotNull, Frozen] IBus bus,
+        public void StoppedHandler_SetsIsFinishedToFalse_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                                     [NotNull] ServiceProxy sut,
                                                                     [NotNull] StoppedMessage message)
         {
@@ -203,7 +202,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void StoppedHandler_SendsMessage_WhenCalled([NotNull, Frozen] IBus bus,
+        public void StoppedHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                            [NotNull] ServiceProxy sut,
                                                            [NotNull] StoppedMessage message)
         {
@@ -217,7 +216,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void FinishedHandler_SetsIsRunningToFalse_WhenCalled([NotNull, Frozen] IBus bus,
+        public void FinishedHandler_SetsIsRunningToFalse_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                                     [NotNull] ServiceProxy sut,
                                                                     [NotNull] FinishedMessage message)
         {
@@ -231,7 +230,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void FinishedHandler_SetsIsFinishedToTrue_WhenCalled([NotNull, Frozen] IBus bus,
+        public void FinishedHandler_SetsIsFinishedToTrue_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                                     [NotNull] ServiceProxy sut,
                                                                     [NotNull] FinishedMessage message)
         {
@@ -245,7 +244,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void FinishedHandler_SetsIsColonyCreatedToFalse_WhenCalled([NotNull, Frozen] IBus bus,
+        public void FinishedHandler_SetsIsColonyCreatedToFalse_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                                           [NotNull] ServiceProxy sut,
                                                                           [NotNull] FinishedMessage message)
         {
@@ -259,7 +258,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void FinishedHandler_SendsMessage_WhenCalled([NotNull, Frozen] IBus bus,
+        public void FinishedHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                             [NotNull] ServiceProxy sut,
                                                             [NotNull] FinishedMessage message)
         {
@@ -273,7 +272,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Start_SendsMessage_WhenCalled([NotNull, Frozen] IBus bus,
+        public void Start_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                   [NotNull] ServiceProxy sut)
         {
             // Arrange
@@ -289,7 +288,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Start_DoesNotSendsMessage_WhenIsColonyCreatedIsFalse([NotNull, Frozen] IBus bus,
+        public void Start_DoesNotSendsMessage_WhenIsColonyCreatedIsFalse([NotNull, Frozen] ISelkieBus bus,
                                                                          [NotNull] ServiceProxy sut)
         {
             // Arrange
@@ -302,7 +301,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Start_DoesNotSendsMessage_WhenIsRunningIsTrue([NotNull, Frozen] IBus bus,
+        public void Start_DoesNotSendsMessage_WhenIsRunningIsTrue([NotNull, Frozen] ISelkieBus bus,
                                                                   [NotNull] ServiceProxy sut)
         {
             // Arrange
@@ -319,7 +318,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CreateColony_SendsMessage_WhenCalled(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
             [NotNull, Frozen] ILinesSourceManager linesSourceManager,
             [NotNull] ServiceProxy sut)
@@ -339,7 +338,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CreateColony_DoesNotSendsMessage_WhenMatrixIsEmpty(
-            [NotNull, Frozen] IBus bus,
+            [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
             [NotNull] ServiceProxy sut)
         {

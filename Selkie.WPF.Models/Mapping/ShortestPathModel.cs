@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Castle.Core.Logging;
-using EasyNetQ;
-using Selkie.EasyNetQ.Extensions;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
+using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
@@ -16,28 +16,28 @@ namespace Selkie.WPF.Models.Mapping
         : IShortestPathModel,
           IDisposable
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly ILineToLineNodeConverterToDisplayLineConverterFactory m_Factory;
-        private readonly ILogger m_Logger;
+        private readonly ISelkieLogger m_Logger;
         private readonly IPathToLineToLineNodeConverter m_PathToLineToLineNodeConverter;
         private ILineToLineNodeConverterToDisplayLineConverter m_Converter;
         private IEnumerable <ILineToLineNodeConverter> m_Nodes;
 
-        public ShortestPathModel(ILogger logger,
-                                 IBus bus,
-                                 IPathToLineToLineNodeConverter pathToLineToLineNodeConverter,
-                                 ILineToLineNodeConverterToDisplayLineConverterFactory factory)
+        public ShortestPathModel([NotNull] ISelkieLogger logger,
+                                 [NotNull] ISelkieBus bus,
+                                 [NotNull] ISelkieInMemoryBus memoryBus,
+                                 [NotNull] IPathToLineToLineNodeConverter pathToLineToLineNodeConverter,
+                                 [NotNull] ILineToLineNodeConverterToDisplayLineConverterFactory factory)
         {
             m_Logger = logger;
-            m_Bus = bus;
+            m_MemoryBus = memoryBus;
             m_PathToLineToLineNodeConverter = pathToLineToLineNodeConverter;
             m_Factory = factory;
             m_Nodes = new ILineToLineNodeConverter[0];
             m_Converter = m_Factory.Create();
 
-            m_Bus.SubscribeHandlerAsync <ColonyBestTrailMessage>(m_Logger,
-                                                                 GetType().FullName,
-                                                                 ColonyBestTrailHandler);
+            bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().FullName,
+                                                        ColonyBestTrailHandler);
         }
 
         public void Dispose()
@@ -81,7 +81,7 @@ namespace Selkie.WPF.Models.Mapping
                 UpdateConverter();
             }
 
-            m_Bus.Publish(new ShortestPathModelChangedMessage());
+            m_MemoryBus.Publish(new ShortestPathModelChangedMessage());
         }
 
         internal void ConvertPath(IEnumerable <int> trail)

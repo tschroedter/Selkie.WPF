@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
+using Selkie.Windsor;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
@@ -24,24 +23,27 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         {
             m_NodeToDisplayLineConverter = Substitute.For <ILineToLineNodeConverterToDisplayLineConverter>();
 
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Logger = Substitute.For <ISelkieLogger>();
+            m_Bus = Substitute.For <ISelkieBus>();
+            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Converter = Substitute.For <IPathToLineToLineNodeConverter>();
             m_Factory = Substitute.For <ILineToLineNodeConverterToDisplayLineConverterFactory>();
             m_Factory.Create().Returns(m_NodeToDisplayLineConverter);
 
             m_Model = new ShortestPathModel(m_Logger,
                                             m_Bus,
+                                            m_MemoryBus,
                                             m_Converter,
                                             m_Factory);
         }
 
         private ShortestPathModel m_Model;
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieLogger m_Logger;
+        private ISelkieBus m_Bus;
         private IPathToLineToLineNodeConverter m_Converter;
         private ILineToLineNodeConverterToDisplayLineConverterFactory m_Factory;
         private ILineToLineNodeConverterToDisplayLineConverter m_NodeToDisplayLineConverter;
+        private ISelkieInMemoryBus m_MemoryBus;
 
         private ColonyBestTrailMessage CreateBestTrailMessage()
         {
@@ -105,7 +107,7 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         public void SubscribesToBestTrailMessageTest()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ColonyBestTrailMessage, Task>>());
+                                            Arg.Any <Action <ColonyBestTrailMessage>>());
         }
 
         [Test]
@@ -168,7 +170,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
 
             m_Model.Update(message);
 
-            m_Bus.Received().Publish(Arg.Any <ShortestPathModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .Publish(Arg.Any <ShortestPathModelChangedMessage>());
         }
 
         [Test]

@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Mapping;
@@ -17,19 +16,19 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For <ISelkieBus>();
+            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Helper = Substitute.For <INodeIdHelper>();
 
-            m_Model = new EndNodeModel(m_Logger,
-                                       m_Bus,
+            m_Model = new EndNodeModel(m_Bus,
+                                       m_MemoryBus,
                                        m_Helper);
         }
 
-        private IBus m_Bus;
-        private ILogger m_Logger;
+        private ISelkieBus m_Bus;
         private EndNodeModel m_Model;
         private INodeIdHelper m_Helper;
+        private ISelkieInMemoryBus m_MemoryBus;
 
         [Test]
         public void DetermieNodeIdReversesTest()
@@ -51,7 +50,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         {
             m_Model.SendMessage();
 
-            m_Bus.Received().Publish(Arg.Any <EndNodeModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .Publish(Arg.Any <EndNodeModelChangedMessage>());
         }
     }
 }

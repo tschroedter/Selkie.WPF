@@ -2,12 +2,12 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows.Media;
-using Castle.Core.Logging;
 using NSubstitute;
 using NUnit.Framework;
 using Selkie.Framework.Common;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry.Shapes;
+using Selkie.Windsor;
 using Selkie.WPF.Converters.Interfaces;
 
 namespace Selkie.WPF.Converters.Tests.NUnit
@@ -20,7 +20,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
+            m_Logger = Substitute.For <ISelkieLogger>();
 
             m_StartSegment = Substitute.For <ITurnCircleArcSegment>();
             m_MiddleSegment = Substitute.For <ILine>();
@@ -71,7 +71,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
         private IPath m_UTurnPath;
         private PathFigureCollection m_NormalFigureCollection;
         private PathFigureCollection m_UTurnFigureCollection;
-        private ILogger m_Logger;
+        private ISelkieLogger m_Logger;
 
         [Test]
         public void ConvertForUnknownPathTest()

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Geometry.Primitives;
 using Selkie.Geometry.Shapes;
@@ -25,22 +23,22 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         {
             m_Line = CreateLine();
 
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For <ISelkieBus>();
+            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Helper = Substitute.For <INodeIdHelper>();
             m_Helper.GetLine(-1).ReturnsForAnyArgs(m_Line);
             m_Helper.IsForwardNode(-1).ReturnsForAnyArgs(true);
 
-            m_Model = new ShortestPathDirectionModel(m_Logger,
-                                                     m_Bus,
+            m_Model = new ShortestPathDirectionModel(m_Bus,
+                                                     m_MemoryBus,
                                                      m_Helper);
         }
 
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieBus m_Bus;
         private INodeIdHelper m_Helper;
         private ShortestPathDirectionModel m_Model;
         private ILine m_Line;
+        private ISelkieInMemoryBus m_MemoryBus;
 
         private ILine CreateLine()
         {
@@ -86,7 +84,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.ColonyBestTrailHandler(message);
 
             // Assert
-            m_Bus.Received().Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
         }
 
         [Test]
@@ -99,21 +98,22 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.ColonyLinesChangedHandler(message);
 
             // Assert
-            m_Bus.Received().Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
         }
 
         [Test]
         public void Constructor_SubscribesToBestTrailMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ColonyBestTrailMessage, Task>>());
+                                            Arg.Any <Action <ColonyBestTrailMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribesToColonyLinesChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ColonyLinesChangedMessage, Task>>());
+                                            Arg.Any <Action <ColonyLinesChangedMessage>>());
         }
 
         [Test]
@@ -212,7 +212,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.Update(message);
 
             // Assert
-            m_Bus.Received().Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
         }
 
         [Test]

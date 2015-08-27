@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Castle.Core.Logging;
-using EasyNetQ;
-using Selkie.EasyNetQ.Extensions;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Geometry.Primitives;
 using Selkie.Geometry.Shapes;
@@ -13,24 +12,22 @@ namespace Selkie.WPF.Models.Mapping
 {
     public sealed class ShortestPathDirectionModel : IShortestPathDirectionModel
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly INodeIdHelper m_NodeIdHelper;
         private readonly List <INodeModel> m_Nodes = new List <INodeModel>();
 
-        public ShortestPathDirectionModel(ILogger logger,
-                                          IBus bus,
-                                          INodeIdHelper nodeIdHelper)
+        public ShortestPathDirectionModel([NotNull] ISelkieBus bus,
+                                          [NotNull] ISelkieInMemoryBus memoryBus,
+                                          [NotNull] INodeIdHelper nodeIdHelper)
         {
-            m_Bus = bus;
+            m_MemoryBus = memoryBus;
             m_NodeIdHelper = nodeIdHelper;
 
-            bus.SubscribeHandlerAsync <ColonyBestTrailMessage>(logger,
-                                                               GetType().FullName,
-                                                               ColonyBestTrailHandler);
+            bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().FullName,
+                                                        ColonyBestTrailHandler);
 
-            bus.SubscribeHandlerAsync <ColonyLinesChangedMessage>(logger,
-                                                                  GetType().ToString(),
-                                                                  ColonyLinesChangedHandler);
+            bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
+                                                           ColonyLinesChangedHandler);
         }
 
         public IEnumerable <INodeModel> Nodes
@@ -70,7 +67,7 @@ namespace Selkie.WPF.Models.Mapping
                 m_Nodes.Add(model);
             }
 
-            m_Bus.Publish(new ShortestPathDirectionModelChangedMessage());
+            m_MemoryBus.Publish(new ShortestPathDirectionModelChangedMessage());
         }
 
         internal INodeModel CreateNodeModel(int lineId,

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Geometry.Primitives;
 using Selkie.Geometry.Shapes;
@@ -26,22 +24,22 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         {
             m_Line = CreateLine();
 
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For <ISelkieBus>();
+            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Helper = Substitute.For <INodeIdHelper>();
             m_Helper.GetLine(-1).ReturnsForAnyArgs(m_Line);
             m_Helper.IsForwardNode(-1).ReturnsForAnyArgs(true);
 
-            m_Model = new TestBaseNodeModel(m_Logger,
-                                            m_Bus,
+            m_Model = new TestBaseNodeModel(m_Bus,
+                                            m_MemoryBus,
                                             m_Helper);
         }
 
-        private IBus m_Bus;
-        private ILogger m_Logger;
+        private ISelkieBus m_Bus;
         private TestBaseNodeModel m_Model;
         private INodeIdHelper m_Helper;
         private ILine m_Line;
+        private ISelkieInMemoryBus m_MemoryBus;
 
         private ColonyBestTrailMessage CreateBestTrailMessage([NotNull] IEnumerable <int> trail)
         {
@@ -75,11 +73,11 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
 
         private class TestBaseNodeModel : BaseNodeModel
         {
-            public TestBaseNodeModel(ILogger logger,
-                                     IBus bus,
-                                     INodeIdHelper nodeIdHelper)
-                : base(logger,
-                       bus,
+            public TestBaseNodeModel([NotNull] ISelkieBus bus,
+                                     [NotNull] ISelkieInMemoryBus memoryBus,
+                                     [NotNull] INodeIdHelper nodeIdHelper)
+                : base(bus,
+                       memoryBus,
                        nodeIdHelper)
             {
             }
@@ -220,14 +218,14 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         public void SubscribeToBestTrailMessageTest()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ColonyBestTrailMessage, Task>>());
+                                            Arg.Any <Action <ColonyBestTrailMessage>>());
         }
 
         [Test]
         public void SubscribeToColonyLinesChangedMessageest()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ColonyLinesChangedMessage, Task>>());
+                                            Arg.Any <Action <ColonyLinesChangedMessage>>());
         }
 
         [Test]

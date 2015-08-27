@@ -1,8 +1,6 @@
 using System.Linq;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.Framework.Interfaces.Aco;
@@ -16,13 +14,12 @@ namespace Selkie.Framework.Aco
     {
         internal const int DefaultNumberOfIterations = 2000;
         private readonly IAcoProxyLogger m_AcoProxylogger;
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
         private readonly ICostMatrixSourceManager m_CostMatrixSourceManager;
         private readonly ILinesSourceManager m_LinesSourceManager;
 
-        public ServiceProxy([NotNull] ILogger alogger,
-                            [NotNull] IAcoProxyLogger acoProxylogger,
-                            [NotNull] IBus bus,
+        public ServiceProxy([NotNull] IAcoProxyLogger acoProxylogger,
+                            [NotNull] ISelkieBus bus,
                             [NotNull] ICostMatrixSourceManager costMatrixSourceManager,
                             [NotNull] ILinesSourceManager linesSourceManager)
         {
@@ -33,21 +30,17 @@ namespace Selkie.Framework.Aco
 
             string subscriptionId = GetType().FullName;
 
-            m_Bus.SubscribeHandlerAsync <CreatedColonyMessage>(alogger,
-                                                               subscriptionId,
-                                                               CreatedColonyHandler);
+            m_Bus.SubscribeAsync <CreatedColonyMessage>(subscriptionId,
+                                                        CreatedColonyHandler);
 
-            m_Bus.SubscribeHandlerAsync <StartedMessage>(alogger,
-                                                         subscriptionId,
-                                                         StartedHandler);
+            m_Bus.SubscribeAsync <StartedMessage>(subscriptionId,
+                                                  StartedHandler);
 
-            m_Bus.SubscribeHandlerAsync <StoppedMessage>(alogger,
-                                                         subscriptionId,
-                                                         StoppedHandler);
+            m_Bus.SubscribeAsync <StoppedMessage>(subscriptionId,
+                                                  StoppedHandler);
 
-            m_Bus.SubscribeHandlerAsync <FinishedMessage>(alogger,
-                                                          subscriptionId,
-                                                          FinishedHandler);
+            m_Bus.SubscribeAsync <FinishedMessage>(subscriptionId,
+                                                   FinishedHandler);
         }
 
         public bool IsColonyCreated { get; private set; }

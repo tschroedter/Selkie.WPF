@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
+using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces;
@@ -16,33 +15,32 @@ namespace Selkie.WPF.Models.TrailHistory
         : ITrailHistoryModel,
           IDisposable
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
 
         private readonly SortedDictionary <int, ITrailDetails> m_Dictionary =
             new SortedDictionary <int, ITrailDetails>();
 
         private readonly ITrailDetailsFactory m_Factory;
-        private readonly ILogger m_Logger;
+        private readonly ISelkieLogger m_Logger;
         private ITrailDetails m_FirstTrailDetails = TrailDetails.Unknown;
         private List <ITrailDetails> m_TrailDetails = new List <ITrailDetails>();
 
-        public TrailHistoryModel([NotNull] ILogger logger,
-                                 [NotNull] IBus bus,
+        public TrailHistoryModel([NotNull] ISelkieLogger logger,
+                                 [NotNull] ISelkieBus bus,
+                                 [NotNull] ISelkieInMemoryBus memoryBus,
                                  [NotNull] ITrailDetailsFactory factory)
         {
             m_Logger = logger;
-            m_Bus = bus;
+            m_MemoryBus = memoryBus;
             m_Factory = factory;
 
             string subscriptionId = GetType().FullName;
 
-            m_Bus.SubscribeHandlerAsync <ColonyBestTrailMessage>(logger,
-                                                                 subscriptionId,
-                                                                 ColonyBestTrailHandler);
+            bus.SubscribeAsync <ColonyBestTrailMessage>(subscriptionId,
+                                                        ColonyBestTrailHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyStartRequestMessage>(logger,
-                                                                    subscriptionId,
-                                                                    ColonyStartRequestHandler);
+            bus.SubscribeAsync <ColonyStartRequestMessage>(subscriptionId,
+                                                           ColonyStartRequestHandler);
         }
 
         public void Dispose()
@@ -108,9 +106,9 @@ namespace Selkie.WPF.Models.TrailHistory
                 m_TrailDetails = CreateTrailDetailsList(m_Dictionary.Values.ToArray());
 
                 m_Logger.Info("Update called! (Count: {0})".Inject(m_Dictionary.Count));
-            }
 
-            m_Bus.Publish(new TrailHistoryModelChangedMessage());
+                m_MemoryBus.PublishAsync(new TrailHistoryModelChangedMessage());
+            }
         }
 
         internal List <ITrailDetails> CreateTrailDetailsList(ITrailDetails[] values)

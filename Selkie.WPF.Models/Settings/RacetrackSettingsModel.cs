@@ -1,7 +1,5 @@
-﻿using Castle.Core.Logging;
-using EasyNetQ;
-using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+﻿using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
@@ -12,28 +10,27 @@ namespace Selkie.WPF.Models.Settings
     public class RacetrackSettingsModel : IRacetrackSettingsModel
     {
         internal static readonly double DefaultTurnRadius = 30.0;
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly IRacetrackSettingsSourceManager m_Manager;
 
-        public RacetrackSettingsModel([NotNull] ILogger logger,
-                                      [NotNull] IBus bus,
+        public RacetrackSettingsModel([NotNull] ISelkieBus bus,
+                                      [NotNull] ISelkieInMemoryBus memoryBus,
                                       [NotNull] IRacetrackSettingsSourceManager manager)
         {
             m_Bus = bus;
+            m_MemoryBus = memoryBus;
             m_Manager = manager;
 
             string subscriptionId = GetType().ToString();
-            m_Bus.SubscribeHandlerAsync <RacetrackSettingsSetMessage>(logger,
-                                                                      subscriptionId,
-                                                                      RacetrackSettingsSetHandler);
+            memoryBus.SubscribeAsync <RacetrackSettingsSetMessage>(subscriptionId,
+                                                                   RacetrackSettingsSetHandler);
 
-            m_Bus.SubscribeHandlerAsync <RacetrackSettingsRequestMessage>(logger,
-                                                                          subscriptionId,
-                                                                          RacetrackSettingsRequestHandler);
+            memoryBus.SubscribeAsync <RacetrackSettingsRequestMessage>(subscriptionId,
+                                                                       RacetrackSettingsRequestHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyCostMatrixChangedMessage>(logger,
-                                                                         subscriptionId,
-                                                                         ColonyCostMatrixChangedHandler);
+            m_Bus.SubscribeAsync <ColonyCostMatrixChangedMessage>(subscriptionId,
+                                                                  ColonyCostMatrixChangedHandler);
         }
 
         public double TurnRadius
@@ -71,7 +68,7 @@ namespace Selkie.WPF.Models.Settings
                             IsStarboardTurnAllowed = source.IsStarboardTurnAllowed
                         };
 
-            m_Bus.PublishAsync(reply);
+            m_MemoryBus.PublishAsync(reply);
         }
 
         internal void RacetrackSettingsRequestHandler(RacetrackSettingsRequestMessage message)

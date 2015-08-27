@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces;
@@ -22,8 +20,7 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Bus = Substitute.For<ISelkieInMemoryBus>();
             m_Dispatcher = new TestImmediateDispatcher();
             m_ControlModel = Substitute.For <IControlModel>();
             m_Manager = Substitute.For <ICommandManager>();
@@ -33,15 +30,13 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
 
         private ControlViewModel CreateModel([NotNull] IApplicationDispatcher dispatcher)
         {
-            return new ControlViewModel(m_Logger,
-                                        m_Bus,
+            return new ControlViewModel(m_Bus,
                                         dispatcher,
                                         m_ControlModel,
                                         m_Manager);
         }
 
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieInMemoryBus m_Bus;
         private ControlViewModel m_Model;
         private TestImmediateDispatcher m_Dispatcher;
         private IControlModel m_ControlModel;
@@ -234,14 +229,14 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         public void Constructor_SubscribeToControlModelChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ControlModelChangedMessage, Task>>());
+                                            Arg.Any <Action <ControlModelChangedMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribeToControlModelTestLinesChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Func <ControlModelTestLinesChangedMessage, Task>>());
+                                            Arg.Any <Action <ControlModelTestLinesChangedMessage>>());
         }
 
         [Test]

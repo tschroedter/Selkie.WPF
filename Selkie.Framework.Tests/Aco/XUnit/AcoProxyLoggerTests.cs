@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Castle.Core.Logging;
 using JetBrains.Annotations;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit;
 using Selkie.Framework.Aco;
+using Selkie.Windsor;
 using Selkie.XUnit.Extensions;
 using Xunit.Extensions;
 
@@ -14,7 +14,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
     {
         [Theory]
         [AutoNSubstituteData]
-        public void Error_CallsLogger_WhenCalled([NotNull, Frozen] ILogger logger,
+        public void Error_CallsLogger_WhenCalled([NotNull, Frozen] ISelkieLogger logger,
                                                  [NotNull] AcoProxyLogger sut)
         {
             // Arrange
@@ -27,7 +27,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Info_CallsLogger_WhenCalled([NotNull, Frozen] ILogger logger,
+        public void Info_CallsLogger_WhenCalled([NotNull, Frozen] ISelkieLogger logger,
                                                 [NotNull] AcoProxyLogger sut)
         {
             // Arrange
@@ -40,7 +40,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void LogCostPerLine_CallsLogger_WhenCalled([NotNull, Frozen] ILogger logger,
+        public void LogCostPerLine_CallsLogger_WhenCalled([NotNull, Frozen] ISelkieLogger logger,
                                                           [NotNull] AcoProxyLogger sut)
         {
             // Arrange
@@ -60,7 +60,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void LogCostMatrix_CallsLogger_ForMatrix([NotNull, Frozen] ILogger logger,
+        public void LogCostMatrix_CallsLogger_ForMatrix([NotNull, Frozen] ISelkieLogger logger,
                                                         [NotNull] AcoProxyLogger sut)
         {
             // Arrange
@@ -75,7 +75,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void LogCostMatrix_CallsLogger_ForEmptyMatrix([NotNull, Frozen] ILogger logger,
+        public void LogCostMatrix_CallsLogger_ForEmptyMatrix([NotNull, Frozen] ISelkieLogger logger,
                                                              [NotNull] AcoProxyLogger sut)
         {
             // Arrange

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
-using Castle.Core.Logging;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Interfaces;
+using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Common.Interfaces.Windsor;
 
@@ -28,11 +28,11 @@ namespace Selkie.WPF.Application
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            ILogger logger = null;
+            ISelkieLogger logger = null;
 
             try
             {
-                logger = Container.Resolve <ILogger>();
+                logger = Container.Resolve <ISelkieLogger>();
 
                 var managementClient = Container.Resolve <ISelkieManagementClient>();
                 managementClient.PurgeAllQueues();
@@ -61,7 +61,7 @@ namespace Selkie.WPF.Application
             }
         }
 
-        private string LogException(ILogger logger,
+        private string LogException(ISelkieLogger logger,
                                     Exception exception)
         {
             string message = "Failed to create components: {0}\r\n\r\n{1}".Inject(exception.Message,

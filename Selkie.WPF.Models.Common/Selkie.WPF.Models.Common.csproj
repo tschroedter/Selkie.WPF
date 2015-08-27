@@ -45,6 +45,7 @@
     <Compile Include="Messages\ControlModelTestLinesRequestMessage.cs" />
     <Compile Include="Messages\EndNodeModelChangedMessage.cs" />
     <Compile Include="Messages\LinesModelChangedMessage.cs" />
+    <Compile Include="Messages\LinesModelLinesRequestMessage.cs" />
     <Compile Include="Messages\NodesModelChangedMessage.cs" />
     <Compile Include="Messages\PheromonesModelChangedMessage.cs" />
     <Compile Include="Messages\RacetrackModelChangedMessage.cs" />

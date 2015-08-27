@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
@@ -17,14 +15,14 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Singleton)]
     public class CostMatrixSourceManager : ICostMatrixSourceManager
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
         private readonly IDoubleArrayToIntegerArrayConverter m_Converter;
         private readonly ILinesSourceManager m_LinesSourceManager;
-        private readonly ILogger m_Logger;
+        private readonly ISelkieLogger m_Logger;
         private readonly IRacetrackSettingsSourceManager m_RacetrackSettingsSourceManager;
 
-        public CostMatrixSourceManager([NotNull] ILogger logger,
-                                       [NotNull] IBus bus,
+        public CostMatrixSourceManager([NotNull] ISelkieLogger logger,
+                                       [NotNull] ISelkieBus bus,
                                        [NotNull] ILinesSourceManager linesSourceManager,
                                        [NotNull] IRacetrackSettingsSourceManager racetrackSettingsSourceManager,
                                        [NotNull] IDoubleArrayToIntegerArrayConverter converter)
@@ -37,17 +35,15 @@ namespace Selkie.Framework
 
             string subscriptionId = GetType().FullName;
 
-            bus.SubscribeHandlerAsync <CostMatrixChangedMessage>(logger,
-                                                                 subscriptionId,
-                                                                 CostMatrixChangedHandler);
+            m_Bus.SubscribeAsync <CostMatrixChangedMessage>(subscriptionId,
+                                                            CostMatrixChangedHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyLinesChangedMessage>(logger,
-                                                                    subscriptionId,
-                                                                    ColonyLinesChangedHandler);
+            m_Bus.SubscribeAsync <ColonyLinesChangedMessage>(subscriptionId,
+                                                             ColonyLinesChangedHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyRacetrackSettingsChangedMessage>(logger,
-                                                                                subscriptionId,
-                                                                                ColonyRacetrackSettingsChangedHandler);
+            m_Bus.SubscribeAsync <ColonyRacetrackSettingsChangedMessage>(subscriptionId,
+                                                                         ColonyRacetrackSettingsChangedHandler);
+
             bus.PublishAsync(new CostMatrixGetMessage()); // todo rename to ...RequestMessage
         }
 

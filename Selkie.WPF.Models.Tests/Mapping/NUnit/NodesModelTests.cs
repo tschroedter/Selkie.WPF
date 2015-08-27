@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry.Shapes;
+using Selkie.Windsor;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Mapping;
@@ -24,20 +24,23 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         {
             m_Lines = CreateLines();
 
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Logger = Substitute.For <ISelkieLogger>();
+            m_Bus = Substitute.For <ISelkieBus>();
+            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Manager = Substitute.For <ILinesSourceManager>();
 
             m_Model = new NodesModel(m_Logger,
                                      m_Bus,
+                                     m_MemoryBus,
                                      m_Manager);
         }
 
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieLogger m_Logger;
+        private ISelkieBus m_Bus;
         private ILinesSourceManager m_Manager;
         private NodesModel m_Model;
         private IEnumerable <ILine> m_Lines;
+        private ISelkieInMemoryBus m_MemoryBus;
 
         private IEnumerable <Line> CreateLines()
         {
@@ -154,7 +157,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
 
             m_Model.LinesChangedHandler(message);
 
-            m_Bus.Received().Publish(Arg.Any <NodesModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .Publish(Arg.Any <NodesModelChangedMessage>());
         }
 
         [Test]

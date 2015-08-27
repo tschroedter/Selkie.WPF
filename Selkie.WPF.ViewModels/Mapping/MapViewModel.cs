@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media;
-using Castle.Core.Logging;
-using EasyNetQ;
-using Selkie.EasyNetQ.Extensions;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
@@ -35,21 +34,20 @@ namespace Selkie.WPF.ViewModels.Mapping
         private List <PathFigureCollection> m_Racetrack;
         private List <IDisplayLine> m_ShortestPath;
 
-        public MapViewModel(ILogger logger,
-                            IBus bus,
-                            IApplicationDispatcher dispatcher,
-                            ILineNodeToDisplayLineNodeConverter converterNodes,
-                            INodeModelToDisplayNodeConverter converterStartNodeModel,
-                            INodeModelToDisplayNodeConverter converterEndNodeModel,
-                            IRacetrackPathsToFiguresConverter converterRacetrack,
-                            INodesToDisplayNodesConverter converterDirections,
-                            ILinesModel linesModel,
-                            INodesModel nodesModel,
-                            IStartNodeModel startNodeModel,
-                            IEndNodeModel endNodeModel,
-                            IShortestPathModel shortestPathModel,
-                            IShortestPathDirectionModel shortestPathDirectionModel,
-                            IRacetrackModel racetrackModel)
+        public MapViewModel([NotNull] ISelkieInMemoryBus bus,
+                            [NotNull] IApplicationDispatcher dispatcher,
+                            [NotNull] ILineNodeToDisplayLineNodeConverter converterNodes,
+                            [NotNull] INodeModelToDisplayNodeConverter converterStartNodeModel,
+                            [NotNull] INodeModelToDisplayNodeConverter converterEndNodeModel,
+                            [NotNull] IRacetrackPathsToFiguresConverter converterRacetrack,
+                            [NotNull] INodesToDisplayNodesConverter converterDirections,
+                            [NotNull] ILinesModel linesModel,
+                            [NotNull] INodesModel nodesModel,
+                            [NotNull] IStartNodeModel startNodeModel,
+                            [NotNull] IEndNodeModel endNodeModel,
+                            [NotNull] IShortestPathModel shortestPathModel,
+                            [NotNull] IShortestPathDirectionModel shortestPathDirectionModel,
+                            [NotNull] IRacetrackModel racetrackModel)
         {
             m_Dispatcher = dispatcher;
             m_ConverterNodes = converterNodes;
@@ -68,28 +66,23 @@ namespace Selkie.WPF.ViewModels.Mapping
             m_ConverterEndNodeModel.FillBrush = Brushes.Red;
             m_ConverterEndNodeModel.StrokeBrush = Brushes.DarkRed;
 
-            string subscriptionId = GetType().FullName;
-            bus.SubscribeHandlerAsync <ShortestPathModelChangedMessage>(logger,
-                                                                        subscriptionId,
-                                                                        ShortestPathModelChangedHandler);
-            bus.SubscribeHandlerAsync <LinesModelChangedMessage>(logger,
-                                                                 subscriptionId,
-                                                                 LinesModelChangedMessageHandler);
-            bus.SubscribeHandlerAsync <NodesModelChangedMessage>(logger,
-                                                                 subscriptionId,
-                                                                 NodesModelChangedHandler);
-            bus.SubscribeHandlerAsync <StartNodeModelChangedMessage>(logger,
-                                                                     subscriptionId,
-                                                                     StartNodeModelChangedHandler);
-            bus.SubscribeHandlerAsync <EndNodeModelChangedMessage>(logger,
-                                                                   subscriptionId,
-                                                                   EndNodeModelChangedHandler);
-            bus.SubscribeHandlerAsync <RacetrackModelChangedMessage>(logger,
-                                                                     subscriptionId,
-                                                                     RacetrackModelChangedHandler);
-            bus.SubscribeHandlerAsync <ShortestPathDirectionModelChangedMessage>(logger,
-                                                                                 subscriptionId,
-                                                                                 ShortestPathDirectionModelChangedHandler);
+            string subscriptionId = GetType().FullName; // todo ICosume <T, T1,...>
+            bus.SubscribeAsync <ShortestPathModelChangedMessage>(subscriptionId,
+                                                                 ShortestPathModelChangedHandler);
+            bus.SubscribeAsync <LinesModelChangedMessage>(subscriptionId,
+                                                          LinesModelChangedMessageHandler);
+            bus.SubscribeAsync <NodesModelChangedMessage>(subscriptionId,
+                                                          NodesModelChangedHandler);
+            bus.SubscribeAsync <StartNodeModelChangedMessage>(subscriptionId,
+                                                              StartNodeModelChangedHandler);
+            bus.SubscribeAsync <EndNodeModelChangedMessage>(subscriptionId,
+                                                            EndNodeModelChangedHandler);
+            bus.SubscribeAsync <RacetrackModelChangedMessage>(subscriptionId,
+                                                              RacetrackModelChangedHandler);
+            bus.SubscribeAsync <ShortestPathDirectionModelChangedMessage>(subscriptionId,
+                                                                          ShortestPathDirectionModelChangedHandler);
+
+            bus.PublishAsync(new LinesModelLinesRequestMessage());
         }
 
         public IEnumerable <PathFigureCollection> Racetracks

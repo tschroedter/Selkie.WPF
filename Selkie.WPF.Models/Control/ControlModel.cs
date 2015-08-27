@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Castle.Core.Logging;
-using EasyNetQ;
-using Selkie.EasyNetQ.Extensions;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
+using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces;
@@ -11,51 +11,46 @@ namespace Selkie.WPF.Models.Control
 {
     public class ControlModel : IControlModel
     {
-        private readonly IBus m_Bus;
-        private readonly ILogger m_Logger;
+        private readonly ISelkieBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
+        private readonly ISelkieLogger m_Logger;
 
-        public ControlModel(ILogger logger,
-                            IBus bus)
+        public ControlModel([NotNull] ISelkieLogger logger,
+                            [NotNull] ISelkieBus bus,
+                            [NotNull] ISelkieInMemoryBus memoryBus)
         {
             m_Logger = logger;
             m_Bus = bus;
+            m_MemoryBus = memoryBus;
 
             IsFinished = false;
             IsRunning = false;
 
             string subscriptionId = GetType().FullName;
 
-            m_Bus.SubscribeHandlerAsync <ColonyStartedMessage>(logger,
-                                                               subscriptionId,
-                                                               ColonyStartedHandler);
+            m_Bus.SubscribeAsync <ColonyStartedMessage>(subscriptionId,
+                                                        ColonyStartedHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyStoppedMessage>(logger,
-                                                               subscriptionId,
-                                                               ColonyStoppedHandler);
+            m_Bus.SubscribeAsync <ColonyStoppedMessage>(subscriptionId,
+                                                        ColonyStoppedHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyFinishedMessage>(logger,
-                                                                subscriptionId,
-                                                                ColonyFinishedHandler);
+            m_Bus.SubscribeAsync <ColonyFinishedMessage>(subscriptionId,
+                                                         ColonyFinishedHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyTestLinesResponseMessage>(logger,
-                                                                         subscriptionId,
-                                                                         ColonyTestLinesResponseHandler);
+            m_Bus.SubscribeAsync <ColonyTestLinesResponseMessage>(subscriptionId,
+                                                                  ColonyTestLinesResponseHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyLinesChangedMessage>(logger,
-                                                                    subscriptionId,
-                                                                    ColonyLinesChangedHandler);
+            m_Bus.SubscribeAsync <ColonyLinesChangedMessage>(subscriptionId,
+                                                             ColonyLinesChangedHandler);
 
-            m_Bus.SubscribeHandlerAsync <ControlModelTestLinesRequestMessage>(logger,
-                                                                              subscriptionId,
-                                                                              ControlModelTestLinesRequestHandler);
+            m_Bus.SubscribeAsync <ControlModelTestLinesRequestMessage>(subscriptionId,
+                                                                       ControlModelTestLinesRequestHandler);
 
-            m_Bus.SubscribeHandlerAsync <ControlModelTestLineSetMessage>(logger,
-                                                                         subscriptionId,
-                                                                         ControlModelTestLineSetHandler);
+            m_Bus.SubscribeAsync <ColonyTestLinesChangedMessage>(subscriptionId,
+                                                                 ColonyTestLineResponseHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyTestLinesChangedMessage>(logger,
-                                                                        subscriptionId,
-                                                                        ColonyTestLineResponseHandler);
+            m_MemoryBus.SubscribeAsync <ControlModelTestLineSetMessage>(subscriptionId,
+                                                                        ControlModelTestLineSetHandler);
 
             m_Bus.PublishAsync(new ColonyTestLinesRequestMessage());
         }
@@ -146,12 +141,12 @@ namespace Selkie.WPF.Models.Control
                                         bool isFinished,
                                         bool isApplying)
         {
-            m_Bus.PublishAsync(new ControlModelChangedMessage
-                               {
-                                   IsRunning = isRunning,
-                                   IsFinished = isFinished,
-                                   IsApplying = isApplying
-                               });
+            m_MemoryBus.PublishAsync(new ControlModelChangedMessage
+                                     {
+                                         IsRunning = isRunning,
+                                         IsFinished = isFinished,
+                                         IsApplying = isApplying
+                                     });
 
             m_Logger.Info("IsRunning: {0} IsFinished: {1}".Inject(isRunning,
                                                                   isFinished));
@@ -183,10 +178,10 @@ namespace Selkie.WPF.Models.Control
         {
             TestLineTypes = message.Types;
 
-            m_Bus.PublishAsync(new ControlModelTestLinesChangedMessage
-                               {
-                                   TestLineTypes = message.Types
-                               });
+            m_MemoryBus.PublishAsync(new ControlModelTestLinesChangedMessage
+                                     {
+                                         TestLineTypes = message.Types
+                                     });
         }
     }
 }

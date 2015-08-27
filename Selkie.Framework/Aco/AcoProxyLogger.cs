@@ -1,5 +1,4 @@
 using System.Text;
-using Castle.Core.Logging;
 using JetBrains.Annotations;
 using Selkie.Framework.Interfaces.Aco;
 using Selkie.Windsor;
@@ -10,9 +9,9 @@ namespace Selkie.Framework.Aco
     [ProjectComponent(Lifestyle.Transient)]
     public class AcoProxyLogger : IAcoProxyLogger
     {
-        private readonly ILogger m_Logger;
+        private readonly ISelkieLogger m_Logger;
 
-        public AcoProxyLogger([NotNull] ILogger logger)
+        public AcoProxyLogger([NotNull] ISelkieLogger logger)
         {
             m_Logger = logger;
         }

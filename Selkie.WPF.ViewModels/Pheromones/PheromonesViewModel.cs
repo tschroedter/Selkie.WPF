@@ -1,9 +1,8 @@
 ﻿using System.Globalization;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Castle.Core.Logging;
-using EasyNetQ;
-using Selkie.EasyNetQ.Extensions;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
@@ -26,21 +25,19 @@ namespace Selkie.WPF.ViewModels.Pheromones
         private string m_Maximum = string.Empty;
         private string m_Minimum = string.Empty;
 
-        public PheromonesViewModel(ILogger logger,
-                                   IBus bus,
-                                   IApplicationDispatcher dispatcher,
-                                   IPheromonesModel model,
-                                   IGrayscaleConverter grayscaleConverter,
-                                   IBitmapSourceConverter bitmapSourceConverter)
+        public PheromonesViewModel([NotNull] ISelkieInMemoryBus bus,
+                                   [NotNull] IApplicationDispatcher dispatcher,
+                                   [NotNull] IPheromonesModel model,
+                                   [NotNull] IGrayscaleConverter grayscaleConverter,
+                                   [NotNull] IBitmapSourceConverter bitmapSourceConverter)
         {
             m_Model = model;
             m_Dispatcher = dispatcher;
             m_GrayscaleConverter = grayscaleConverter;
             m_BitmapSourceConverter = bitmapSourceConverter;
 
-            bus.SubscribeHandlerAsync <PheromonesModelChangedMessage>(logger,
-                                                                      GetType().ToString(),
-                                                                      PheromonesHandler);
+            bus.SubscribeAsync <PheromonesModelChangedMessage>(GetType().ToString(),
+                                                               PheromonesHandler);
         }
 
         public ImageSource ImageSource

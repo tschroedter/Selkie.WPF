@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Windows.Input;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
+using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
@@ -26,14 +25,14 @@ namespace Selkie.WPF.ViewModels.Settings
 
         internal const int PeriodInMs = 500;
         internal const int DueTimeInMs = 1000;
-        private readonly IBus m_Bus;
+        private readonly ISelkieInMemoryBus m_Bus;
         private readonly ICommandManager m_CommandManager;
         private readonly IApplicationDispatcher m_Dispatcher;
         private ICommand m_ApplyCommand;
         private double m_TurnRadius;
 
-        public RacetrackSettingsViewModel([NotNull] ILogger logger,
-                                          [NotNull] IBus bus,
+        public RacetrackSettingsViewModel([NotNull] ISelkieLogger logger,
+                                          [NotNull] ISelkieInMemoryBus bus,
                                           [NotNull] IApplicationDispatcher dispatcher,
                                           [NotNull] ICommandManager commandManager,
                                           [UsedImplicitly] IRacetrackSettingsModel model)
@@ -51,9 +50,8 @@ namespace Selkie.WPF.ViewModels.Settings
             AllowedTurns = DetermineAllowedTurns(IsPortTurnAllowed,
                                                  IsStarboardTurnAllowed);
 
-            bus.SubscribeHandlerAsync <RacetrackSettingsChangedMessage>(logger,
-                                                                        GetType().ToString(),
-                                                                        RacetrackSettingsChangedHandler);
+            bus.SubscribeAsync <RacetrackSettingsChangedMessage>(GetType().ToString(),
+                                                                 RacetrackSettingsChangedHandler);
 
             bus.PublishAsync(new RacetrackSettingsRequestMessage());
         }

@@ -1,7 +1,6 @@
-﻿using Castle.Core.Logging;
-using EasyNetQ;
+﻿using JetBrains.Annotations;
 using Selkie.Common;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces;
@@ -12,14 +11,16 @@ namespace Selkie.WPF.Models.Pheromones
     {
         internal const int TwoSeconds = 2000;
         internal const int TenSeconds = 10000;
-        private readonly IBus m_Bus;
+        private readonly ISelkieBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly object m_Padlock = new object();
 
-        public PheromonesModel(ILogger logger,
-                               IBus bus,
-                               ITimer timer)
+        public PheromonesModel([NotNull] ISelkieBus bus,
+                               [NotNull] ISelkieInMemoryBus memoryBus,
+                               [NotNull] ITimer timer)
         {
             m_Bus = bus;
+            m_MemoryBus = memoryBus;
 
             Values = new double[0][];
             Minimum = 0.0;
@@ -28,18 +29,14 @@ namespace Selkie.WPF.Models.Pheromones
 
             string subscriptionId = GetType().ToString();
 
-            bus.SubscribeHandlerAsync <ColonyStartedMessage>(logger,
-                                                             subscriptionId,
-                                                             StartedHandler);
-            bus.SubscribeHandlerAsync <ColonyStoppedMessage>(logger,
-                                                             subscriptionId,
-                                                             StoppedHandler);
-            bus.SubscribeHandlerAsync <ColonyPheromonesMessage>(logger,
-                                                                subscriptionId,
-                                                                PheromonesHandler);
-            bus.SubscribeHandlerAsync <ColonyFinishedMessage>(logger,
-                                                              subscriptionId,
-                                                              FinishedHandler);
+            bus.SubscribeAsync <ColonyStartedMessage>(subscriptionId,
+                                                      StartedHandler);
+            bus.SubscribeAsync <ColonyStoppedMessage>(subscriptionId,
+                                                      StoppedHandler);
+            bus.SubscribeAsync <ColonyPheromonesMessage>(subscriptionId,
+                                                         PheromonesHandler);
+            bus.SubscribeAsync <ColonyFinishedMessage>(subscriptionId,
+                                                       FinishedHandler);
 
             timer.Initialize(OnTimer,
                              TenSeconds,
@@ -82,7 +79,7 @@ namespace Selkie.WPF.Models.Pheromones
                 Average = message.Average;
             }
 
-            m_Bus.PublishAsync(new PheromonesModelChangedMessage());
+            m_MemoryBus.PublishAsync(new PheromonesModelChangedMessage());
         }
 
         internal void FinishedHandler(ColonyFinishedMessage message)

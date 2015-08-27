@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.Framework.Interfaces.Aco;
@@ -16,12 +14,12 @@ namespace Selkie.Framework
     public sealed class Colony : IColony
     {
         internal const int SleepTimeOneSecond = 1000;
-        private readonly IBus m_Bus;
-        private readonly ILogger m_Logger;
+        private readonly ISelkieBus m_Bus;
+        private readonly ISelkieLogger m_Logger;
         private readonly IServiceProxy m_ServiceProxy;
 
-        public Colony([NotNull] ILogger logger,
-                      [NotNull] IBus bus,
+        public Colony([NotNull] ISelkieLogger logger,
+                      [NotNull] ISelkieBus bus,
                       [NotNull] IServiceProxy serviceProxy)
         {
             SleepTimeInMs = SleepTimeOneSecond;
@@ -31,17 +29,14 @@ namespace Selkie.Framework
 
             string subscriptionId = GetType().FullName;
 
-            m_Bus.SubscribeHandlerAsync <ColonyStartRequestMessage>(logger,
-                                                                    subscriptionId,
-                                                                    ColonyStartRequestHandler);
+            m_Bus.SubscribeAsync <ColonyStartRequestMessage>(subscriptionId,
+                                                             ColonyStartRequestHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyStopRequestMessage>(logger,
-                                                                   subscriptionId,
-                                                                   ColonyStopRequestHandler);
+            m_Bus.SubscribeAsync <ColonyStopRequestMessage>(subscriptionId,
+                                                            ColonyStopRequestHandler);
 
-            m_Bus.SubscribeHandlerAsync <ColonyPheromonesRequestMessage>(logger,
-                                                                         subscriptionId,
-                                                                         ColonyPheromonesRequestHandler);
+            m_Bus.SubscribeAsync <ColonyPheromonesRequestMessage>(subscriptionId,
+                                                                  ColonyPheromonesRequestHandler);
         }
 
         public int SleepTimeInMs { get; private set; }

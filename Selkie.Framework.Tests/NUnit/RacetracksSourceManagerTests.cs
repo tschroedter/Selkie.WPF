@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
 using Selkie.Services.Racetracks.Common.Dto;
 using Selkie.Services.Racetracks.Common.Messages;
+using Selkie.Windsor;
 
 namespace Selkie.Framework.Tests.NUnit
 {
@@ -21,8 +20,8 @@ namespace Selkie.Framework.Tests.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Logger = Substitute.For <ISelkieLogger>();
+            m_Bus = Substitute.For <ISelkieBus>();
             m_Converter = Substitute.For <IRacetracksDtoToRacetracksConverter>();
 
             m_Sut = new RacetracksSourceManager(m_Logger,
@@ -31,8 +30,8 @@ namespace Selkie.Framework.Tests.NUnit
         }
 
         private IRacetracksDtoToRacetracksConverter m_Converter;
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieLogger m_Logger;
+        private ISelkieBus m_Bus;
         private RacetracksSourceManager m_Sut;
 
         private static Racetracks CreateRacetracks()
@@ -90,14 +89,14 @@ namespace Selkie.Framework.Tests.NUnit
         public void Constructor_SubscribeToColonyRacetracksRequestMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Sut.GetType().FullName,
-                                            Arg.Any <Func <ColonyRacetracksRequestMessage, Task>>());
+                                            Arg.Any <Action<ColonyRacetracksRequestMessage>>());
         }
 
         [Test]
         public void Constructor_SubscribeToRacetracksChangedMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Sut.GetType().FullName,
-                                            Arg.Any <Func <RacetracksChangedMessage, Task>>());
+                                            Arg.Any <Action <RacetracksChangedMessage>>());
         }
 
         [Test]

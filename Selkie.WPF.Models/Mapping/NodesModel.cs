@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using Castle.Core.Logging;
-using EasyNetQ;
 using JetBrains.Annotations;
-using Selkie.EasyNetQ.Extensions;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry.Shapes;
+using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
@@ -15,24 +14,24 @@ namespace Selkie.WPF.Models.Mapping
 {
     public class NodesModel : INodesModel
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly ILinesSourceManager m_LinesSourceManager;
-        private readonly ILogger m_Logger;
+        private readonly ISelkieLogger m_Logger;
         private readonly List <INodeModel> m_Nodes = new List <INodeModel>();
 
-        public NodesModel(ILogger logger,
-                          IBus bus,
-                          ILinesSourceManager linesSourceManager)
+        public NodesModel([NotNull] ISelkieLogger logger,
+                          [NotNull] ISelkieBus bus,
+                          [NotNull] ISelkieInMemoryBus memoryBus,
+                          [NotNull] ILinesSourceManager linesSourceManager)
         {
             m_Logger = logger;
-            m_Bus = bus;
+            m_MemoryBus = memoryBus;
             m_LinesSourceManager = linesSourceManager;
 
             LoadNodes();
 
-            bus.SubscribeHandlerAsync <ColonyLinesChangedMessage>(m_Logger,
-                                                                  GetType().FullName,
-                                                                  LinesChangedHandler);
+            bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().FullName,
+                                                           LinesChangedHandler);
         }
 
         public IEnumerable <INodeModel> Nodes
@@ -61,7 +60,7 @@ namespace Selkie.WPF.Models.Mapping
                 m_Nodes.AddRange(models);
             }
 
-            m_Bus.Publish(new NodesModelChangedMessage());
+            m_MemoryBus.Publish(new NodesModelChangedMessage());
         }
 
         internal IEnumerable <INodeModel> CreateNodeModels([NotNull] ILine line)

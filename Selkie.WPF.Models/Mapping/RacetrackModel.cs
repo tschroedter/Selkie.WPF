@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Castle.Core.Logging;
-using EasyNetQ;
-using Selkie.EasyNetQ.Extensions;
+using JetBrains.Annotations;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
@@ -12,23 +11,21 @@ namespace Selkie.WPF.Models.Mapping
 {
     public class RacetrackModel : IRacetrackModel
     {
-        private readonly IBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly IPathToRacetracksConverter m_PathToRacetracksConverter;
 
-        public RacetrackModel(ILogger logger,
-                              IBus bus,
-                              IPathToRacetracksConverter pathToRacetracksConverter)
+        public RacetrackModel([NotNull] ISelkieBus bus,
+                              [NotNull] ISelkieInMemoryBus memoryBus,
+                              [NotNull] IPathToRacetracksConverter pathToRacetracksConverter)
         {
-            m_Bus = bus;
+            m_MemoryBus = memoryBus;
             m_PathToRacetracksConverter = pathToRacetracksConverter;
 
-            bus.SubscribeHandlerAsync <ColonyBestTrailMessage>(logger,
-                                                               GetType().ToString(),
-                                                               ColonyBestTrailHandler);
+            bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().ToString(),
+                                                        ColonyBestTrailHandler);
 
-            bus.SubscribeHandlerAsync <ColonyLinesChangedMessage>(logger,
-                                                                  GetType().ToString(),
-                                                                  ColonyLinesChangedHandler);
+            bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
+                                                           ColonyLinesChangedHandler);
         }
 
         public IEnumerable <IPath> Paths
@@ -54,7 +51,7 @@ namespace Selkie.WPF.Models.Mapping
             m_PathToRacetracksConverter.Path = trail;
             m_PathToRacetracksConverter.Convert();
 
-            m_Bus.Publish(new RacetrackModelChangedMessage());
+            m_MemoryBus.Publish(new RacetrackModelChangedMessage());
         }
     }
 }

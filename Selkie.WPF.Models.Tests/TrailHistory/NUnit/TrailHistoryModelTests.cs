@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Castle.Core.Logging;
-using EasyNetQ;
 using NSubstitute;
 using NSubstitute.Core;
 using NUnit.Framework;
+using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
+using Selkie.Windsor;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces;
 using Selkie.WPF.Models.TrailHistory;
@@ -21,12 +21,14 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Logger = Substitute.For <ILogger>();
-            m_Bus = Substitute.For <IBus>();
+            m_Logger = Substitute.For <ISelkieLogger>();
+            m_Bus = Substitute.For <ISelkieBus>();
+            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Factory = Substitute.For <ITrailDetailsFactory>();
 
             m_Model = new TrailHistoryModel(m_Logger,
                                             m_Bus,
+                                            m_MemoryBus,
                                             m_Factory);
         }
 
@@ -36,10 +38,11 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
             m_Model.Dispose();
         }
 
-        private ILogger m_Logger;
-        private IBus m_Bus;
+        private ISelkieLogger m_Logger;
+        private ISelkieBus m_Bus;
         private ITrailDetailsFactory m_Factory;
         private TrailHistoryModel m_Model;
+        private ISelkieInMemoryBus m_MemoryBus;
 
         private ColonyBestTrailMessage CreateBestTrailMessage()
         {
@@ -117,7 +120,8 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
         {
             m_Model.ColonyBestTrailHandler(CreateBestTrailMessage());
 
-            m_Bus.Received().Publish(Arg.Any <TrailHistoryModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .PublishAsync(Arg.Any <TrailHistoryModelChangedMessage>());
         }
 
         [Test]
@@ -234,6 +238,7 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
             var factory = Substitute.For <ITrailDetailsFactory>();
             var model = new TrailHistoryModel(m_Logger,
                                               m_Bus,
+                                              m_MemoryBus,
                                               factory);
 
             model.Update(CreateBestTrailMessage());
@@ -409,7 +414,8 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
 
             m_Model.Update(message);
 
-            m_Bus.Received().Publish(Arg.Any <TrailHistoryModelChangedMessage>());
+            m_MemoryBus.Received()
+                       .PublishAsync(Arg.Any <TrailHistoryModelChangedMessage>());
         }
     }
 }
