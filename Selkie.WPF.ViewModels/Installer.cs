@@ -13,6 +13,11 @@ namespace Selkie.WPF.ViewModels
     [ExcludeFromCodeCoverage]
     public class Installer : BaseInstaller <Installer>
     {
+        public override string GetPrefixOfDllsToInstall()
+        {
+            return "Selkie.";
+        }
+
         protected override void InstallComponents(IWindsorContainer container,
                                                   IConfigurationStore store)
         {

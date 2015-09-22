@@ -7,5 +7,9 @@ namespace Selkie.WPF.Converters.Interfaces
     [ExcludeFromCodeCoverage]
     public class Installer : BaseInstaller <Installer>
     {
+        public override string GetPrefixOfDllsToInstall()
+        {
+            return "Selkie.";
+        }
     }
 }
