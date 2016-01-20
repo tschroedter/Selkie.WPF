@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Selkie.Framework.Interfaces;
-using Selkie.Services.Racetracks.Common.Dto;
+using Selkie.Services.Common.Dto;
 
 namespace Selkie.Framework.Converters
 {

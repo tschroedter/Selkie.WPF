@@ -56,7 +56,7 @@ namespace Selkie.WPF.Common
 
         public int Reverse(int nodeId)
         {
-            bool isEndPoint = ( nodeId % 2 == 1 );
+            bool isEndPoint = nodeId % 2 == 1;
 
             if ( isEndPoint )
             {

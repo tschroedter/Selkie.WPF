@@ -10,9 +10,9 @@ using Selkie.Windsor.Extensions;
 namespace Selkie.WPF.Models.Handlers
 {
     // todo first implementation, just loggin exceptions coming from the bus
-    [Interceptor(typeof(MessageHandlerAspect))]
+    [Interceptor(typeof ( MessageHandlerAspect ))]
     public class ExceptionThrownHandler
-        : SelkieMessageHandler<ExceptionThrownMessage>
+        : SelkieMessageHandler <ExceptionThrownMessage>
     {
         private readonly ISelkieLogger m_Logger;
 

@@ -205,7 +205,7 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
             List <ITrailDetails> actual = m_Model.CreateTrailDetailsList(list);
 
             Assert.AreEqual(3,
-                            actual.Count());
+                            actual.Count);
         }
 
         [Test]

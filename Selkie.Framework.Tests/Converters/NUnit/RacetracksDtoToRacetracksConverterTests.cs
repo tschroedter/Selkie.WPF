@@ -4,7 +4,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
-using Selkie.Services.Racetracks.Common.Dto;
+using Selkie.Services.Common.Dto;
 
 namespace Selkie.Framework.Tests.Converters.NUnit
 {
@@ -153,10 +153,10 @@ namespace Selkie.Framework.Tests.Converters.NUnit
 
             // Assert
             Assert.AreEqual(2,
-                            actual.Count(),
+                            actual.Length,
                             "[][]");
             Assert.AreEqual(2,
-                            actual.First().Count(),
+                            actual.First().Length,
                             "[0][]");
         }
 

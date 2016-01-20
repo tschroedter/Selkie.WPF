@@ -12,8 +12,8 @@ namespace Selkie.WPF.Models.Control
     public class ControlModel : IControlModel
     {
         private readonly ISelkieBus m_Bus;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly ISelkieLogger m_Logger;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
 
         public ControlModel([NotNull] ISelkieLogger logger,
                             [NotNull] ISelkieBus bus,

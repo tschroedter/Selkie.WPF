@@ -16,9 +16,9 @@ namespace Selkie.WPF.Models.Mapping
         : IShortestPathModel,
           IDisposable
     {
-        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly ILineToLineNodeConverterToDisplayLineConverterFactory m_Factory;
         private readonly ISelkieLogger m_Logger;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly IPathToLineToLineNodeConverter m_PathToLineToLineNodeConverter;
         private ILineToLineNodeConverterToDisplayLineConverter m_Converter;
         private IEnumerable <ILineToLineNodeConverter> m_Nodes;

@@ -22,7 +22,7 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Bus = Substitute.For<ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Dispatcher = new TestImmediateDispatcher();
             m_ConverterNodes = Substitute.For <ILineNodeToDisplayLineNodeConverter>();
             m_ConverterStartNodeModel = Substitute.For <INodeModelToDisplayNodeConverter>();

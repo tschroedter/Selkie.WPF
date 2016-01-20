@@ -11,8 +11,8 @@ namespace Selkie.WPF.Models.Settings
     {
         internal static readonly double DefaultTurnRadius = 30.0;
         private readonly ISelkieBus m_Bus;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly IRacetrackSettingsSourceManager m_Manager;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
 
         public RacetrackSettingsModel([NotNull] ISelkieBus bus,
                                       [NotNull] ISelkieInMemoryBus memoryBus,

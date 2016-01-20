@@ -6,7 +6,7 @@ using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry.Shapes;
-using Selkie.Services.Racetracks.Common.Dto;
+using Selkie.Services.Common.Dto;
 using Selkie.Services.Racetracks.Common.Messages;
 using Selkie.Windsor;
 

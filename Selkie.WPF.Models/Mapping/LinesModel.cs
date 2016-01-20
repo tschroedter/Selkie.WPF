@@ -17,11 +17,11 @@ namespace Selkie.WPF.Models.Mapping
         : ILinesModel,
           IDisposable
     {
-        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly IDisplayLineFactory m_DisplayLineFactory;
         private readonly List <IDisplayLine> m_DisplayLines;
         private readonly ILinesSourceManager m_LinesSourceManager;
         private readonly ISelkieLogger m_Logger;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
 
         public LinesModel([NotNull] ISelkieLogger logger,
                           [NotNull] ISelkieBus bus,

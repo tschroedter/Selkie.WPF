@@ -107,7 +107,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
             m_Factory.Received().Create(1,
                                         1.0,
                                         2.0,
-                                        -( Angle.For45Degrees ).Degrees,
+                                        - Angle.For45Degrees.Degrees,
                                         NodesToDisplayNodesConverter.DefaultRadius,
                                         NodesToDisplayNodesConverter.DefaultFill,
                                         NodesToDisplayNodesConverter.DefaultStroke,

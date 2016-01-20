@@ -4,20 +4,15 @@ using Castle.Core;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using Selkie.Common;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Interfaces.Converters;
-using Selkie.Windsor;
 
 namespace Selkie.Framework
 {
     [ExcludeFromCodeCoverage]
-    public class Installer : BaseInstaller <Installer>
+    public class Installer : SelkieInstaller <Installer>
     {
-        public override string GetPrefixOfDllsToInstall()
-        {
-            return "Selkie.";
-        }
-
         protected override void InstallComponents(IWindsorContainer container,
                                                   IConfigurationStore store)
         {

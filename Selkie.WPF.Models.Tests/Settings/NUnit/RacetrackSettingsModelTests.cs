@@ -62,11 +62,11 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
         }
 
         [Test]
-        public void ConstructorSubscribesToRacetrackSettingsSetMessageTest()
+        public void ConstructorSubscribesToColonyCostMatrixChangedMessageTest()
         {
-            m_MemoryBus.Received()
-                       .SubscribeAsync(m_Model.GetType().ToString(),
-                                       Arg.Any <Action <RacetrackSettingsSetMessage>>());
+            m_Bus.Received()
+                 .SubscribeAsync(m_Model.GetType().ToString(),
+                                 Arg.Any <Action <ColonyCostMatrixChangedMessage>>());
         }
 
         [Test]
@@ -74,15 +74,15 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
         {
             m_MemoryBus.Received()
                        .SubscribeAsync(m_Model.GetType().ToString(),
-                                       Arg.Any<Action<RacetrackSettingsRequestMessage>>());
+                                       Arg.Any <Action <RacetrackSettingsRequestMessage>>());
         }
 
         [Test]
-        public void ConstructorSubscribesToColonyCostMatrixChangedMessageTest()
+        public void ConstructorSubscribesToRacetrackSettingsSetMessageTest()
         {
-            m_Bus.Received()
-                 .SubscribeAsync(m_Model.GetType().ToString(),
-                                 Arg.Any <Action <ColonyCostMatrixChangedMessage>>());
+            m_MemoryBus.Received()
+                       .SubscribeAsync(m_Model.GetType().ToString(),
+                                       Arg.Any <Action <RacetrackSettingsSetMessage>>());
         }
 
         [Test]

@@ -17,7 +17,7 @@ namespace Selkie.WPF.Common.Converters
                                                               double y)
         {
             var newPoint = new System.Windows.Point(Origin.X + x,
-                                                    Origin.Y + ( -y ));
+                                                    Origin.Y + -y);
 
             return newPoint;
         }

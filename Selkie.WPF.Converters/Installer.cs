@@ -3,20 +3,15 @@ using Castle.Core;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using Selkie.Windsor;
+using Selkie.Common;
 using Selkie.WPF.Converters.Interfaces;
 
 namespace Selkie.WPF.Converters
 {
     //ncrunch: no coverage start 
     [ExcludeFromCodeCoverage]
-    public class Installer : BaseInstaller <Installer>
+    public class Installer : SelkieInstaller <Installer>
     {
-        public override string GetPrefixOfDllsToInstall()
-        {
-            return "Selkie.";
-        }
-
         protected override void InstallComponents(IWindsorContainer container,
                                                   IConfigurationStore store)
         {

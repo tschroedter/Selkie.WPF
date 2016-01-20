@@ -133,7 +133,7 @@ namespace Selkie.Framework.Tests.XUnit
             sut.TestLineResponseHandler(message);
 
             // Assert
-            Assert.True(message.LineDtos.Count() == sut.Lines.Count());
+            Assert.True(message.LineDtos.Length == sut.Lines.Count());
         }
 
         [Theory]

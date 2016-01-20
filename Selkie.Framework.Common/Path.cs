@@ -2,6 +2,7 @@
 using System.Linq;
 using JetBrains.Annotations;
 using Selkie.Framework.Interfaces;
+using Selkie.Geometry;
 using Selkie.Geometry.Primitives;
 using Selkie.Geometry.Shapes;
 
@@ -10,10 +11,12 @@ namespace Selkie.Framework.Common
     public class Path : IPath
     {
         public static readonly IPath Unknown = new Path(Point.Unknown);
-        private readonly IPolyline m_Polyline = new Polyline();
+
+        private readonly IPolyline m_Polyline = new Polyline(0,
+                                                             Constants.LineDirection.Forward);
         private readonly Point m_StartPoint;
 
-        public Path([NotNull] Point startPoint)
+        public Path([NotNull] Point startPoint) // todo check who is using it
         {
             m_StartPoint = startPoint;
             EndPoint = startPoint;

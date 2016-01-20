@@ -7,7 +7,7 @@ using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
-using Selkie.Services.Racetracks.Common.Dto;
+using Selkie.Services.Common.Dto;
 using Selkie.Services.Racetracks.Common.Messages;
 using Selkie.Windsor;
 
@@ -89,7 +89,7 @@ namespace Selkie.Framework.Tests.NUnit
         public void Constructor_SubscribeToColonyRacetracksRequestMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Sut.GetType().FullName,
-                                            Arg.Any <Action<ColonyRacetracksRequestMessage>>());
+                                            Arg.Any <Action <ColonyRacetracksRequestMessage>>());
         }
 
         [Test]

@@ -14,9 +14,9 @@ namespace Selkie.WPF.Models.Mapping
 {
     public class NodesModel : INodesModel
     {
-        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly ILinesSourceManager m_LinesSourceManager;
         private readonly ISelkieLogger m_Logger;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly List <INodeModel> m_Nodes = new List <INodeModel>();
 
         public NodesModel([NotNull] ISelkieLogger logger,

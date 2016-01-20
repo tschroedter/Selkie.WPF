@@ -3,6 +3,7 @@ using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using Selkie.Framework.Interfaces;
+using Selkie.Geometry;
 using Selkie.Geometry.Primitives;
 using Selkie.Geometry.Shapes;
 
@@ -35,6 +36,12 @@ namespace Selkie.Framework.Common.Tests.NUnit
             private IPolylineSegment m_Segment1;
             private IPolylineSegment m_Segment2;
 
+            private static Polyline CreatePolyline()
+            {
+                return new Polyline(0,
+                                    Constants.LineDirection.Forward);
+            }
+
             [Test]
             public void Add_AddsSegment_ForSegment()
             {
@@ -56,6 +63,26 @@ namespace Selkie.Framework.Common.Tests.NUnit
                                 "Distance");
                 Assert.False(sut.IsUnknown,
                              "IsUnknown");
+            }
+
+            [Test]
+            public void Constructor_CreatesDefaultPath_WhenCalled()
+            {
+                // Arrange
+                var point = new Point(0.0,
+                                      0.0);
+                var sut = new Path(point);
+
+                // Act
+                IPolyline actual = sut.Polyline;
+
+                // Assert
+                Assert.AreEqual(0,
+                                actual.Id,
+                                "Id");
+                Assert.AreEqual(Constants.LineDirection.Forward,
+                                actual.RunDirection,
+                                "RunDirection");
             }
 
             [Test]
@@ -85,7 +112,7 @@ namespace Selkie.Framework.Common.Tests.NUnit
                                     -10.0,
                                     10.0,
                                     10.0);
-                var polyline = new Polyline();
+                Polyline polyline = CreatePolyline();
                 polyline.AddSegment(line);
 
                 // Act
@@ -290,7 +317,7 @@ namespace Selkie.Framework.Common.Tests.NUnit
                                     -10.0,
                                     10.0,
                                     10.0);
-                var polyline = new Polyline();
+                Polyline polyline = CreatePolyline();
 
                 polyline.AddSegment(line);
 

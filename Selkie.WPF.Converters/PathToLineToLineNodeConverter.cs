@@ -45,7 +45,7 @@ namespace Selkie.WPF.Converters
 
             var nodes = new List <ILineToLineNodeConverter>();
 
-            for ( var i = 0 ; i < pathArray.Count() - 1 ; i++ )
+            for ( var i = 0 ; i < pathArray.Length - 1 ; i++ )
             {
                 int fromIndex = pathArray [ i ];
                 int toIndex = pathArray [ i + 1 ];

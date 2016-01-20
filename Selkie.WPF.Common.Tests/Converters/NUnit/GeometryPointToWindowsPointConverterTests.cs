@@ -29,7 +29,7 @@ namespace Selkie.WPF.Common.Tests.Converters.NUnit
         {
             // Arrange
             var expected = new System.Windows.Point(GeometryPointToWindowsPointConverter.Origin.X + 1.0,
-                                                    GeometryPointToWindowsPointConverter.Origin.Y + ( -2.0 ));
+                                                    GeometryPointToWindowsPointConverter.Origin.Y + -2.0);
 
             // Act
             m_Sut.GeometryPoint = m_Point1;

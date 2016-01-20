@@ -50,7 +50,7 @@ namespace Selkie.WPF.Converters
             ILine[] lines = m_LinesSourceManager.Lines.ToArray();
 
             if ( lineIndex >= 0 &&
-                 lineIndex < lines.Count() )
+                 lineIndex < lines.Length )
             {
                 line = lines.ElementAt(lineIndex);
             }

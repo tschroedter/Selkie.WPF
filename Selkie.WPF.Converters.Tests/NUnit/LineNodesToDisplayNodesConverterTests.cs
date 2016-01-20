@@ -145,7 +145,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
 
             m_Converter.LoadDisplayNodes();
 
-            int count = nodeModels.Count();
+            int count = nodeModels.Length;
 
             m_Factory.Received().Received(count).Create(Arg.Any <int>(),
                                                         Arg.Any <double>(),
@@ -168,7 +168,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
 
             IEnumerable <IDisplayNode> actual = m_Converter.DisplayNodes;
 
-            Assert.AreEqual(nodeModels.Count(),
+            Assert.AreEqual(nodeModels.Length,
                             actual.Count());
         }
 

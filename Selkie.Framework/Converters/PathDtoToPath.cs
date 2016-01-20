@@ -4,7 +4,7 @@ using Selkie.Framework.Common;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry;
 using Selkie.Geometry.Shapes;
-using Selkie.Services.Racetracks.Common.Dto;
+using Selkie.Services.Common.Dto;
 using Selkie.Windsor;
 using Selkie.Windsor.Extensions;
 
@@ -48,7 +48,8 @@ namespace Selkie.Framework.Converters
 
         internal IPolyline CreatePolyline([NotNull] PolylineDto polylineDto)
         {
-            var polyline = new Polyline();
+            var polyline = new Polyline(0,
+                                        Constants.LineDirection.Forward);
             var count = 0;
 
             foreach ( SegmentDto segment in polylineDto.Segments )

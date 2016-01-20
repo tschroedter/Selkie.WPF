@@ -7,7 +7,7 @@ using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry;
 using Selkie.Geometry.Shapes;
-using Selkie.Services.Racetracks.Common.Dto;
+using Selkie.Services.Common.Dto;
 
 namespace Selkie.Framework.Tests.Converters.NUnit
 {

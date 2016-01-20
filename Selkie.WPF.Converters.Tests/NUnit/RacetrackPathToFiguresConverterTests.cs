@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Windows.Media;
 using NSubstitute;
 using NUnit.Framework;
@@ -81,7 +80,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
             m_Converter.Convert();
 
             Assert.AreEqual(0,
-                            m_Converter.FiguresCollection.Count());
+                            m_Converter.FiguresCollection.Count);
         }
 
         [Test]
@@ -100,7 +99,7 @@ namespace Selkie.WPF.Converters.Tests.NUnit
             m_Converter.Convert();
 
             Assert.AreEqual(0,
-                            m_Converter.FiguresCollection.Count());
+                            m_Converter.FiguresCollection.Count);
         }
 
         [Test]

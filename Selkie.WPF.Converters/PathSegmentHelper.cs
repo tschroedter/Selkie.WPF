@@ -93,7 +93,7 @@ namespace Selkie.WPF.Converters
                                 startPoint,
                                 endPoint);
 
-            Constants.TurnDirection turnDirection = line.TurnDirection(checkPoint);
+            Constants.TurnDirection turnDirection = line.TurnDirectionToPoint(checkPoint);
 
             bool isLargeArc;
 

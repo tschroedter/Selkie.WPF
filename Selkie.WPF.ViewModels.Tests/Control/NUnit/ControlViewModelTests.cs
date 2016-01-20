@@ -20,7 +20,7 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Bus = Substitute.For<ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Dispatcher = new TestImmediateDispatcher();
             m_ControlModel = Substitute.For <IControlModel>();
             m_Manager = Substitute.For <ICommandManager>();

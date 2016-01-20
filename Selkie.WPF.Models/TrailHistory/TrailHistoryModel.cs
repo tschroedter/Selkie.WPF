@@ -15,13 +15,12 @@ namespace Selkie.WPF.Models.TrailHistory
         : ITrailHistoryModel,
           IDisposable
     {
-        private readonly ISelkieInMemoryBus m_MemoryBus;
-
         private readonly SortedDictionary <int, ITrailDetails> m_Dictionary =
             new SortedDictionary <int, ITrailDetails>();
 
         private readonly ITrailDetailsFactory m_Factory;
         private readonly ISelkieLogger m_Logger;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private ITrailDetails m_FirstTrailDetails = TrailDetails.Unknown;
         private List <ITrailDetails> m_TrailDetails = new List <ITrailDetails>();
 
