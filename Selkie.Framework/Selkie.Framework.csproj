@@ -107,6 +107,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculateCostMatrixManager.cs" />
     <Compile Include="Converters\IRacetracksDtoToRacetracksConverter.cs" />
     <Compile Include="Converters\ITestLinesDtoToLinesConverter.cs" />
     <Compile Include="Converters\PathDtoToPath.cs" />

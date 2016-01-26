@@ -79,6 +79,7 @@
     <Compile Include="Aco\IServiceProxy.cs" />
     <Compile Include="Converters\IConverter.cs" />
     <Compile Include="Converters\ILinesToCostPerLineConverter.cs" />
+    <Compile Include="ICalculateCostMatrixManager.cs" />
     <Compile Include="IColony.cs" />
     <Compile Include="ICostMatrixSourceManager.cs" />
     <Compile Include="ILinesSource.cs" />
