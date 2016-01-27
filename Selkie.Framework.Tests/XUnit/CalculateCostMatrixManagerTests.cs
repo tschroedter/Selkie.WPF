@@ -60,32 +60,6 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void IsWaitingForChangedMessages_ReturnsFalse_ByDefault(
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            // Act
-            sut.Calculate();
-
-            // Assert
-            Assert.True(sut.IsWaitingForChangedMessages);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void IsWaitingForChangedMessages_ReturnsTrue_WhenCalculateWasCalled(
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            // Act
-            sut.Calculate();
-
-            // Assert
-            Assert.True(sut.IsWaitingForChangedMessages);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
         public void IsReceivedRacetrackSettingsChangedMessage_ReturnsFalse_ByDefault(
             [NotNull] CalculateCostMatrixManager sut)
         {
@@ -188,11 +162,11 @@ namespace Selkie.Framework.Tests.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void
-            CheckIfWeCanCalculateRacetrack_SetsIsWaitingForChangedMessagesToFalse_WhenAllChangedMessageHaveBeenReceived(
+            CheckIfWeCanCalculateRacetrack_SetsIsReceivedRacetrackSettingsChangedMessageToFalse_WhenAllConditionsAreFine
+            (
             [NotNull, Frozen] CalculateCostMatrixManager sut)
         {
             // Arrange
-            sut.Calculate();
             SetIsReceivedLinesChangedMessageToTrue(sut);
             SetIsReceivedRacetrackSettingsChangedMessageToTrue(sut);
 
@@ -200,7 +174,24 @@ namespace Selkie.Framework.Tests.XUnit
             sut.CheckIfWeCanCalculateRacetrack();
 
             // Assert
-            Assert.False(sut.IsWaitingForChangedMessages);
+            Assert.False(sut.IsReceivedRacetrackSettingsChangedMessage);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void
+            CheckIfWeCanCalculateRacetrack_SetsIsReceivedLinesChangedMessageToFalse_WhenAllConditionsAreFine(
+            [NotNull, Frozen] CalculateCostMatrixManager sut)
+        {
+            // Arrange
+            SetIsReceivedLinesChangedMessageToTrue(sut);
+            SetIsReceivedRacetrackSettingsChangedMessageToTrue(sut);
+
+            // Act
+            sut.CheckIfWeCanCalculateRacetrack();
+
+            // Assert
+            Assert.False(sut.IsReceivedLinesChangedMessage);
         }
 
         [Theory]

@@ -17,7 +17,6 @@ namespace Selkie.Framework
         private readonly ISelkieBus m_Bus;
         private readonly ILinesSourceManager m_LinesSourceManager;
         private readonly ISelkieLogger m_Logger;
-        private readonly object m_Padlock = new object();
         private readonly IRacetrackSettingsSourceManager m_RacetrackSettingsSourceManager;
 
         public CalculateCostMatrixManager([NotNull] ISelkieLogger logger,
@@ -39,18 +38,13 @@ namespace Selkie.Framework
                                                                          ColonyRacetrackSettingsChangedHandler);
         }
 
-        public bool IsWaitingForChangedMessages { get; private set; }
         public bool IsReceivedRacetrackSettingsChangedMessage { get; private set; }
         public bool IsReceivedLinesChangedMessage { get; private set; }
 
         public void Calculate()
         {
-            lock ( m_Padlock )
-            {
-                IsWaitingForChangedMessages = true;
-                IsReceivedRacetrackSettingsChangedMessage = false;
-                IsReceivedLinesChangedMessage = false;
-            }
+            IsReceivedRacetrackSettingsChangedMessage = false;
+            IsReceivedLinesChangedMessage = false;
 
             SendRacetrackSettingsSetMessage();
             SendLinesSetMessage();
@@ -115,18 +109,11 @@ namespace Selkie.Framework
 
         internal void CheckIfWeCanCalculateRacetrack()
         {
-            lock ( m_Padlock )
-            {
-                if ( !IsWaitingForChangedMessages )
-                {
-                    return;
-                }
-            }
-
             if ( IsReceivedRacetrackSettingsChangedMessage &&
                  IsReceivedLinesChangedMessage )
             {
-                IsWaitingForChangedMessages = false;
+                IsReceivedRacetrackSettingsChangedMessage = false;
+                IsReceivedLinesChangedMessage = false;
 
                 m_Bus.PublishAsync(new CostMatrixCalculateMessage());
             }
