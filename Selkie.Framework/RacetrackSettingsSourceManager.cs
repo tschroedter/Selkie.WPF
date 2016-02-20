@@ -20,6 +20,7 @@ namespace Selkie.Framework
             m_Factory = factory;
 
             Source = m_Factory.Create(DefaultRadius,
+                                      DefaultRadius,
                                       true,
                                       true);
 
@@ -42,7 +43,8 @@ namespace Selkie.Framework
         {
             m_Factory.Release(Source);
 
-            Source = m_Factory.Create(message.TurnRadius,
+            Source = m_Factory.Create(message.TurnRadiusForPort,
+                                      message.TurnRadiusForStarboard,
                                       message.IsPortTurnAllowed,
                                       message.IsStarboardTurnAllowed);
 

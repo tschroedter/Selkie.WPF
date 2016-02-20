@@ -94,20 +94,6 @@ namespace Selkie.Framework.Aco
 
         public bool IsFinished { get; private set; }
 
-        internal void BestTrailHandler(BestTrailMessage message)
-        {
-            m_Bus.PublishAsync(new ColonyBestTrailMessage
-                               {
-                                   Alpha = message.Alpha,
-                                   Beta = message.Beta,
-                                   Gamma = message.Gamma,
-                                   Iteration = message.Iteration,
-                                   Trail = message.Trail,
-                                   Type = message.Type,
-                                   Length = message.Length
-                               });
-        }
-
         internal void CreatedColonyHandler(CreatedColonyMessage message)
         {
             IsColonyCreated = true;

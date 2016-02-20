@@ -6,41 +6,23 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Transient)]
     public class RacetrackSettingsSource : IRacetrackSettingsSource
     {
-        private readonly bool m_IsPortTurnAllowed;
-        private readonly bool m_IsStarboardTurnAllowed;
-        private readonly double m_TurnRadius;
-
-        public RacetrackSettingsSource(double turnRadius,
+        public RacetrackSettingsSource(double turnRadiusForPort,
+                                       double turnRadiusForStarboard,
                                        bool isPortTurnAllowed,
                                        bool isStarboardTurnAllowed)
         {
-            m_TurnRadius = turnRadius;
-            m_IsPortTurnAllowed = isPortTurnAllowed;
-            m_IsStarboardTurnAllowed = isStarboardTurnAllowed;
+            TurnRadiusForPort = turnRadiusForPort;
+            TurnRadiusForStarboard = turnRadiusForStarboard;
+            IsPortTurnAllowed = isPortTurnAllowed;
+            IsStarboardTurnAllowed = isStarboardTurnAllowed;
         }
 
-        public double TurnRadius
-        {
-            get
-            {
-                return m_TurnRadius;
-            }
-        }
+        public double TurnRadiusForPort { get; private set; }
 
-        public bool IsPortTurnAllowed
-        {
-            get
-            {
-                return m_IsPortTurnAllowed;
-            }
-        }
+        public double TurnRadiusForStarboard { get; private set; }
 
-        public bool IsStarboardTurnAllowed
-        {
-            get
-            {
-                return m_IsStarboardTurnAllowed;
-            }
-        }
+        public bool IsPortTurnAllowed { get; private set; }
+
+        public bool IsStarboardTurnAllowed { get; private set; }
     }
 }

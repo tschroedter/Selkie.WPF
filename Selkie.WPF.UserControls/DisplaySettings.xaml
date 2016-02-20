@@ -10,35 +10,83 @@
     <UserControl.Resources>
         <converters:EnumMatchToBooleanConverter x:Key="EnumConverter" />
     </UserControl.Resources>
-    <StackPanel Orientation="Vertical">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Grid.Row="0"
-                   Grid.Column="0"
-                   Content="Turnradius" />
-            <TextBox Grid.Row="0"
-                     Grid.Column="1"
-                     IsReadOnly="True"
-                     MinWidth="50"
-                     Text="{Binding TurnRadius}" />
-            <Slider Grid.Row="0"
-                    Grid.Column="2"
-                    Name="m_Slider"
-                    Minimum="10"
-                    Maximum="300"
-                    Interval="10"
-                    TickPlacement="BottomRight"
-                    TickFrequency="10"
-                    IsSnapToTickEnabled="True"
-                    Value="{Binding TurnRadius }" />
-        </Grid>
+    <StackPanel Orientation="Vertical" Margin="0,0,-142,0">
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Stretch">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="3"
+                       Content="Port Turn"
+                       FontWeight="Bold" />
+                <Label Grid.Row="1"
+                       Grid.Column="0"
+                       Content="Radius" />
+                <TextBox Grid.Row="1"
+                         Grid.Column="1"
+                         IsReadOnly="True"
+                         MinWidth="50"
+                         Text="{Binding TurnRadiusForPort}" />
+                <Slider Grid.Row="1"
+                        Grid.Column="2"
+                        Margin="5,0,0,0"
+                        Name="m_SliderForPortRadius"
+                        Minimum="10"
+                        Maximum="300"
+                        Interval="10"
+                        TickPlacement="BottomRight"
+                        TickFrequency="10"
+                        IsSnapToTickEnabled="True"
+                        Value="{Binding TurnRadiusForPort}"
+                        MinWidth="100" />
+            </Grid>
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="3"
+                       Content="Starboard Turn"
+                       FontWeight="Bold" />
+                <Label Grid.Row="1"
+                       Grid.Column="0"
+                       Content="Radius" />
+                <TextBox Grid.Row="1"
+                         Grid.Column="1"
+                         IsReadOnly="True"
+                         MinWidth="50"
+                         Text="{Binding TurnRadiusForStarboard}" />
+                <Slider Grid.Row="1"
+                        Grid.Column="2"
+                        Margin="5,0,0,0"
+                        Name="m_SliderForStarboardRadius"
+                        Minimum="10"
+                        Maximum="300"
+                        Interval="10"
+                        TickPlacement="BottomRight"
+                        TickFrequency="10"
+                        IsSnapToTickEnabled="True"
+                        Value="{Binding TurnRadiusForStarboard}"
+                        MinWidth="100" />
+            </Grid>
+        </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Content="Allowed Turns:" />
             <StackPanel Orientation="Horizontal">

@@ -19,6 +19,7 @@ namespace Selkie.Framework.Tests.NUnit
             m_Bus = Substitute.For <ISelkieBus>();
             m_Factory = Substitute.For <IRacetrackSettingsSourceFactory>();
             m_Factory.Create(Arg.Any <double>(),
+                             Arg.Any <double>(),
                              Arg.Any <bool>(),
                              Arg.Any <bool>()).Returns(CreateSource);
 
@@ -29,8 +30,9 @@ namespace Selkie.Framework.Tests.NUnit
         private IRacetrackSettingsSource CreateSource(CallInfo arg)
         {
             return new RacetrackSettingsSource(( double ) arg [ 0 ],
-                                               ( bool ) arg [ 1 ],
-                                               ( bool ) arg [ 2 ]);
+                                               ( double ) arg [ 1 ],
+                                               ( bool ) arg [ 2 ],
+                                               ( bool ) arg [ 3 ]);
         }
 
         private ISelkieBus m_Bus;
@@ -66,7 +68,7 @@ namespace Selkie.Framework.Tests.NUnit
         {
             var message = new ColonyRacetrackSettingsSetMessage
                           {
-                              TurnRadius = 100.0,
+                              TurnRadiusForPort = 100.0,
                               IsPortTurnAllowed = true,
                               IsStarboardTurnAllowed = true
                           };
@@ -76,7 +78,7 @@ namespace Selkie.Framework.Tests.NUnit
             IRacetrackSettingsSource actual = m_Sut.Source;
 
             Assert.AreEqual(100.0,
-                            actual.TurnRadius);
+                            actual.TurnRadiusForPort);
             Assert.True(actual.IsPortTurnAllowed);
             Assert.True(actual.IsStarboardTurnAllowed);
         }
@@ -86,7 +88,7 @@ namespace Selkie.Framework.Tests.NUnit
         {
             var message = new ColonyRacetrackSettingsSetMessage
                           {
-                              TurnRadius = 100.0,
+                              TurnRadiusForPort = 100.0,
                               IsPortTurnAllowed = true,
                               IsStarboardTurnAllowed = true
                           };

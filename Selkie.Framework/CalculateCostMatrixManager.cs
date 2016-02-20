@@ -38,14 +38,8 @@ namespace Selkie.Framework
                                                                          ColonyRacetrackSettingsChangedHandler);
         }
 
-        public bool IsReceivedRacetrackSettingsChangedMessage { get; private set; }
-        public bool IsReceivedLinesChangedMessage { get; private set; }
-
         public void Calculate()
         {
-            IsReceivedRacetrackSettingsChangedMessage = false;
-            IsReceivedLinesChangedMessage = false;
-
             SendRacetrackSettingsSetMessage();
             SendLinesSetMessage();
         }
@@ -56,7 +50,8 @@ namespace Selkie.Framework
 
             var message = new RacetrackSettingsSetMessage
                           {
-                              TurnRadiusInMetres = source.TurnRadius,
+                              TurnRadiusForPort = source.TurnRadiusForPort,
+                              TurnRadiusForStarboard = source.TurnRadiusForStarboard,
                               IsPortTurnAllowed = source.IsPortTurnAllowed,
                               IsStarboardTurnAllowed = source.IsStarboardTurnAllowed
                           };
@@ -95,28 +90,12 @@ namespace Selkie.Framework
 
         internal void ColonyLinesChangedHandler(ColonyLinesChangedMessage message)
         {
-            IsReceivedLinesChangedMessage = true;
-
-            CheckIfWeCanCalculateRacetrack();
+            m_Bus.PublishAsync(new CostMatrixCalculateMessage());
         }
 
         internal void ColonyRacetrackSettingsChangedHandler([NotNull] ColonyRacetrackSettingsChangedMessage message)
         {
-            IsReceivedRacetrackSettingsChangedMessage = true;
-
-            CheckIfWeCanCalculateRacetrack();
-        }
-
-        internal void CheckIfWeCanCalculateRacetrack()
-        {
-            if ( IsReceivedRacetrackSettingsChangedMessage &&
-                 IsReceivedLinesChangedMessage )
-            {
-                IsReceivedRacetrackSettingsChangedMessage = false;
-                IsReceivedLinesChangedMessage = false;
-
-                m_Bus.PublishAsync(new CostMatrixCalculateMessage());
-            }
+            m_Bus.PublishAsync(new CostMatrixCalculateMessage());
         }
     }
 }

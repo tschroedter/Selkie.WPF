@@ -23,7 +23,7 @@ namespace Selkie.WPF.Common.Tests.Converters.NUnit
         private enum EnumTypes
         {
             One
-        };
+        }
 
         private EnumMatchToBooleanConverter m_Converter;
         private Type m_DoesNotMatter;

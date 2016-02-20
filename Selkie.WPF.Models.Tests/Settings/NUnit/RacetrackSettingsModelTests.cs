@@ -22,6 +22,7 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
             m_Bus = Substitute.For <ISelkieBus>();
             m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
             m_Source = new RacetrackSettingsSource(300.0,
+                                                   400.0,
                                                    true,
                                                    true);
 
@@ -52,8 +53,11 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
             // Assert
             m_MemoryBus.Received()
                        .PublishAsync(Arg.Is <RacetrackSettingsChangedMessage>(x =>
-                                                                              Math.Abs(x.TurnRadius -
-                                                                                       m_Source.TurnRadius) <
+                                                                              Math.Abs(x.TurnRadiusForPort -
+                                                                                       m_Source.TurnRadiusForPort) <
+                                                                              Tolerance &&
+                                                                              Math.Abs(x.TurnRadiusForStarboard -
+                                                                                       m_Source.TurnRadiusForStarboard) <
                                                                               Tolerance &&
                                                                               x.IsPortTurnAllowed ==
                                                                               m_Source.IsPortTurnAllowed &&
@@ -116,7 +120,8 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
             // Arrange
             var message = new RacetrackSettingsSetMessage
                           {
-                              TurnRadius = 1.0,
+                              TurnRadiusForPort = 1.0,
+                              TurnRadiusForStarboard = 2.0,
                               IsPortTurnAllowed = true,
                               IsStarboardTurnAllowed = true
                           };
@@ -129,7 +134,10 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
                  .PublishAsync(
                                Arg.Is <ColonyRacetrackSettingsSetMessage>(
                                                                           x =>
-                                                                          Math.Abs(x.TurnRadius - 1.0) < Tolerance &&
+                                                                          Math.Abs(x.TurnRadiusForPort - 1.0) <
+                                                                          Tolerance &&
+                                                                          Math.Abs(x.TurnRadiusForStarboard - 2.0) <
+                                                                          Tolerance &&
                                                                           x.IsPortTurnAllowed &&
                                                                           x.IsStarboardTurnAllowed));
         }

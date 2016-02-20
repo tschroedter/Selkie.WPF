@@ -40,6 +40,8 @@
                     Content="Apply"
                     Command="{Binding ApplyCommand}"
                     IsEnabled="{Binding IsApplyEnabled}" />
+            <Label DockPanel.Dock="Left"
+                   Content="Available Test Lines" />
             <ComboBox DockPanel.Dock="Right"
                       ItemsSource="{Binding TestLines}"
                       SelectedItem="{Binding SelectedTestLine}" />

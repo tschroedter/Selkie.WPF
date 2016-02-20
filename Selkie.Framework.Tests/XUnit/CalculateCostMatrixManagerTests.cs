@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit;
 using Selkie.EasyNetQ;
-using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry.Shapes;
 using Selkie.Services.Common.Dto;
@@ -16,18 +15,24 @@ using Xunit.Extensions;
 
 namespace Selkie.Framework.Tests.XUnit
 {
-    public sealed class CalculateCostMatrixManagerTests // todo rename???
+    public sealed class CalculateCostMatrixManagerTests
     {
         private const double Tolerance = 0.1;
 
         [Theory]
         [AutoNSubstituteData]
         public void Calculate_SendsRacetrackSettingsSetMessage_WhenCalled(
+            [NotNull] IRacetrackSettingsSource source,
             [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] IRacetrackSettingsSourceManager manager,
             [NotNull] CalculateCostMatrixManager sut)
         {
             // Arrange
+            source.TurnRadiusForPort.Returns(1.0);
+            source.TurnRadiusForStarboard.Returns(2.0);
+            manager.Source.Returns(source);
+            bus.ClearReceivedCalls();
+
             // Act
             sut.Calculate();
 
@@ -36,8 +41,8 @@ namespace Selkie.Framework.Tests.XUnit
                .PublishAsync(
                              Arg.Is <RacetrackSettingsSetMessage>(
                                                                   x =>
-                                                                  Math.Abs(x.TurnRadiusInMetres -
-                                                                           manager.Source.TurnRadius) < 0.01 &&
+                                                                  Math.Abs(x.TurnRadiusForPort - 1.0) < 0.01 &&
+                                                                  Math.Abs(x.TurnRadiusForStarboard - 2.0) < 0.01 &&
                                                                   x.IsPortTurnAllowed ==
                                                                   manager.Source.IsPortTurnAllowed &&
                                                                   x.IsStarboardTurnAllowed ==
@@ -56,190 +61,6 @@ namespace Selkie.Framework.Tests.XUnit
 
             // Assert
             bus.Received().PublishAsync(Arg.Is <LinesSetMessage>(x => x.LineDtos.Any()));
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void IsReceivedRacetrackSettingsChangedMessage_ReturnsFalse_ByDefault(
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            // Act
-            sut.Calculate();
-
-            // Assert
-            Assert.False(sut.IsReceivedRacetrackSettingsChangedMessage);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void IsWaitingForChangedMessages_ReturnsFalse_WhenCalculateIsCalled(
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            SetIsReceivedRacetrackSettingsChangedMessageToTrue(sut);
-
-            // Act
-            sut.Calculate();
-
-            // Assert
-            Assert.False(sut.IsReceivedRacetrackSettingsChangedMessage);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void IsReceivedLinesChangedMessage_ReturnsFalse_ByDefault(
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            // Act
-            sut.Calculate();
-
-            // Assert
-            Assert.False(sut.IsReceivedLinesChangedMessage);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void IsReceivedLinesChangedMessage_ReturnsFalse_WhenCalculateIsCalled(
-            [NotNull, Frozen] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            SetIsReceivedLinesChangedMessageToTrue(sut);
-
-            // Act
-            sut.Calculate();
-
-            // Assert
-            Assert.False(sut.IsReceivedLinesChangedMessage);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void ColonyLinesChangedHandler_SetsIsReceivedLinesChangedMessageToTrue_WhenCalled(
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            // Act
-            sut.ColonyLinesChangedHandler(new ColonyLinesChangedMessage());
-
-            // Assert
-            Assert.True(sut.IsReceivedLinesChangedMessage);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void ColonyRacetrackSettingsChangedHandler_SetsIsReceivedLinesChangedMessageToTrue_WhenCalled(
-            [NotNull, Frozen] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            // Act
-            sut.ColonyRacetrackSettingsChangedHandler(new ColonyRacetrackSettingsChangedMessage());
-
-            // Assert
-            Assert.True(sut.IsReceivedRacetrackSettingsChangedMessage);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void CheckIfWeCanCalculateRacetrack_SendsCostMatrixCalculateMessage_WhenAllChangedMessageHaveBeenReceived
-            (
-            [NotNull, Frozen] ISelkieBus bus,
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            sut.Calculate();
-            SetIsReceivedLinesChangedMessageToTrue(sut);
-            SetIsReceivedRacetrackSettingsChangedMessageToTrue(sut);
-
-            // Act
-            sut.CheckIfWeCanCalculateRacetrack();
-
-            // Assert
-            bus.Received().PublishAsync(Arg.Any <CostMatrixCalculateMessage>());
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void
-            CheckIfWeCanCalculateRacetrack_SetsIsReceivedRacetrackSettingsChangedMessageToFalse_WhenAllConditionsAreFine
-            (
-            [NotNull, Frozen] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            SetIsReceivedLinesChangedMessageToTrue(sut);
-            SetIsReceivedRacetrackSettingsChangedMessageToTrue(sut);
-
-            // Act
-            sut.CheckIfWeCanCalculateRacetrack();
-
-            // Assert
-            Assert.False(sut.IsReceivedRacetrackSettingsChangedMessage);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void
-            CheckIfWeCanCalculateRacetrack_SetsIsReceivedLinesChangedMessageToFalse_WhenAllConditionsAreFine(
-            [NotNull, Frozen] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            SetIsReceivedLinesChangedMessageToTrue(sut);
-            SetIsReceivedRacetrackSettingsChangedMessageToTrue(sut);
-
-            // Act
-            sut.CheckIfWeCanCalculateRacetrack();
-
-            // Assert
-            Assert.False(sut.IsReceivedLinesChangedMessage);
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void CheckIfWeCanCalculateRacetrack_DoesNothing_ForIsWaitingForChangedMessagesIsFalse(
-            [NotNull, Frozen] ISelkieBus bus,
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            // Act
-            sut.CheckIfWeCanCalculateRacetrack();
-
-            // Assert
-            bus.DidNotReceive().PublishAsync(Arg.Any <CostMatrixCalculateMessage>());
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void CheckIfWeCanCalculateRacetrack_DoesNothing_ForIsReceivedRacetrackSettingsChangedMessageFalse(
-            [NotNull, Frozen] ISelkieBus bus,
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            sut.Calculate();
-            SetIsReceivedLinesChangedMessageToTrue(sut);
-
-            // Act
-            sut.CheckIfWeCanCalculateRacetrack();
-
-            // Assert
-            bus.DidNotReceive().PublishAsync(Arg.Any <CostMatrixCalculateMessage>());
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void CheckIfWeCanCalculateRacetrack_DoesNothing_ForIsReceivedLinesChangedMessageFalse(
-            [NotNull, Frozen] ISelkieBus bus,
-            [NotNull] CalculateCostMatrixManager sut)
-        {
-            // Arrange
-            sut.Calculate();
-            SetIsReceivedRacetrackSettingsChangedMessageToTrue(sut);
-
-            // Act
-            sut.CheckIfWeCanCalculateRacetrack();
-
-            // Assert
-            bus.DidNotReceive().PublishAsync(Arg.Any <CostMatrixCalculateMessage>());
         }
 
         [Theory]
@@ -305,16 +126,6 @@ namespace Selkie.Framework.Tests.XUnit
                         "X2");
             Assert.True(Math.Abs(actual.Y2 - line.Y2) < Tolerance,
                         "Y2");
-        }
-
-        private void SetIsReceivedRacetrackSettingsChangedMessageToTrue(CalculateCostMatrixManager sut)
-        {
-            sut.ColonyRacetrackSettingsChangedHandler(new ColonyRacetrackSettingsChangedMessage());
-        }
-
-        private void SetIsReceivedLinesChangedMessageToTrue(CalculateCostMatrixManager sut)
-        {
-            sut.ColonyLinesChangedHandler(new ColonyLinesChangedMessage());
         }
     }
 }

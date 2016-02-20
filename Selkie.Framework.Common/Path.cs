@@ -14,6 +14,7 @@ namespace Selkie.Framework.Common
 
         private readonly IPolyline m_Polyline = new Polyline(0,
                                                              Constants.LineDirection.Forward);
+
         private readonly Point m_StartPoint;
 
         public Path([NotNull] Point startPoint) // todo check who is using it

@@ -42,7 +42,8 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
 
         private void SetModelPropertiesToSettingsModel()
         {
-            m_Model.TurnRadius = 100.0;
+            m_Model.TurnRadiusForPort = 100.0;
+            m_Model.TurnRadiusForStarboard = 200.0;
             m_Model.IsPortTurnAllowed = true;
             m_Model.IsStarboardTurnAllowed = true;
         }
@@ -51,7 +52,8 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
         {
             return new RacetrackSettingsChangedMessage
                    {
-                       TurnRadius = 200.0,
+                       TurnRadiusForPort = 200.0,
+                       TurnRadiusForStarboard = 300.0,
                        IsPortTurnAllowed = false,
                        IsStarboardTurnAllowed = true
                    };
@@ -108,7 +110,10 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
                  .PublishAsync(
                                Arg.Is <RacetrackSettingsSetMessage>(
                                                                     x =>
-                                                                    Math.Abs(x.TurnRadius - 100.0) < double.Epsilon &&
+                                                                    Math.Abs(x.TurnRadiusForPort - 100.0) <
+                                                                    double.Epsilon &&
+                                                                    Math.Abs(x.TurnRadiusForStarboard - 200.0) <
+                                                                    double.Epsilon &&
                                                                     x.IsPortTurnAllowed &&
                                                                     x.IsStarboardTurnAllowed));
         }
@@ -321,8 +326,10 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
             m_Model.RacetrackSettingsChangedHandler(message);
 
             // Assert
-            Assert.True(Math.Abs(m_Model.TurnRadius - 200.0) < double.Epsilon,
-                        "TurnRadius");
+            Assert.True(Math.Abs(m_Model.TurnRadiusForPort - 200.0) < double.Epsilon,
+                        "TurnRadiusForPort");
+            Assert.True(Math.Abs(m_Model.TurnRadiusForStarboard - 300.0) < double.Epsilon,
+                        "TurnRadiusForStarboard");
             Assert.False(m_Model.IsPortTurnAllowed,
                          "IsPortTurnAllowed");
             Assert.True(m_Model.IsStarboardTurnAllowed,
@@ -330,20 +337,73 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
         }
 
         [Test]
-        public void TurnRadius_ReturnsDefault_WhenCalled()
+        public void TurnRadiusForPort_RaisesEvent_WhenChanged()
         {
-            Assert.AreEqual(100.0,
-                            m_Model.TurnRadius);
+            // Arrange
+            var test = new TestNotifyPropertyChanged(m_Model,
+                                                     "TurnRadiusForPort");
+            SetModelPropertiesToSettingsModel();
+
+            // Act
+            m_Model.TurnRadiusForPort = 123.0;
+
+            // Assert
+            Assert.True(test.IsExpectedNotified,
+                        "TurnRadiusForPort");
         }
 
         [Test]
-        public void TurnRadius_Roundtrip()
+        public void TurnRadiusForPort_ReturnsDefault_WhenCalled()
+        {
+            Assert.AreEqual(100.0,
+                            m_Model.TurnRadiusForPort);
+        }
+
+        [Test]
+        public void TurnRadiusForPort_Roundtrip()
         {
             // Arrange
-            m_Model.TurnRadius = 200.0;
+            m_Model.TurnRadiusForPort = 200.0;
 
             // Act
-            double actual = m_Model.TurnRadius;
+            double actual = m_Model.TurnRadiusForPort;
+
+            // Assert
+            Assert.AreEqual(200.0,
+                            actual);
+        }
+
+        [Test]
+        public void TurnRadiusForStarboard_RaisesEvent_WhenChanged()
+        {
+            // Arrange
+            var test = new TestNotifyPropertyChanged(m_Model,
+                                                     "TurnRadiusForStarboard");
+            SetModelPropertiesToSettingsModel();
+
+            // Act
+            m_Model.TurnRadiusForStarboard = 123.0;
+
+            // Assert
+            Assert.True(test.IsExpectedNotified,
+                        "TurnRadiusForStarboard");
+        }
+
+        [Test]
+        public void TurnRadiusForStarboard_ReturnsDefault_WhenCalled()
+        {
+            Assert.AreEqual(100.0,
+                            m_Model.TurnRadiusForStarboard);
+        }
+
+        [Test]
+        public void TurnRadiusForStarboard_Roundtrip()
+        {
+            // Arrange
+            m_Model.TurnRadiusForStarboard = 200.0;
+
+            // Act
+            double actual = m_Model.TurnRadiusForStarboard;
 
             // Assert
             Assert.AreEqual(200.0,
@@ -356,6 +416,7 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
             // Arrange
             // Act
             m_Model.Update(200.0,
+                           300.0,
                            false,
                            true);
 
@@ -369,6 +430,7 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
             // Arrange
             // Act
             m_Model.Update(200.0,
+                           300.0,
                            true,
                            false);
 
@@ -377,17 +439,33 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
         }
 
         [Test]
-        public void Update_SetsTurnRadius_WhenCalled()
+        public void Update_SetsTurnRadiusForPort_WhenCalled()
         {
             // Arrange
             // Act
             m_Model.Update(200.0,
+                           300.0,
                            true,
                            true);
 
             // Assert
             Assert.AreEqual(200.0,
-                            m_Model.TurnRadius);
+                            m_Model.TurnRadiusForPort);
+        }
+
+        [Test]
+        public void Update_SetsTurnRadiusForStarboard_WhenCalled()
+        {
+            // Arrange
+            // Act
+            m_Model.Update(200.0,
+                           300.0,
+                           true,
+                           true);
+
+            // Assert
+            Assert.AreEqual(300.0,
+                            m_Model.TurnRadiusForStarboard);
         }
 
         [Test]

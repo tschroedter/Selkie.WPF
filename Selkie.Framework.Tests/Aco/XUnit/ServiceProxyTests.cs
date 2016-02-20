@@ -59,28 +59,6 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void BestTrailHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
-                                                             [NotNull] ServiceProxy sut,
-                                                             [NotNull] BestTrailMessage message)
-        {
-            // Arrange
-            // Act
-            sut.BestTrailHandler(message);
-
-            // Assert
-            bus.Received()
-               .PublishAsync(Arg.Is <ColonyBestTrailMessage>(x => Math.Abs(x.Alpha - message.Alpha) < Tolerance &&
-                                                                  Math.Abs(x.Alpha - message.Alpha) < Tolerance &&
-                                                                  Math.Abs(x.Beta - message.Beta) < Tolerance &&
-                                                                  Math.Abs(x.Gamma - message.Gamma) < Tolerance &&
-                                                                  x.Iteration == message.Iteration &&
-                                                                  x.Trail.SequenceEqual(message.Trail) &&
-                                                                  x.Type == message.Type &&
-                                                                  Math.Abs(x.Length - message.Length) < Tolerance));
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
         public void Stop_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
                                                  [NotNull] ServiceProxy sut)
         {

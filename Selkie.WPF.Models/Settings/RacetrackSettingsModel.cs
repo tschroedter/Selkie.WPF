@@ -37,7 +37,7 @@ namespace Selkie.WPF.Models.Settings
         {
             get
             {
-                return m_Manager.Source.TurnRadius;
+                return m_Manager.Source.TurnRadiusForPort;
             }
         }
 
@@ -63,7 +63,8 @@ namespace Selkie.WPF.Models.Settings
 
             var reply = new RacetrackSettingsChangedMessage
                         {
-                            TurnRadius = source.TurnRadius,
+                            TurnRadiusForPort = source.TurnRadiusForPort,
+                            TurnRadiusForStarboard = source.TurnRadiusForStarboard,
                             IsPortTurnAllowed = source.IsPortTurnAllowed,
                             IsStarboardTurnAllowed = source.IsStarboardTurnAllowed
                         };
@@ -80,7 +81,8 @@ namespace Selkie.WPF.Models.Settings
         {
             m_Bus.PublishAsync(new ColonyRacetrackSettingsSetMessage
                                {
-                                   TurnRadius = message.TurnRadius,
+                                   TurnRadiusForPort = message.TurnRadiusForPort,
+                                   TurnRadiusForStarboard = message.TurnRadiusForStarboard,
                                    IsPortTurnAllowed = message.IsPortTurnAllowed,
                                    IsStarboardTurnAllowed = message.IsStarboardTurnAllowed
                                });

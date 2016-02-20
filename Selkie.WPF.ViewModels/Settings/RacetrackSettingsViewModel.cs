@@ -21,7 +21,7 @@ namespace Selkie.WPF.ViewModels.Settings
             Port,
             StarPort,
             Both
-        };
+        }
 
         internal const int PeriodInMs = 500;
         internal const int DueTimeInMs = 1000;
@@ -29,7 +29,8 @@ namespace Selkie.WPF.ViewModels.Settings
         private readonly ICommandManager m_CommandManager;
         private readonly IApplicationDispatcher m_Dispatcher;
         private ICommand m_ApplyCommand;
-        private double m_TurnRadius;
+        private double m_TurnRadiusForPort;
+        private double m_TurnRadiusForStarboard;
 
         public RacetrackSettingsViewModel([NotNull] ISelkieLogger logger,
                                           [NotNull] ISelkieInMemoryBus bus,
@@ -41,7 +42,8 @@ namespace Selkie.WPF.ViewModels.Settings
             m_Dispatcher = dispatcher;
             m_CommandManager = commandManager;
 
-            TurnRadius = 100.0;
+            TurnRadiusForPort = 100.0;
+            TurnRadiusForStarboard = 100.0;
             AllowedTurns = PossibleTurns.Both;
             IsPortTurnAllowed = true;
             IsStarboardTurnAllowed = true;
@@ -51,21 +53,35 @@ namespace Selkie.WPF.ViewModels.Settings
                                                  IsStarboardTurnAllowed);
 
             bus.SubscribeAsync <RacetrackSettingsChangedMessage>(GetType().ToString(),
+                                                                 // todo this should be Colony...message
                                                                  RacetrackSettingsChangedHandler);
 
             bus.PublishAsync(new RacetrackSettingsRequestMessage());
         }
 
-        public double TurnRadius
+        public double TurnRadiusForPort
         {
             get
             {
-                return m_TurnRadius;
+                return m_TurnRadiusForPort;
             }
             set
             {
-                m_TurnRadius = value;
-                NotifyPropertyChanged("TurnRadius");
+                m_TurnRadiusForPort = value;
+                NotifyPropertyChanged("TurnRadiusForPort");
+            }
+        }
+
+        public double TurnRadiusForStarboard
+        {
+            get
+            {
+                return m_TurnRadiusForStarboard;
+            }
+            set
+            {
+                m_TurnRadiusForStarboard = value;
+                NotifyPropertyChanged("TurnRadiusForStarboard");
             }
         }
 
@@ -104,9 +120,10 @@ namespace Selkie.WPF.ViewModels.Settings
 
             UpdateSelectedTurns();
 
-            var message = new RacetrackSettingsSetMessage
+            var message = new RacetrackSettingsSetMessage // todo this should be Colony...message
                           {
-                              TurnRadius = TurnRadius,
+                              TurnRadiusForPort = TurnRadiusForPort,
+                              TurnRadiusForStarboard = TurnRadiusForStarboard,
                               IsPortTurnAllowed = IsPortTurnAllowed,
                               IsStarboardTurnAllowed = IsStarboardTurnAllowed
                           };
@@ -139,7 +156,8 @@ namespace Selkie.WPF.ViewModels.Settings
 
         private void UpdateAndNotify(RacetrackSettingsChangedMessage message)
         {
-            Update(message.TurnRadius,
+            Update(message.TurnRadiusForPort,
+                   message.TurnRadiusForStarboard,
                    message.IsPortTurnAllowed,
                    message.IsStarboardTurnAllowed);
 
@@ -150,11 +168,13 @@ namespace Selkie.WPF.ViewModels.Settings
             m_CommandManager.InvalidateRequerySuggested();
         }
 
-        internal void Update(double turnRadius,
+        internal void Update(double turnRadiusForPort,
+                             double turnRadiusForStarboard,
                              bool isPortTurnAllowed,
                              bool isStarboardTurnAllowed)
         {
-            TurnRadius = turnRadius;
+            TurnRadiusForPort = turnRadiusForPort;
+            TurnRadiusForStarboard = turnRadiusForStarboard;
             IsPortTurnAllowed = isPortTurnAllowed;
             IsStarboardTurnAllowed = isStarboardTurnAllowed;
         }
