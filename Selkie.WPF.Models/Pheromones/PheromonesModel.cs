@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Selkie.Common;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
@@ -19,13 +20,25 @@ namespace Selkie.WPF.Models.Pheromones
                                [NotNull] ISelkieInMemoryBus memoryBus,
                                [NotNull] ITimer timer)
         {
+            if ( memoryBus == null )
+            {
+                throw new ArgumentNullException("memoryBus");
+            }
             m_Bus = bus;
             m_MemoryBus = memoryBus;
 
-            Values = new double[0][];
+            Values = new[]
+                     {
+                         new[]
+                         {
+                             0.0,
+                             1.0
+                         }
+                     };
+
             Minimum = 0.0;
-            Maximum = 0.0;
-            Average = 0.0;
+            Maximum = 1.0;
+            Average = 0.5;
 
             string subscriptionId = GetType().ToString();
 
@@ -38,6 +51,9 @@ namespace Selkie.WPF.Models.Pheromones
             bus.SubscribeAsync <ColonyFinishedMessage>(subscriptionId,
                                                        FinishedHandler);
 
+            m_MemoryBus.SubscribeAsync <PheromonesModelsSetMessage>(subscriptionId,
+                                                                    SetHandler);
+
             timer.Initialize(OnTimer,
                              TenSeconds,
                              TwoSeconds);
@@ -48,10 +64,12 @@ namespace Selkie.WPF.Models.Pheromones
         public double Minimum { get; internal set; }
         public double Maximum { get; internal set; }
         public double Average { get; internal set; }
+        public bool IsShowPheromones { get; internal set; }
 
         internal void OnTimer(object state)
         {
-            if ( !IsRequestingEnabled )
+            if ( !IsShowPheromones ||
+                 !IsRequestingEnabled )
             {
                 return;
             }
@@ -79,12 +97,19 @@ namespace Selkie.WPF.Models.Pheromones
                 Average = message.Average;
             }
 
-            m_MemoryBus.PublishAsync(new PheromonesModelChangedMessage());
+            m_MemoryBus.PublishAsync(new PheromonesModelChangedMessage()); // todo better to include parameters???
         }
 
         internal void FinishedHandler(ColonyFinishedMessage message)
         {
             IsRequestingEnabled = false;
+        }
+
+        internal void SetHandler(PheromonesModelsSetMessage message) // todo testing
+        {
+            IsShowPheromones = message.IsShowPheromones;
+
+            m_MemoryBus.PublishAsync(new PheromonesModelChangedMessage());
         }
     }
 }

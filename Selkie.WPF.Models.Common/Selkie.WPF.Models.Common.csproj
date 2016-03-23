@@ -48,6 +48,7 @@
     <Compile Include="Messages\LinesModelLinesRequestMessage.cs" />
     <Compile Include="Messages\NodesModelChangedMessage.cs" />
     <Compile Include="Messages\PheromonesModelChangedMessage.cs" />
+    <Compile Include="Messages\PheromonesModelsSetMessage.cs" />
     <Compile Include="Messages\RacetrackModelChangedMessage.cs" />
     <Compile Include="Messages\RacetracksChangedMessage.cs" />
     <Compile Include="Messages\RacetrackSettingsChangedMessage.cs" />

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using JetBrains.Annotations;
 using Selkie.EasyNetQ;
@@ -51,23 +52,43 @@ namespace Selkie.Framework.Aco
             IsColonyCreated = false;
             IsRunning = false;
 
-            m_AcoProxylogger.LogCostMatrix(m_CostMatrixSourceManager.Matrix);
-            m_AcoProxylogger.LogCostPerLine(m_LinesSourceManager.CostPerLine.ToArray());
+            int[][] costMatrix = m_CostMatrixSourceManager.Matrix;
+            int[] costPerLine = m_LinesSourceManager.CostPerLine.ToArray();
 
-            if ( m_CostMatrixSourceManager.Matrix.Length == 0 )
-            {
-                m_AcoProxylogger.Error("Cost Matrix is not set!");
+            m_AcoProxylogger.LogCostMatrix(costMatrix);
+            m_AcoProxylogger.LogCostPerLine(costPerLine);
 
-                return;
-            }
+            ValidateCostMatrixAndCostPerLine(costMatrix,
+                                             costPerLine);
 
             var createMessage = new CreateColonyMessage
                                 {
-                                    CostMatrix = m_CostMatrixSourceManager.Matrix,
-                                    CostPerLine = m_LinesSourceManager.CostPerLine.ToArray()
+                                    CostMatrix = costMatrix,
+                                    CostPerLine = costPerLine
                                 };
 
             m_Bus.PublishAsync(createMessage);
+        }
+
+        // ReSharper disable UnusedParameter.Local
+        private void ValidateCostMatrixAndCostPerLine(int[][] costMatrix,
+                                                      int[] costPerLine)
+        // ReSharper restore UnusedParameter.Local
+        {
+            if ( costMatrix.Length == 0 )
+            {
+                throw new ArgumentException("Cost Matrix is not set!");
+            }
+
+            if ( costPerLine.Length == 0 )
+            {
+                throw new ArgumentException("CostPerLine array is not set!");
+            }
+
+            if ( costPerLine.Length != costMatrix.Length )
+            {
+                throw new ArgumentException("CostMatrix and CostPerLine do not match!");
+            }
         }
 
         public bool Start()

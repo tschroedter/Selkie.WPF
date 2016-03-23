@@ -7,5 +7,8 @@ namespace Selkie.WPF.ViewModels.Interfaces
         string Minimum { get; }
         string Maximum { get; }
         string Average { get; }
+
+        bool IsShowPheromones // todo testing
+        { get; set; }
     }
 }

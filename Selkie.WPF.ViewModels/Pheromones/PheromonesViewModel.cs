@@ -18,12 +18,14 @@ namespace Selkie.WPF.ViewModels.Pheromones
         private readonly IBitmapSourceConverter m_BitmapSourceConverter;
         private readonly IApplicationDispatcher m_Dispatcher;
         private readonly IGrayscaleConverter m_GrayscaleConverter;
+        private readonly ISelkieInMemoryBus m_Bus;
         private readonly IPheromonesModel m_Model;
         private readonly object m_Padlock = new object();
         private string m_Average = string.Empty;
         private ImageSource m_ImageSource = new BitmapImage();
         private string m_Maximum = string.Empty;
         private string m_Minimum = string.Empty;
+        private bool m_IsShowPheromones;
 
         public PheromonesViewModel([NotNull] ISelkieInMemoryBus bus,
                                    [NotNull] IApplicationDispatcher dispatcher,
@@ -31,13 +33,16 @@ namespace Selkie.WPF.ViewModels.Pheromones
                                    [NotNull] IGrayscaleConverter grayscaleConverter,
                                    [NotNull] IBitmapSourceConverter bitmapSourceConverter)
         {
+            m_Bus = bus;
             m_Model = model;
             m_Dispatcher = dispatcher;
             m_GrayscaleConverter = grayscaleConverter;
             m_BitmapSourceConverter = bitmapSourceConverter;
 
-            bus.SubscribeAsync <PheromonesModelChangedMessage>(GetType().ToString(),
-                                                               PheromonesHandler);
+            string subscriptionId = GetType().ToString();
+
+            bus.SubscribeAsync <PheromonesModelChangedMessage>(subscriptionId,
+                                                                 PheromonesHandler);
         }
 
         public ImageSource ImageSource
@@ -72,6 +77,23 @@ namespace Selkie.WPF.ViewModels.Pheromones
             }
         }
 
+        public bool IsShowPheromones // todo testing
+        {
+            get
+            {
+                return m_IsShowPheromones;
+            }
+            set
+            {
+                m_IsShowPheromones = value;
+
+                m_Bus.PublishAsync(new PheromonesModelsSetMessage()
+                                   {
+                                       IsShowPheromones = m_IsShowPheromones
+                                   });
+            }
+        }
+
         internal void PheromonesHandler(PheromonesModelChangedMessage message)
         {
             GenerateImageSource();
@@ -84,8 +106,9 @@ namespace Selkie.WPF.ViewModels.Pheromones
             m_Minimum = m_Model.Minimum.ToString(CultureInfo.InvariantCulture);
             m_Maximum = m_Model.Maximum.ToString(CultureInfo.InvariantCulture);
             m_Average = m_Model.Average.ToString(CultureInfo.InvariantCulture);
+            m_IsShowPheromones = m_Model.IsShowPheromones; // todo testing
 
-            m_ImageSource = m_BitmapSourceConverter.ImageSource;
+            m_ImageSource = m_BitmapSourceConverter.ImageSource; // todo should have default image
 
             NotifyPropertyChanged("");
         }

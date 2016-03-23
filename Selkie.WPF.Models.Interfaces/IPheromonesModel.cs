@@ -10,5 +10,6 @@ namespace Selkie.WPF.Models.Interfaces
         double Minimum { get; }
         double Maximum { get; }
         double Average { get; }
+        bool IsShowPheromones { get; }
     }
 }

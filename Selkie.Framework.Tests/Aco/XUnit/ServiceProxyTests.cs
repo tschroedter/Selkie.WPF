@@ -19,8 +19,6 @@ namespace Selkie.Framework.Tests.Aco.XUnit
     [ExcludeFromCodeCoverage]
     public sealed class ServiceProxyTests
     {
-        private const double Tolerance = 0.01;
-
         [Theory]
         [AutoNSubstituteData]
         public void Constructor_SubscribeToCreatedColonyMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
@@ -302,6 +300,12 @@ namespace Selkie.Framework.Tests.Aco.XUnit
             [NotNull] ServiceProxy sut)
         {
             // Arrange
+            int[][] matrix = CreateValidMatrix();
+            int[] costPerLine = CreateValidCostPerLine();
+
+            costMatrixSourceManager.Matrix.Returns(matrix);
+            linesSourceManager.CostPerLine.Returns(costPerLine);
+
             // Act
             sut.CreateColony();
 
@@ -322,18 +326,82 @@ namespace Selkie.Framework.Tests.Aco.XUnit
         {
             // Arrange
             costMatrixSourceManager.Matrix.Returns(new int[0][]);
-            // Act
-            sut.CreateColony();
 
+            // Act
             // Assert
-            bus.DidNotReceive().PublishAsync(Arg.Any <CreateColonyMessage>());
+            Assert.Throws <ArgumentException>(() => sut.CreateColony());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void CreateColony_SetsIsColonyCreatedToFalse_WhenCalled([NotNull] ServiceProxy sut)
+        public void CreateColony_DoesNotSendsMessage_WhenCostPerLineIsEmpty(
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
+            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
+            [NotNull] ServiceProxy sut)
         {
             // Arrange
+            var matrixDoesNotMatter = new[]
+                                      {
+                                          new[]
+                                          {
+                                              1
+                                          }
+                                      };
+
+            costMatrixSourceManager.Matrix.Returns(matrixDoesNotMatter);
+            linesSourceManager.CostPerLine.Returns(new int[0]);
+
+            // Act
+            // Assert
+            Assert.Throws <ArgumentException>(() => sut.CreateColony());
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void CreateColony_DoesNotSendsMessage_WhenMatrixAndCostPerDoNotMatch(
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
+            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
+            [NotNull] ServiceProxy sut)
+        {
+            // Arrange
+            var matrix = new[]
+                         {
+                             new[]
+                             {
+                                 1
+                             }
+                         };
+
+            var costPerLine = new[]
+                              {
+                                  1,
+                                  2
+                              };
+
+            costMatrixSourceManager.Matrix.Returns(matrix);
+            linesSourceManager.CostPerLine.Returns(costPerLine);
+
+            // Act
+            // Assert
+            Assert.Throws <ArgumentException>(() => sut.CreateColony());
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void CreateColony_SetsIsColonyCreatedToFalse_WhenCalled(
+            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
+            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
+            [NotNull] ServiceProxy sut)
+        {
+            // Arrange
+            int[][] matrix = CreateValidMatrix();
+            int[] costPerLine = CreateValidCostPerLine();
+
+            costMatrixSourceManager.Matrix.Returns(matrix);
+            linesSourceManager.CostPerLine.Returns(costPerLine);
+
             // Act
             sut.CreateColony();
 
@@ -343,9 +411,19 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void CreateColony_SetsIsRunningToFalse_WhenCalled([NotNull] ServiceProxy sut)
+        public void CreateColony_SetsIsRunningToFalse_WhenCalled(
+            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
+            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
+            [NotNull] ServiceProxy sut)
         {
             // Arrange
+            int[][] matrix = CreateValidMatrix();
+            int[] costPerLine = CreateValidCostPerLine();
+
+            costMatrixSourceManager.Matrix.Returns(matrix);
+            linesSourceManager.CostPerLine.Returns(costPerLine);
+
+
             // Act
             sut.CreateColony();
 
@@ -358,9 +436,16 @@ namespace Selkie.Framework.Tests.Aco.XUnit
         public void CreateColony_CallsLogCostMatrix_WhenCalled(
             [NotNull, Frozen] IAcoProxyLogger logger,
             [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
+            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
             [NotNull] ServiceProxy sut)
         {
             // Arrange
+            int[][] matrix = CreateValidMatrix();
+            int[] costPerLine = CreateValidCostPerLine();
+
+            costMatrixSourceManager.Matrix.Returns(matrix);
+            linesSourceManager.CostPerLine.Returns(costPerLine);
+
             // Act
             sut.CreateColony();
 
@@ -372,10 +457,17 @@ namespace Selkie.Framework.Tests.Aco.XUnit
         [AutoNSubstituteData]
         public void CreateColony_CallsLogCostPerLine_WhenCalled(
             [NotNull, Frozen] IAcoProxyLogger logger,
+            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
             [NotNull, Frozen] ILinesSourceManager linesSourceManager,
             [NotNull] ServiceProxy sut)
         {
             // Arrange
+            int[][] matrix = CreateValidMatrix();
+            int[] costPerLine = CreateValidCostPerLine();
+
+            costMatrixSourceManager.Matrix.Returns(matrix);
+            linesSourceManager.CostPerLine.Returns(costPerLine);
+
             // Act
             sut.CreateColony();
 
@@ -395,6 +487,38 @@ namespace Selkie.Framework.Tests.Aco.XUnit
             var message = new CreatedColonyMessage();
 
             sut.CreatedColonyHandler(message);
+        }
+
+        private static int[] CreateValidCostPerLine()
+        {
+            var costPerLine = new[]
+                              {
+                                  1,
+                                  2
+                              };
+            return costPerLine;
+        }
+
+        private static int[][] CreateValidMatrix()
+        {
+            var matrix = new[]
+                         {
+                             new[]
+                             {
+                                 1,
+                                 1,
+                                 1,
+                                 1
+                             },
+                             new[]
+                             {
+                                 2,
+                                 2,
+                                 2,
+                                 2
+                             }
+                         };
+            return matrix;
         }
     }
 }
