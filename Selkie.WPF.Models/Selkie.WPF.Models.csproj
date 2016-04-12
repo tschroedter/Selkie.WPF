@@ -70,8 +70,8 @@
       <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Aop, Version=0.6.19.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Aop.0.6.19.0\lib\net45\Selkie.Aop.dll</HintPath>
+    <Reference Include="Selkie.Aop, Version=0.6.25.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Aop.0.6.25.0\lib\net45\Selkie.Aop.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Selkie.Common, Version=0.6.228.0, Culture=neutral, processorArchitecture=MSIL">
@@ -102,6 +102,8 @@
     <Compile Include="Control\ControlModel.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Handlers\ExceptionThrownHandler.cs" />
+    <Compile Include="Handlers\ExceptionThrownMessageToStringConverter.cs" />
+    <Compile Include="Handlers\IExceptionThrownMessageToStringConverter.cs" />
     <Compile Include="Installer.cs" />
     <Compile Include="Mapping\BaseNodeModel.cs" />
     <Compile Include="Mapping\EndNodeModel.cs" />
@@ -114,7 +116,12 @@
     <Compile Include="Mapping\StartNodeModel.cs" />
     <Compile Include="Pheromones\PheromonesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\AntSettingsModel.cs" />
+    <Compile Include="Settings\AntSettingsNode.cs" />
+    <Compile Include="Settings\AntSettingsNodesManager.cs" />
+    <Compile Include="Settings\LinesToNodesConverter.cs" />
     <Compile Include="Settings\RacetrackSettingsModel.cs" />
+    <Compile Include="Status\StatusModel.cs" />
     <Compile Include="TrailHistory\TrailDetails.cs" />
     <Compile Include="TrailHistory\TrailHistoryModel.cs" />
   </ItemGroup>

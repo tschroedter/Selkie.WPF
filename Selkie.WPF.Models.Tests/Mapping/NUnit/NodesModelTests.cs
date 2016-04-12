@@ -25,22 +25,19 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Lines = CreateLines();
 
             m_Logger = Substitute.For <ISelkieLogger>();
-            m_Bus = Substitute.For <ISelkieBus>();
-            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Manager = Substitute.For <ILinesSourceManager>();
 
             m_Model = new NodesModel(m_Logger,
                                      m_Bus,
-                                     m_MemoryBus,
                                      m_Manager);
         }
 
         private ISelkieLogger m_Logger;
-        private ISelkieBus m_Bus;
         private ILinesSourceManager m_Manager;
         private NodesModel m_Model;
         private IEnumerable <ILine> m_Lines;
-        private ISelkieInMemoryBus m_MemoryBus;
+        private ISelkieInMemoryBus m_Bus;
 
         private IEnumerable <Line> CreateLines()
         {
@@ -157,8 +154,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
 
             m_Model.LinesChangedHandler(message);
 
-            m_MemoryBus.Received()
-                       .Publish(Arg.Any <NodesModelChangedMessage>());
+            m_Bus.Received()
+                 .Publish(Arg.Any <NodesModelChangedMessage>());
         }
 
         [Test]

@@ -16,16 +16,16 @@ namespace Selkie.WPF.ViewModels.Pheromones
           IPheromonesViewModel
     {
         private readonly IBitmapSourceConverter m_BitmapSourceConverter;
+        private readonly ISelkieInMemoryBus m_Bus;
         private readonly IApplicationDispatcher m_Dispatcher;
         private readonly IGrayscaleConverter m_GrayscaleConverter;
-        private readonly ISelkieInMemoryBus m_Bus;
         private readonly IPheromonesModel m_Model;
         private readonly object m_Padlock = new object();
         private string m_Average = string.Empty;
         private ImageSource m_ImageSource = new BitmapImage();
+        private bool m_IsShowPheromones;
         private string m_Maximum = string.Empty;
         private string m_Minimum = string.Empty;
-        private bool m_IsShowPheromones;
 
         public PheromonesViewModel([NotNull] ISelkieInMemoryBus bus,
                                    [NotNull] IApplicationDispatcher dispatcher,
@@ -42,7 +42,7 @@ namespace Selkie.WPF.ViewModels.Pheromones
             string subscriptionId = GetType().ToString();
 
             bus.SubscribeAsync <PheromonesModelChangedMessage>(subscriptionId,
-                                                                 PheromonesHandler);
+                                                               PheromonesHandler);
         }
 
         public ImageSource ImageSource
@@ -87,7 +87,7 @@ namespace Selkie.WPF.ViewModels.Pheromones
             {
                 m_IsShowPheromones = value;
 
-                m_Bus.PublishAsync(new PheromonesModelsSetMessage()
+                m_Bus.PublishAsync(new PheromonesModelsSetMessage
                                    {
                                        IsShowPheromones = m_IsShowPheromones
                                    });

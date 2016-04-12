@@ -31,8 +31,9 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SendsRequestMessage_WhenCalled([NotNull] ISelkieLogger logger,
-                                                               [NotNull, Frozen] ISelkieBus bus)
+        public void Constructor_SendsRequestMessage_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus)
         {
             // Arrange
             // ReSharper disable once UnusedVariable
@@ -46,6 +47,15 @@ namespace Selkie.Framework.Tests.XUnit
         private static LinesSourceManager CreateManager(ISelkieLogger logger,
                                                         ISelkieBus bus)
         {
+            return CreateManager(logger,
+                                 bus,
+                                 Substitute.For <ISelkieInMemoryBus>());
+        }
+
+        private static LinesSourceManager CreateManager(ISelkieLogger logger,
+                                                        ISelkieBus bus,
+                                                        ISelkieInMemoryBus inMemoryBus)
+        {
             var factory = Substitute.For <ILinesSourceFactory>();
             factory.Create(Arg.Any <IEnumerable <ILine>>()).Returns(CreateLinesSource);
 
@@ -53,6 +63,7 @@ namespace Selkie.Framework.Tests.XUnit
 
             return new LinesSourceManager(logger,
                                           bus,
+                                          inMemoryBus,
                                           factory,
                                           converter);
         }
@@ -65,8 +76,9 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribesToTestLineResponseMessage_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                               [NotNull, Frozen] ISelkieBus bus)
+        public void Constructor_SubscribesToTestLineResponseMessage_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
@@ -79,51 +91,62 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribesToColonyLinesRequestMessage_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                                 [NotNull, Frozen] ISelkieBus bus)
+        public void Constructor_SubscribesToColonyLinesRequestMessage_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
-                                                   bus);
+                                                   bus,
+                                                   inMemoryBus);
             // Act
             // Assert
-            bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Action <ColonyLinesRequestMessage>>());
+            inMemoryBus.Received().SubscribeAsync(sut.GetType().FullName,
+                                                  Arg.Any <Action <ColonyLinesRequestMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribesToColonyTestLinesRequestMessage_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                                     [NotNull, Frozen] ISelkieBus bus)
+        public void Constructor_SubscribesToColonyTestLinesRequestMessage_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull] ISelkieBus bus,
+            [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
-                                                   bus);
+                                                   bus,
+                                                   inMemoryBus);
             // Act
             // Assert
-            bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Action <ColonyTestLinesRequestMessage>>());
+            inMemoryBus.Received().SubscribeAsync(sut.GetType().FullName,
+                                                  Arg.Any <Action <ColonyTestLinesRequestMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribesToColonyTestLineSetMessage_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                                [NotNull, Frozen] ISelkieBus bus)
+        public void Constructor_SubscribesToColonyTestLineSetMessage_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull] ISelkieBus bus,
+            [NotNull, Frozen] ISelkieInMemoryBus
+                inMemoryBus)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
-                                                   bus);
+                                                   bus,
+                                                   inMemoryBus);
             // Act
             // Assert
-            bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Action <ColonyTestLineSetMessage>>());
+            inMemoryBus.Received().SubscribeAsync(sut.GetType().FullName,
+                                                  Arg.Any <Action <ColonyTestLineSetMessage>>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void TestLineResponseHandler_UpdatesLines_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                    [NotNull, Frozen] ISelkieBus bus,
-                                                                    [NotNull] TestLineResponseMessage message)
+        public void TestLineResponseHandler_UpdatesLines_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull] TestLineResponseMessage message)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
@@ -138,8 +161,9 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void TestLineResponseHandler_ConvertsDtoIntoLines_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                            [NotNull, Frozen] ISelkieBus bus)
+        public void TestLineResponseHandler_ConvertsDtoIntoLines_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
@@ -157,10 +181,11 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void TestLineResponseHandler_SendsLinesSourceChangedMessage_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                                      [NotNull, Frozen] ISelkieBus bus,
-                                                                                      [NotNull] TestLineResponseMessage
-                                                                                          message)
+        public void TestLineResponseHandler_SendsLinesSourceChangedMessage_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull] TestLineResponseMessage
+                message)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
@@ -175,42 +200,48 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void TestLineResponseHandler_SendsColonyLinesChangedMessage_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                                      [NotNull, Frozen] ISelkieBus bus,
-                                                                                      [NotNull] TestLineResponseMessage
-                                                                                          message)
+        public void TestLineResponseHandler_SendsColonyLinesChangedMessage_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus,
+            [NotNull] TestLineResponseMessage message)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
-                                                   bus);
+                                                   bus,
+                                                   inMemoryBus);
 
             // Act
             sut.TestLineResponseHandler(message);
 
             // Assert
-            bus.Received().PublishAsync(Arg.Any <ColonyLinesChangedMessage>());
+            inMemoryBus.Received().PublishAsync(Arg.Any <ColonyLinesChangedMessage>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void SendColonyLinesChangedMessage_UpdatesLines_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                          [NotNull, Frozen] ISelkieBus bus)
+        public void SendColonyLinesChangedMessage_UpdatesLines_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
-                                                   bus);
+                                                   bus,
+                                                   inMemoryBus);
 
             // Act
             sut.SendColonyLinesChangedMessage();
 
             // Assert
-            bus.Received().PublishAsync(Arg.Any <ColonyLinesChangedMessage>());
+            inMemoryBus.Received().PublishAsync(Arg.Any <ColonyLinesChangedMessage>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void SendColonyLinesChangedMessage_LogsLines_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                       [NotNull, Frozen] ISelkieBus bus)
+        public void SendColonyLinesChangedMessage_LogsLines_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
@@ -225,29 +256,33 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyLinesRequestHandler_UpdatesLines_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                      [NotNull, Frozen] ISelkieBus bus,
-                                                                      [NotNull] ColonyLinesRequestMessage message)
+        public void ColonyLinesRequestHandler_UpdatesLines_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus,
+            [NotNull] ColonyLinesRequestMessage message)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
-                                                   bus);
+                                                   bus,
+                                                   inMemoryBus);
 
             // Act
             sut.ColonyLinesRequestHandler(message);
 
             // Assert
-            bus.Received().PublishAsync(Arg.Any <ColonyLinesChangedMessage>());
+            inMemoryBus.Received().PublishAsync(Arg.Any <ColonyLinesChangedMessage>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyTestLineSetHandler_SendsMessage_ForKnownType([NotNull] ISelkieLogger logger,
-                                                                       [NotNull, Frozen] ISelkieBus bus,
-                                                                       [NotNull] ColonyTestLineSetMessage message)
+        public void ColonyTestLineSetHandler_SendsMessage_ForKnownType(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull] ColonyTestLineSetMessage message)
         {
             // Arrange
-            var type = TestLineType.Type.Create45DegreeLines;
+            const TestLineType.Type type = TestLineType.Type.Create45DegreeLines;
             message.Type = type.ToString();
 
             LinesSourceManager sut = CreateManager(logger,
@@ -262,9 +297,10 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyTestLineSetHandler_Throws_ForUnknownType([NotNull] ISelkieLogger logger,
-                                                                   [NotNull, Frozen] ISelkieBus bus,
-                                                                   [NotNull] ColonyTestLineSetMessage message)
+        public void ColonyTestLineSetHandler_Throws_ForUnknownType(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull] ColonyTestLineSetMessage message)
         {
             // Arrange
             message.Type = "Unknown";
@@ -279,9 +315,10 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void CostPerLine_ReturnsCostPerLine([NotNull] ISelkieLogger logger,
-                                                   [NotNull, Frozen] ISelkieBus bus,
-                                                   [NotNull] TestLineResponseMessage message)
+        public void CostPerLine_ReturnsCostPerLine(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull] TestLineResponseMessage message)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
@@ -296,26 +333,29 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyTestLinesRequestHandler_SendsMessage_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                          [NotNull, Frozen] ISelkieBus bus,
-                                                                          [NotNull] ColonyTestLinesRequestMessage
-                                                                              message)
+        public void ColonyTestLinesRequestHandler_SendsMessage_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus,
+            [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus,
+            [NotNull] ColonyTestLinesRequestMessage message)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
-                                                   bus);
+                                                   bus,
+                                                   inMemoryBus);
 
             // Act
             sut.ColonyTestLinesRequestHandler(message);
 
             // Assert
-            bus.Received().PublishAsync(Arg.Is <ColonyTestLinesResponseMessage>(x => x.Types.Any()));
+            inMemoryBus.Received().PublishAsync(Arg.Is <ColonyTestLinesResponseMessage>(x => x.Types.Any()));
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void GetTestLineTypes_ReturnsTestLineTypesAsStrings_WhenCalled([NotNull] ISelkieLogger logger,
-                                                                              [NotNull, Frozen] ISelkieBus bus)
+        public void GetTestLineTypes_ReturnsTestLineTypesAsStrings_WhenCalled(
+            [NotNull] ISelkieLogger logger,
+            [NotNull, Frozen] ISelkieBus bus)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,

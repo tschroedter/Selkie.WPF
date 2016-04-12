@@ -10,9 +10,9 @@
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top">
             <CheckBox Margin="5,6,5,0"
-                      Content="Show Pheromones" 
+                      Content="Show Pheromones"
                       IsChecked="{Binding Path=IsShowPheromones}" />
-            <Separator Height="10"/>
+            <Separator Height="10" />
         </StackPanel>
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
@@ -21,8 +21,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="0"
-                    Grid.Column="0"
-                    Orientation="Vertical">
+                        Grid.Column="0"
+                        Orientation="Vertical">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -35,30 +35,30 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0"
-                           Grid.Column="0"
-                           Text="Minimum:" />
+                               Grid.Column="0"
+                               Text="Minimum:" />
                     <TextBox Grid.Row="0"
-                         Grid.Column="1"
-                         IsReadOnly="True"
-                         Text="{Binding Minimum, Mode=OneWay}" />
+                             Grid.Column="1"
+                             IsReadOnly="True"
+                             Text="{Binding Minimum, Mode=OneWay}" />
                     <TextBlock Grid.Row="1"
-                           Grid.Column="0"
-                           Text="Maximum:" />
+                               Grid.Column="0"
+                               Text="Maximum:" />
                     <TextBox Grid.Row="1"
-                         Grid.Column="1"
-                         IsReadOnly="True"
-                         Text="{Binding Maximum, Mode=OneWay}" />
+                             Grid.Column="1"
+                             IsReadOnly="True"
+                             Text="{Binding Maximum, Mode=OneWay}" />
                     <TextBlock Grid.Row="2"
-                           Grid.Column="0"
-                           Text="Average:" />
+                               Grid.Column="0"
+                               Text="Average:" />
                     <TextBox Grid.Row="2"
-                         Grid.Column="1"
-                         IsReadOnly="True"
-                         Text="{Binding Average, Mode=OneWay}" />
+                             Grid.Column="1"
+                             IsReadOnly="True"
+                             Text="{Binding Average, Mode=OneWay}" />
                 </Grid>
             </StackPanel>
             <userControls:DisplayPheromones Grid.Row="0"
-                                        Grid.Column="2" />
+                                            Grid.Column="2" />
         </Grid>
     </DockPanel>
 </views:BaseView>

@@ -99,6 +99,12 @@
     <Compile Include="MapView.xaml.cs">
       <DependentUpon>MapView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AntSettingsView.xaml.cs">
+      <DependentUpon>AntSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StatusView.xaml.cs">
+      <DependentUpon>StatusView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PheromonesView.xaml.cs">
       <DependentUpon>PheromonesView.xaml</DependentUpon>
     </Compile>
@@ -121,6 +127,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MapView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="AntSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StatusView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

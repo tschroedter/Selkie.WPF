@@ -73,6 +73,9 @@
     <Compile Include="DisplayRacetracks.xaml.cs">
       <DependentUpon>DisplayRacetracks.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DisplayAntSettings.xaml.cs">
+      <DependentUpon>DisplayAntSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DisplaySettings.xaml.cs">
       <DependentUpon>DisplaySettings.xaml</DependentUpon>
     </Compile>
@@ -122,6 +125,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="DisplayRacetracks.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DisplayAntSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

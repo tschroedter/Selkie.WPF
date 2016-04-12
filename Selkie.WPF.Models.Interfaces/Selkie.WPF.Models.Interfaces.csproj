@@ -62,6 +62,10 @@
       <HintPath>..\packages\Selkie.Common.0.6.228.0\lib\net45\Selkie.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Selkie.Geometry, Version=0.6.137.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Geometry.0.6.137.0\lib\net45\Selkie.Geometry.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Selkie.Windsor, Version=0.6.256.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Selkie.Windsor.0.6.256.0\lib\net45\Selkie.Windsor.dll</HintPath>
       <Private>True</Private>
@@ -75,12 +79,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAntSettingsModel.cs" />
+    <Compile Include="IAntSettingsNode.cs" />
+    <Compile Include="IAntSettingsNodeFactory.cs" />
+    <Compile Include="IAntSettingsNodesManager.cs" />
     <Compile Include="IControlModel.cs" />
     <Compile Include="IConverter.cs" />
+    <Compile Include="ILinesToNodesConverter.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Installer.cs" />
     <Compile Include="IPheromonesModel.cs" />
     <Compile Include="IRacetrackSettingsModel.cs" />
+    <Compile Include="IStatusModel.cs" />
     <Compile Include="ITrailDetailsFactory.cs" />
     <Compile Include="ITrailDetails.cs" />
     <Compile Include="ITrailHistoryModel.cs" />

@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAntSettingsView.cs" />
     <Compile Include="IControlView.cs">
       <SubType>
       </SubType>
@@ -55,6 +56,7 @@
       <SubType>
       </SubType>
     </Compile>
+    <Compile Include="IStatusView.cs" />
     <Compile Include="ITrailsHistoryView.cs">
       <SubType>
       </SubType>

@@ -58,12 +58,20 @@
       <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NLog, Version=4.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.1.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RabbitMQ.Client, Version=3.5.4.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Aop, Version=0.6.25.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Aop.0.6.25.0\lib\net45\Selkie.Aop.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Selkie.Common, Version=0.6.228.0, Culture=neutral, processorArchitecture=MSIL">
@@ -78,8 +86,8 @@
       <HintPath>..\packages\Selkie.Geometry.0.6.137.0\lib\net45\Selkie.Geometry.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Services.Aco.Common, Version=0.6.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Services.Aco.Common.0.6.15.0\lib\net45\Selkie.Services.Aco.Common.dll</HintPath>
+    <Reference Include="Selkie.Services.Aco.Common, Version=0.6.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Aco.Common.0.6.17.0\lib\net45\Selkie.Services.Aco.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Selkie.Services.Common.Dto, Version=0.6.17.0, Culture=neutral, processorArchitecture=MSIL">
@@ -107,18 +115,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalculateCostMatrixManager.cs" />
+    <Compile Include="Aco\ColonyParameters.cs" />
+    <Compile Include="Aco\ColonyParametersValidator.cs" />
+    <Compile Include="AntSettingsSource.cs" />
+    <Compile Include="AntSettingsSourceManager.cs" />
     <Compile Include="Converters\IRacetracksDtoToRacetracksConverter.cs" />
     <Compile Include="Converters\ITestLinesDtoToLinesConverter.cs" />
     <Compile Include="Converters\PathDtoToPath.cs" />
     <Compile Include="Converters\DoubleArrayToIntegerArrayConverter.cs" />
     <Compile Include="Converters\IDoubleArrayToIntegerArrayConverter.cs" />
+    <Compile Include="Messages\CostMatrixCalculatedMessage.cs" />
+    <Compile Include="CostMatrixCalculationManager.cs" />
     <Compile Include="Services\Handlers\PheromonesHandler.cs" />
     <Compile Include="Aco\ServiceProxy.cs" />
     <Compile Include="Aco\AcoProxyLogger.cs" />
     <Compile Include="Services\Handlers\BestTrailHandler.cs" />
     <Compile Include="Colony.cs" />
-    <Compile Include="CostMatrixSourceManager.cs" />
     <Compile Include="Installer.cs" />
     <Compile Include="Converters\IPathDtoToPath.cs" />
     <Compile Include="LinesSource.cs" />
@@ -133,6 +145,7 @@
     <Compile Include="RacetracksSource.cs" />
     <Compile Include="RacetracksSourceManager.cs" />
     <Compile Include="Converters\TestLinesDtoToLinesConverter.cs" />
+    <Compile Include="Services\Handlers\StatusHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Selkie.Framework.Common\Selkie.Framework.Common.csproj">

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using NSubstitute;
 using Ploeh.AutoFixture.Xunit;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
+using Selkie.Framework.Interfaces;
 using Selkie.Framework.Interfaces.Aco;
+using Selkie.Framework.Messages;
 using Selkie.Services.Aco.Common.Messages;
 using Selkie.XUnit.Extensions;
 using Xunit;
@@ -12,6 +15,7 @@ using Xunit.Extensions;
 
 namespace Selkie.Framework.Tests.XUnit
 {
+    [ExcludeFromCodeCoverage]
     public sealed class ColonyTests
     {
         [Theory]
@@ -27,33 +31,71 @@ namespace Selkie.Framework.Tests.XUnit
             Assert.True(sut.IsRunning);
         }
 
+
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyStartRequestHandler_CallsCreateColony_WhenCalled([NotNull, Frozen] IServiceProxy proxy,
-                                                                           [NotNull] Colony sut,
-                                                                           [NotNull] ColonyStartRequestMessage message)
+        public void ColonyStartRequestHandler_CallsManager_WhenCalled(
+            [NotNull, Frozen] ICostMatrixCalculationManager manager,
+            [NotNull] Colony sut,
+            [NotNull] ColonyStartRequestMessage message)
         {
             // Arrange
-            proxy.IsColonyCreated.Returns(true);
-
             // Act
             sut.ColonyStartRequestHandler(message);
 
             // Assert
-            proxy.Received().CreateColony();
+            manager.Received().Calculate();
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyStartRequestHandler_CallsStart_WhenCalled([NotNull, Frozen] IServiceProxy proxy,
-                                                                    [NotNull] Colony sut,
-                                                                    [NotNull] ColonyStartRequestMessage message)
+        public void CostMatrixCalculatedMessageHandler_CallsCreateColony_WhenCalled(
+            [NotNull, Frozen] IColonyParameters colonyParameters,
+            [NotNull, Frozen] IServiceProxy proxy,
+            [NotNull] Colony sut,
+            [NotNull] CostMatrixCalculatedMessage message)
         {
             // Arrange
             proxy.IsColonyCreated.Returns(true);
 
             // Act
-            sut.ColonyStartRequestHandler(message);
+            sut.CostMatrixCalculatedMessageHandler(message);
+
+            // Assert
+            proxy.Received().CreateColony(colonyParameters);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void CostMatrixCalculatedMessageHandler_CallsFactory_WhenCalled(
+            [NotNull, Frozen] IColonyParametersFactory factory,
+            [NotNull, Frozen] IAntSettingsSource source,
+            [NotNull] Colony sut,
+            [NotNull] CostMatrixCalculatedMessage message)
+        {
+            // Arrange
+            // Act
+            sut.CostMatrixCalculatedMessageHandler(message);
+
+            // Assert
+            factory.Received().Create(message.Matrix,
+                                      message.CostPerLine,
+                                      source.IsFixedStartNode,
+                                      source.FixedStartNode);
+        }
+
+        [Theory]
+        [AutoNSubstituteData]
+        public void CostMatrixCalculatedMessageHandler_CallsStart_WhenCalled([NotNull, Frozen] IServiceProxy proxy,
+                                                                             [NotNull] Colony sut,
+                                                                             [NotNull] CostMatrixCalculatedMessage
+                                                                                 message)
+        {
+            // Arrange
+            proxy.IsColonyCreated.Returns(true);
+
+            // Act
+            sut.CostMatrixCalculatedMessageHandler(message);
 
             // Assert
             proxy.Received().Start();
@@ -90,8 +132,9 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToColonyStartRequestMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
-                                                                                 [NotNull] Colony sut)
+        public void Constructor_SubscribeToColonyStartRequestMessage_WhenCreated(
+            [NotNull, Frozen] ISelkieInMemoryBus bus,
+            [NotNull] Colony sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
                                           Arg.Any <Action <ColonyStartRequestMessage>>());
@@ -99,8 +142,9 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToColonyStopRequestMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
-                                                                                [NotNull] Colony sut)
+        public void Constructor_SubscribeToColonyStopRequestMessage_WhenCreated(
+            [NotNull, Frozen] ISelkieInMemoryBus bus,
+            [NotNull] Colony sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
                                           Arg.Any <Action <ColonyStopRequestMessage>>());
@@ -108,8 +152,9 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribeToColonyPheromonesRequestMessage_WhenCreated([NotNull, Frozen] ISelkieBus bus,
-                                                                                      [NotNull] Colony sut)
+        public void Constructor_SubscribeToColonyPheromonesRequestMessage_WhenCreated(
+            [NotNull, Frozen] ISelkieInMemoryBus bus,
+            [NotNull] Colony sut)
         {
             bus.Received().SubscribeAsync(sut.GetType().FullName,
                                           Arg.Any <Action <ColonyPheromonesRequestMessage>>());

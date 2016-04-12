@@ -16,21 +16,20 @@ namespace Selkie.WPF.Models.Mapping
         : IShortestPathModel,
           IDisposable
     {
+        private readonly ISelkieInMemoryBus m_Bus;
         private readonly ILineToLineNodeConverterToDisplayLineConverterFactory m_Factory;
         private readonly ISelkieLogger m_Logger;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly IPathToLineToLineNodeConverter m_PathToLineToLineNodeConverter;
         private ILineToLineNodeConverterToDisplayLineConverter m_Converter;
         private IEnumerable <ILineToLineNodeConverter> m_Nodes;
 
         public ShortestPathModel([NotNull] ISelkieLogger logger,
-                                 [NotNull] ISelkieBus bus,
-                                 [NotNull] ISelkieInMemoryBus memoryBus,
+                                 [NotNull] ISelkieInMemoryBus bus,
                                  [NotNull] IPathToLineToLineNodeConverter pathToLineToLineNodeConverter,
                                  [NotNull] ILineToLineNodeConverterToDisplayLineConverterFactory factory)
         {
             m_Logger = logger;
-            m_MemoryBus = memoryBus;
+            m_Bus = bus;
             m_PathToLineToLineNodeConverter = pathToLineToLineNodeConverter;
             m_Factory = factory;
             m_Nodes = new ILineToLineNodeConverter[0];
@@ -81,7 +80,7 @@ namespace Selkie.WPF.Models.Mapping
                 UpdateConverter();
             }
 
-            m_MemoryBus.Publish(new ShortestPathModelChangedMessage());
+            m_Bus.Publish(new ShortestPathModelChangedMessage());
         }
 
         internal void ConvertPath(IEnumerable <int> trail)

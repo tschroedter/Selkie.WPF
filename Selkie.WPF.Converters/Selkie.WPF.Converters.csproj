@@ -119,7 +119,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Selkie.WPF.Converters.v2.ncrunchproject" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Selkie.Framework.Common\Selkie.Framework.Common.csproj">

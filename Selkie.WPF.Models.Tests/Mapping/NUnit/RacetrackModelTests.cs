@@ -19,19 +19,16 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Bus = Substitute.For <ISelkieBus>();
-            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Converter = Substitute.For <IPathToRacetracksConverter>();
 
             m_Model = new RacetrackModel(m_Bus,
-                                         m_MemoryBus,
                                          m_Converter);
         }
 
-        private ISelkieBus m_Bus;
         private IPathToRacetracksConverter m_Converter;
         private RacetrackModel m_Model;
-        private ISelkieInMemoryBus m_MemoryBus;
+        private ISelkieInMemoryBus m_Bus;
 
         private ColonyBestTrailMessage CreateBestTrailMessage()
         {
@@ -76,8 +73,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.ColonyLinesChangedHandler(message);
 
             // Assert
-            m_MemoryBus.Received()
-                       .Publish(Arg.Any <RacetrackModelChangedMessage>());
+            m_Bus.Received()
+                 .Publish(Arg.Any <RacetrackModelChangedMessage>());
         }
 
         [Test]
@@ -90,8 +87,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.ColonyLinesChangedHandler(message);
 
             // Assert
-            m_MemoryBus.Received()
-                       .Publish(Arg.Any <RacetrackModelChangedMessage>());
+            m_Bus.Received()
+                 .Publish(Arg.Any <RacetrackModelChangedMessage>());
         }
 
         [Test]

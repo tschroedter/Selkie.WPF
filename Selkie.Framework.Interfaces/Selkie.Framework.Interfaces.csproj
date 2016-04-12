@@ -76,11 +76,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aco\IAcoProxyLogger.cs" />
+    <Compile Include="Aco\IColonyParametersValidator.cs" />
     <Compile Include="Aco\IServiceProxy.cs" />
     <Compile Include="Converters\IConverter.cs" />
     <Compile Include="Converters\ILinesToCostPerLineConverter.cs" />
-    <Compile Include="ICalculateCostMatrixManager.cs" />
+    <Compile Include="IAntSettingsSource.cs" />
+    <Compile Include="IAntSettingsSourceFactory.cs" />
+    <Compile Include="IAntSettingsSourceManager.cs" />
     <Compile Include="IColony.cs" />
+    <Compile Include="IColonyParameters.cs" />
+    <Compile Include="IColonyParametersFactory.cs" />
+    <Compile Include="ICostMatrixCalculationManager.cs" />
     <Compile Include="ICostMatrixSourceManager.cs" />
     <Compile Include="ILinesSource.cs" />
     <Compile Include="ILinesSourceFactory.cs" />

@@ -23,22 +23,19 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         {
             m_Line = CreateLine();
 
-            m_Bus = Substitute.For <ISelkieBus>();
-            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Helper = Substitute.For <INodeIdHelper>();
             m_Helper.GetLine(-1).ReturnsForAnyArgs(m_Line);
             m_Helper.IsForwardNode(-1).ReturnsForAnyArgs(true);
 
             m_Model = new ShortestPathDirectionModel(m_Bus,
-                                                     m_MemoryBus,
                                                      m_Helper);
         }
 
-        private ISelkieBus m_Bus;
         private INodeIdHelper m_Helper;
         private ShortestPathDirectionModel m_Model;
         private ILine m_Line;
-        private ISelkieInMemoryBus m_MemoryBus;
+        private ISelkieInMemoryBus m_Bus;
 
         private ILine CreateLine()
         {
@@ -84,8 +81,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.ColonyBestTrailHandler(message);
 
             // Assert
-            m_MemoryBus.Received()
-                       .Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
+            m_Bus.Received()
+                 .Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
         }
 
         [Test]
@@ -98,8 +95,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.ColonyLinesChangedHandler(message);
 
             // Assert
-            m_MemoryBus.Received()
-                       .Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
+            m_Bus.Received()
+                 .Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
         }
 
         [Test]
@@ -212,8 +209,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.Update(message);
 
             // Assert
-            m_MemoryBus.Received()
-                       .Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
+            m_Bus.Received()
+                 .Publish(Arg.Any <ShortestPathDirectionModelChangedMessage>());
         }
 
         [Test]

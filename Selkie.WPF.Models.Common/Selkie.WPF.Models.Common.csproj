@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\AntSettingsModelChangedMessage.cs" />
+    <Compile Include="Messages\AntSettingsModelRequestMessage.cs" />
+    <Compile Include="Messages\AntSettingsModelSetMessage.cs" />
     <Compile Include="Messages\ControlModelChangedMessage.cs" />
     <Compile Include="Messages\ControlModelTestLinesChangedMessage.cs" />
     <Compile Include="Messages\ControlModelTestLineSetMessage.cs" />
@@ -58,6 +65,7 @@
     <Compile Include="Messages\ShortestPathDirectionModelChangedMessage.cs" />
     <Compile Include="Messages\ShortestPathModelChangedMessage.cs" />
     <Compile Include="Messages\StartNodeModelChangedMessage.cs" />
+    <Compile Include="Messages\StatusChangedMessage.cs" />
     <Compile Include="Messages\TrailHistoryModelChangedMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -66,9 +74,14 @@
       <Project>{3617609C-CB6A-4BF7-881F-D428B6EEF2D4}</Project>
       <Name>Selkie.Framework.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Selkie.WPF.Models.Interfaces\Selkie.WPF.Models.Interfaces.csproj">
+      <Project>{7C62B53B-F78D-4652-89DC-AE450400402A}</Project>
+      <Name>Selkie.WPF.Models.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Castle.Core;
+﻿using Castle.Core;
 using JetBrains.Annotations;
 using Selkie.Aop.Aspects;
 using Selkie.Aop.Messages;
@@ -14,27 +13,29 @@ namespace Selkie.WPF.Models.Handlers
     public class ExceptionThrownHandler
         : SelkieMessageHandler <ExceptionThrownMessage>
     {
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly IExceptionThrownMessageToStringConverter m_Converter;
         private readonly ISelkieLogger m_Logger;
 
-        public ExceptionThrownHandler([NotNull] ISelkieLogger logger)
+        public ExceptionThrownHandler([NotNull] ISelkieLogger logger,
+                                      [NotNull] ISelkieInMemoryBus bus,
+                                      [NotNull] IExceptionThrownMessageToStringConverter converter)
         {
             m_Logger = logger;
+            m_Bus = bus;
+            m_Converter = converter;
         }
 
         public override void Handle(ExceptionThrownMessage message)
         {
-            m_Logger.Error(MessageToText(message));
-        }
+            m_Logger.Error(m_Converter.Convert(message));
 
-        private string MessageToText(ExceptionThrownMessage message)
-        {
-            var builder = new StringBuilder();
+            string statusText = "Error: {0}".Inject(message.Exception.Message);
 
-            builder.AppendLine("Invocation: {0}".Inject(message.Invocation));
-            builder.AppendLine("Message: {0}".Inject(message.Message));
-            builder.AppendLine("StackTrace: {0}".Inject(message.StackTrace));
-
-            return builder.ToString();
+            m_Bus.PublishAsync(new StatusMessage
+                               {
+                                   Text = statusText
+                               });
         }
     }
 }

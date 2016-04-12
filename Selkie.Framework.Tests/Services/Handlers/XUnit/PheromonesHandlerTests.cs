@@ -18,7 +18,7 @@ namespace Selkie.Framework.Tests.Services.Handlers.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Handle_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
+        public void Handle_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieInMemoryBus bus,
                                                    [NotNull] PheromonesMessage message,
                                                    [NotNull] PheromonesHandler sut)
         {

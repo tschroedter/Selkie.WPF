@@ -6,7 +6,9 @@
         xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         mc:Ignorable="d"
         d:DesignHeight="300"
-        d:DesignWidth="300">
+        d:DesignWidth="300"
+        Width="800"
+        Height="720">
     <Grid x:Name="m_LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -19,50 +21,69 @@
                 <xcad:AeroTheme />
             </xcad:DockingManager.Theme>
             <xcad:LayoutRoot>
-                <xcad:LayoutPanel Orientation="Horizontal">
-                    <xcad:LayoutPanel Orientation="Vertical">
+                <xcad:LayoutPanel Orientation="Vertical">
+                    <xcad:LayoutPanel Orientation="Horizontal"
+                                      DockHeight="90*">
+                        <xcad:LayoutPanel Orientation="Vertical">
+                            <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
+                                                            DockHeight="16*" >
+                                <xcad:LayoutAnchorablePane>
+                                    <xcad:LayoutAnchorable ContentId="Control"
+                                                           Title="Control" />
+                                </xcad:LayoutAnchorablePane>
+                            </xcad:LayoutAnchorablePaneGroup>
+
+                            <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
+                                                            DockHeight="14*">
+                                <xcad:LayoutAnchorablePane>
+                                    <xcad:LayoutAnchorable ContentId="AntSettings"
+                                                           Title="Ant Settings" />
+                                </xcad:LayoutAnchorablePane>
+                            </xcad:LayoutAnchorablePaneGroup>
+
+                            <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
+                                                            DockHeight="25*">
+                                <xcad:LayoutAnchorablePane>
+                                    <xcad:LayoutAnchorable ContentId="Settings"
+                                                           Title="Settings" />
+                                </xcad:LayoutAnchorablePane>
+                            </xcad:LayoutAnchorablePaneGroup>
+
+                            <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
+                                                            DockHeight="25*">
+                                <xcad:LayoutAnchorablePane>
+                                    <xcad:LayoutAnchorable ContentId="History"
+                                                           Title="History" />
+                                </xcad:LayoutAnchorablePane>
+                            </xcad:LayoutAnchorablePaneGroup>
+
+                            <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
+                                                            DockHeight="20*">
+                                <xcad:LayoutAnchorablePane>
+                                    <xcad:LayoutAnchorable ContentId="Pheromones"
+                                                           Title="Pheromones" />
+                                </xcad:LayoutAnchorablePane>
+                            </xcad:LayoutAnchorablePaneGroup>
+                        </xcad:LayoutPanel>
+
                         <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
-                                                        DockHeight="Auto">
+                                                        DockHeight="20*">
                             <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable ContentId="Control"
-                                                       Title="Control" />
+                                <xcad:LayoutAnchorable ContentId="Preview"
+                                                       Title="Preview" />
                             </xcad:LayoutAnchorablePane>
                         </xcad:LayoutAnchorablePaneGroup>
 
-                        <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
-                                                        DockHeight="Auto">
-                            <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable ContentId="Settings"
-                                                       Title="Settings" />
-                            </xcad:LayoutAnchorablePane>
-                        </xcad:LayoutAnchorablePaneGroup>
-
-                        <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
-                                                        DockHeight="Auto">
-                            <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable ContentId="History"
-                                                       Title="History" />
-                            </xcad:LayoutAnchorablePane>
-                        </xcad:LayoutAnchorablePaneGroup>
-
-                        <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
-                                                        DockHeight="Auto">
-                            <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable ContentId="Pheromones"
-                                                       Title="Pheromones" />
-                            </xcad:LayoutAnchorablePane>
-                        </xcad:LayoutAnchorablePaneGroup>
                     </xcad:LayoutPanel>
 
-                    <xcad:LayoutAnchorablePaneGroup DockWidth="*">
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
+                                                    DockHeight="10*">
                         <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable ContentId="Preview"
-                                                   Title="Preview" />
+                            <xcad:LayoutAnchorable ContentId="Status"
+                                                   Title="Status" />
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>
-
                 </xcad:LayoutPanel>
-
             </xcad:LayoutRoot>
         </xcad:DockingManager>
 

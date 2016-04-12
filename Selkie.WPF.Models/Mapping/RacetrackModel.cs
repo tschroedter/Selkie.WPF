@@ -14,18 +14,17 @@ namespace Selkie.WPF.Models.Mapping
         private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly IPathToRacetracksConverter m_PathToRacetracksConverter;
 
-        public RacetrackModel([NotNull] ISelkieBus bus,
-                              [NotNull] ISelkieInMemoryBus memoryBus,
+        public RacetrackModel([NotNull] ISelkieInMemoryBus memoryBus,
                               [NotNull] IPathToRacetracksConverter pathToRacetracksConverter)
         {
             m_MemoryBus = memoryBus;
             m_PathToRacetracksConverter = pathToRacetracksConverter;
 
-            bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().ToString(),
-                                                        ColonyBestTrailHandler);
+            memoryBus.SubscribeAsync <ColonyBestTrailMessage>(GetType().ToString(),
+                                                              ColonyBestTrailHandler);
 
-            bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
-                                                           ColonyLinesChangedHandler);
+            memoryBus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
+                                                                 ColonyLinesChangedHandler);
         }
 
         public IEnumerable <IPath> Paths

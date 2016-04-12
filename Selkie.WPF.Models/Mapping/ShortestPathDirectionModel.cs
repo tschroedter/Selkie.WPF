@@ -16,18 +16,17 @@ namespace Selkie.WPF.Models.Mapping
         private readonly INodeIdHelper m_NodeIdHelper;
         private readonly List <INodeModel> m_Nodes = new List <INodeModel>();
 
-        public ShortestPathDirectionModel([NotNull] ISelkieBus bus,
-                                          [NotNull] ISelkieInMemoryBus memoryBus,
+        public ShortestPathDirectionModel([NotNull] ISelkieInMemoryBus memoryBus,
                                           [NotNull] INodeIdHelper nodeIdHelper)
         {
             m_MemoryBus = memoryBus;
             m_NodeIdHelper = nodeIdHelper;
 
-            bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().FullName,
-                                                        ColonyBestTrailHandler);
+            memoryBus.SubscribeAsync <ColonyBestTrailMessage>(GetType().FullName,
+                                                              ColonyBestTrailHandler);
 
-            bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
-                                                           ColonyLinesChangedHandler);
+            memoryBus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
+                                                                 ColonyLinesChangedHandler);
         }
 
         public IEnumerable <INodeModel> Nodes

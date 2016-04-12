@@ -11,17 +11,14 @@ namespace Selkie.WPF.Models.Control
 {
     public class ControlModel : IControlModel
     {
-        private readonly ISelkieBus m_Bus;
+        private readonly ISelkieInMemoryBus m_Bus;
         private readonly ISelkieLogger m_Logger;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
 
         public ControlModel([NotNull] ISelkieLogger logger,
-                            [NotNull] ISelkieBus bus,
-                            [NotNull] ISelkieInMemoryBus memoryBus)
+                            [NotNull] ISelkieInMemoryBus bus)
         {
             m_Logger = logger;
             m_Bus = bus;
-            m_MemoryBus = memoryBus;
 
             IsFinished = false;
             IsRunning = false;
@@ -49,8 +46,8 @@ namespace Selkie.WPF.Models.Control
             m_Bus.SubscribeAsync <ColonyTestLinesChangedMessage>(subscriptionId,
                                                                  ColonyTestLineResponseHandler);
 
-            m_MemoryBus.SubscribeAsync <ControlModelTestLineSetMessage>(subscriptionId,
-                                                                        ControlModelTestLineSetHandler);
+            m_Bus.SubscribeAsync <ControlModelTestLineSetMessage>(subscriptionId,
+                                                                  ControlModelTestLineSetHandler);
 
             m_Bus.PublishAsync(new ColonyTestLinesRequestMessage());
         }
@@ -141,12 +138,12 @@ namespace Selkie.WPF.Models.Control
                                         bool isFinished,
                                         bool isApplying)
         {
-            m_MemoryBus.PublishAsync(new ControlModelChangedMessage
-                                     {
-                                         IsRunning = isRunning,
-                                         IsFinished = isFinished,
-                                         IsApplying = isApplying
-                                     });
+            m_Bus.PublishAsync(new ControlModelChangedMessage
+                               {
+                                   IsRunning = isRunning,
+                                   IsFinished = isFinished,
+                                   IsApplying = isApplying
+                               });
 
             m_Logger.Info("IsRunning: {0} IsFinished: {1}".Inject(isRunning,
                                                                   isFinished));
@@ -178,10 +175,10 @@ namespace Selkie.WPF.Models.Control
         {
             TestLineTypes = message.Types;
 
-            m_MemoryBus.PublishAsync(new ControlModelTestLinesChangedMessage
-                                     {
-                                         TestLineTypes = message.Types
-                                     });
+            m_Bus.PublishAsync(new ControlModelTestLinesChangedMessage
+                               {
+                                   TestLineTypes = message.Types
+                               });
         }
     }
 }

@@ -97,6 +97,8 @@
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Mapping\MapViewModel.cs" />
+    <Compile Include="Settings\AntSettingsViewModel.cs" />
+    <Compile Include="Status\StatusViewModel.cs" />
     <Compile Include="TrailHistory\Converters\ITrailDetailsToDisplayHistoryRowsConverter.cs" />
     <Compile Include="TrailHistory\Converters\TrailDetailsToDisplayHistoryRowsConverter.cs" />
     <Compile Include="TrailHistory\DisplayHistoryRow.cs" />

@@ -22,15 +22,18 @@ namespace Selkie.Framework
         private readonly ITestLinesDtoToLinesConverter m_Converter;
         private readonly ILinesSourceFactory m_Factory;
         private readonly ISelkieLogger m_Logger;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
         private ILinesSource m_Source = LinesSource.Unknown;
 
         public LinesSourceManager([NotNull] ISelkieLogger logger,
                                   [NotNull] ISelkieBus bus,
+                                  [NotNull] ISelkieInMemoryBus memoryBus,
                                   [NotNull] ILinesSourceFactory factory,
                                   [NotNull] ITestLinesDtoToLinesConverter converter)
         {
             m_Logger = logger;
             m_Bus = bus;
+            m_MemoryBus = memoryBus;
             m_Factory = factory;
             m_Converter = converter;
 
@@ -45,14 +48,14 @@ namespace Selkie.Framework
             bus.SubscribeAsync <TestLineResponseMessage>(GetType().FullName,
                                                          TestLineResponseHandler);
 
-            bus.SubscribeAsync <ColonyLinesRequestMessage>(GetType().FullName,
-                                                           ColonyLinesRequestHandler);
+            memoryBus.SubscribeAsync <ColonyLinesRequestMessage>(GetType().FullName,
+                                                                 ColonyLinesRequestHandler);
 
-            bus.SubscribeAsync <ColonyTestLinesRequestMessage>(GetType().FullName,
-                                                               ColonyTestLinesRequestHandler);
+            memoryBus.SubscribeAsync <ColonyTestLinesRequestMessage>(GetType().FullName,
+                                                                     ColonyTestLinesRequestHandler);
 
-            bus.SubscribeAsync <ColonyTestLineSetMessage>(GetType().FullName,
-                                                          ColonyTestLineSetHandler);
+            memoryBus.SubscribeAsync <ColonyTestLineSetMessage>(GetType().FullName,
+                                                                ColonyTestLineSetHandler);
         }
 
         public IEnumerable <ILine> Lines
@@ -101,7 +104,7 @@ namespace Selkie.Framework
 
         internal void SendColonyLinesChangedMessage()
         {
-            m_Bus.PublishAsync(new ColonyLinesChangedMessage());
+            m_MemoryBus.PublishAsync(new ColonyLinesChangedMessage());
 
             LogLines(m_Source.Lines);
         }
@@ -135,7 +138,7 @@ namespace Selkie.Framework
 
         private void SendLinesSourceChangedMessage()
         {
-            var response = new LinesSourceChangedMessage
+            var response = new LinesSourceChangedMessage // todo check if memory bus
                            {
                                Lines = m_Source.Lines
                            };
@@ -152,7 +155,7 @@ namespace Selkie.Framework
                                Types = types
                            };
 
-            m_Bus.PublishAsync(response);
+            m_MemoryBus.PublishAsync(response);
         }
 
         public IEnumerable <string> GetTestLineTypes()

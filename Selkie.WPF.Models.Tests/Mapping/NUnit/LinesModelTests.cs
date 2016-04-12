@@ -29,14 +29,12 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Manager.Lines.Returns(m_Lines);
 
             m_Logger = Substitute.For <ISelkieLogger>();
-            m_Bus = Substitute.For <ISelkieBus>();
-            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Manager = Substitute.For <ILinesSourceManager>();
             m_Factory = Substitute.For <IDisplayLineFactory>();
 
             m_Model = new LinesModel(m_Logger,
                                      m_Bus,
-                                     m_MemoryBus,
                                      m_Manager,
                                      m_Factory);
         }
@@ -48,12 +46,11 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         private ISelkieLogger m_Logger;
-        private ISelkieBus m_Bus;
         private ILinesSourceManager m_Manager;
         private IDisplayLineFactory m_Factory;
         private LinesModel m_Model;
         private IEnumerable <ILine> m_Lines;
-        private ISelkieInMemoryBus m_MemoryBus;
+        private ISelkieInMemoryBus m_Bus;
 
         private IEnumerable <Line> CreateLines()
         {
@@ -105,7 +102,6 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
 
             var model = new LinesModel(m_Logger,
                                        m_Bus,
-                                       m_MemoryBus,
                                        m_Manager,
                                        m_Factory);
 
@@ -122,7 +118,6 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
 
             var model = new LinesModel(m_Logger,
                                        m_Bus,
-                                       m_MemoryBus,
                                        m_Manager,
                                        m_Factory);
 
@@ -140,8 +135,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
 
             m_Model.ColonyLinesChangedHandler(message);
 
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Any <LinesModelChangedMessage>());
+            m_Bus.Received()
+                 .PublishAsync(Arg.Any <LinesModelChangedMessage>());
         }
 
         [Test]
@@ -154,8 +149,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_Model.LinesModelLinesRequestHandler(message);
 
             // Assert
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Any <LinesModelChangedMessage>());
+            m_Bus.Received()
+                 .PublishAsync(Arg.Any <LinesModelChangedMessage>());
         }
 
         [Test]
@@ -194,8 +189,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
 
             m_Model.LoadDisplayLines(m_Lines);
 
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Any <LinesModelChangedMessage>());
+            m_Bus.Received()
+                 .PublishAsync(Arg.Any <LinesModelChangedMessage>());
         }
 
         [Test]
@@ -221,9 +216,9 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         [Test]
         public void SubscribeToLinesModelLinesRequestMessageTest()
         {
-            m_MemoryBus.Received()
-                       .SubscribeAsync(m_Model.GetType().FullName,
-                                       Arg.Any <Action <LinesModelLinesRequestMessage>>());
+            m_Bus.Received()
+                 .SubscribeAsync(m_Model.GetType().FullName,
+                                 Arg.Any <Action <LinesModelLinesRequestMessage>>());
         }
 
         [Test]
@@ -231,8 +226,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         {
             m_Model.Update(new ILine[0]);
 
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Any <LinesModelChangedMessage>());
+            m_Bus.Received()
+                 .PublishAsync(Arg.Any <LinesModelChangedMessage>());
         }
 
         [Test]

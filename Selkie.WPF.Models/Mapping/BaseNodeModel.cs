@@ -11,39 +11,28 @@ namespace Selkie.WPF.Models.Mapping
 {
     public abstract class BaseNodeModel
     {
-        private readonly ISelkieBus m_Bus;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
+        private readonly ISelkieInMemoryBus m_Bus;
         private readonly INodeIdHelper m_NodeIdHelper;
         private INodeModel m_NodeModel = NodeModel.Unknown;
 
-        protected BaseNodeModel([NotNull] ISelkieBus bus,
-                                [NotNull] ISelkieInMemoryBus memoryBus,
+        protected BaseNodeModel([NotNull] ISelkieInMemoryBus bus,
                                 [NotNull] INodeIdHelper nodeIdHelper)
         {
             m_Bus = bus;
-            m_MemoryBus = memoryBus;
             m_NodeIdHelper = nodeIdHelper;
 
-            bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().ToString(),
-                                                        ColonyBestTrailHandler);
+            m_Bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().ToString(),
+                                                          ColonyBestTrailHandler);
 
-            bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
-                                                           ColonyLinesChangedHandler);
+            m_Bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
+                                                             ColonyLinesChangedHandler);
         }
 
-        protected ISelkieBus Bus
+        protected ISelkieInMemoryBus Bus
         {
             get
             {
                 return m_Bus;
-            }
-        }
-
-        protected ISelkieInMemoryBus MemoryBus
-        {
-            get
-            {
-                return m_MemoryBus;
             }
         }
 

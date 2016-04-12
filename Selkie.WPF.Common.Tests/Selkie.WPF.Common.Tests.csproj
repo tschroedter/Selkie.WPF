@@ -94,6 +94,7 @@
     <Compile Include="Converters\NUnit\CostForLineSwitchCalculatorTests.cs" />
     <Compile Include="Converters\NUnit\EnumMatchToBooleanConverterTests.cs" />
     <Compile Include="Converters\NUnit\GeometryPointToWindowsPointConverterTests.cs" />
+    <Compile Include="Converters\NUnit\InverseBooleanConverterTests.cs" />
     <Compile Include="Converters\NUnit\LinesToTransferPointsConverterTests.cs" />
     <Compile Include="Converters\NUnit\LineToWindowPointsConverterTests.cs" />
     <Compile Include="NUnit\DisplayLineTests.cs" />

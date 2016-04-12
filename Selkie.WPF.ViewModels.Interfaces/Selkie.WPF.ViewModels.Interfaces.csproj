@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,10 +47,12 @@
     <Compile Include="IControlViewModel.cs" />
     <Compile Include="IConverter.cs" />
     <Compile Include="IDisplayHistoryRow.cs" />
+    <Compile Include="IStatusViewModel.cs" />
     <Compile Include="ITrailHistoryViewModel.cs" />
     <Compile Include="IMainViewModel.cs" />
     <Compile Include="IMapViewModel.cs" />
     <Compile Include="IPheromonesViewModel.cs" />
+    <Compile Include="Settings\IAntSettingsViewModel.cs" />
     <Compile Include="Settings\IRacetrackSettingsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -59,9 +65,14 @@
       <Project>{0840EC66-1B85-4AE7-8881-E6277CB0EF6F}</Project>
       <Name>Selkie.WPF.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Selkie.WPF.Models.Interfaces\Selkie.WPF.Models.Interfaces.csproj">
+      <Project>{7C62B53B-F78D-4652-89DC-AE450400402A}</Project>
+      <Name>Selkie.WPF.Models.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

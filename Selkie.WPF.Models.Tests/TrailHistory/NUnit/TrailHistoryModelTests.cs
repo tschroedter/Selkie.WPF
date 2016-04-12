@@ -22,13 +22,11 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
         public void Setup()
         {
             m_Logger = Substitute.For <ISelkieLogger>();
-            m_Bus = Substitute.For <ISelkieBus>();
-            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Factory = Substitute.For <ITrailDetailsFactory>();
 
             m_Model = new TrailHistoryModel(m_Logger,
                                             m_Bus,
-                                            m_MemoryBus,
                                             m_Factory);
         }
 
@@ -39,10 +37,9 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
         }
 
         private ISelkieLogger m_Logger;
-        private ISelkieBus m_Bus;
         private ITrailDetailsFactory m_Factory;
         private TrailHistoryModel m_Model;
-        private ISelkieInMemoryBus m_MemoryBus;
+        private ISelkieInMemoryBus m_Bus;
 
         private ColonyBestTrailMessage CreateBestTrailMessage()
         {
@@ -120,8 +117,8 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
         {
             m_Model.ColonyBestTrailHandler(CreateBestTrailMessage());
 
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Any <TrailHistoryModelChangedMessage>());
+            m_Bus.Received()
+                 .PublishAsync(Arg.Any <TrailHistoryModelChangedMessage>());
         }
 
         [Test]
@@ -238,7 +235,6 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
             var factory = Substitute.For <ITrailDetailsFactory>();
             var model = new TrailHistoryModel(m_Logger,
                                               m_Bus,
-                                              m_MemoryBus,
                                               factory);
 
             model.Update(CreateBestTrailMessage());
@@ -414,8 +410,8 @@ namespace Selkie.WPF.Models.Tests.TrailHistory.NUnit
 
             m_Model.Update(message);
 
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Any <TrailHistoryModelChangedMessage>());
+            m_Bus.Received()
+                 .PublishAsync(Arg.Any <TrailHistoryModelChangedMessage>());
         }
     }
 }

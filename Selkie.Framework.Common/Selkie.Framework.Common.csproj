@@ -75,6 +75,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\ColonyAntSettingsRequestMessage.cs" />
+    <Compile Include="Messages\ColonyAntSettingsResponseMessage.cs" />
+    <Compile Include="Messages\ColonyAntSettingsSetMessage.cs" />
     <Compile Include="Messages\ColonyBestTrailMessage.cs" />
     <Compile Include="Messages\ColonyCostMatrixChangedMessage.cs" />
     <Compile Include="Messages\ColonyFinishedMessage.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="Messages\ColonyRacetracksRequestMessage.cs" />
     <Compile Include="Messages\ColonyStartedMessage.cs" />
     <Compile Include="Messages\ColonyStartRequestMessage.cs" />
+    <Compile Include="Messages\ColonyStatusMessage.cs" />
     <Compile Include="Messages\ColonyStoppedMessage.cs" />
     <Compile Include="Messages\ColonyStopRequestMessage.cs" />
     <Compile Include="Messages\ColonyTestLinesChangedMessage.cs" />

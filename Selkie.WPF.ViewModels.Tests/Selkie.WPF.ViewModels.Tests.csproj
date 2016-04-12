@@ -111,7 +111,9 @@
     <Compile Include="NUnit\ViewModelTests.cs" />
     <Compile Include="Pheromones\NUnit\PheromonesViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\NUnit\AntSettingsViewModelTests.cs" />
     <Compile Include="Settings\NUnit\RacetrackSettingsViewModelTests.cs" />
+    <Compile Include="Status\NUnit\StatusViewModelTests.cs" />
     <Compile Include="TrailHistory\Converters\NUnit\TrailDetailsToDisplayDisplayHistoryRowsConverterTests.cs" />
     <Compile Include="TrailHistory\NUnit\DisplayHistoryRowTests.cs" />
     <Compile Include="TrailHistory\NUnit\TrailHistoryViewModelTests.cs" />
@@ -140,6 +142,10 @@
     <ProjectReference Include="..\Selkie.WPF.Models.Interfaces\Selkie.WPF.Models.Interfaces.csproj">
       <Project>{7C62B53B-F78D-4652-89DC-AE450400402A}</Project>
       <Name>Selkie.WPF.Models.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Selkie.WPF.Models\Selkie.WPF.Models.csproj">
+      <Project>{389D345D-C0A2-4AB4-BF4E-DDCB0DEB73DC}</Project>
+      <Name>Selkie.WPF.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\Selkie.WPF.ViewModels.Interfaces\Selkie.WPF.ViewModels.Interfaces.csproj">
       <Project>{5a2beca8-0af7-49c7-8f43-a71e5fb6be2b}</Project>

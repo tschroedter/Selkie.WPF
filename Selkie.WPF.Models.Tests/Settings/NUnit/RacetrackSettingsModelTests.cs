@@ -42,13 +42,13 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
         private ISelkieInMemoryBus m_MemoryBus;
 
         [Test]
-        public void ColonyCostMatrixChangedHandler_SendsMessage_WhenCalled()
+        public void ColonyRacetrackSettingsChangedMessage_SendsMessage_WhenCalled()
         {
             // Arrange
-            var message = new ColonyCostMatrixChangedMessage();
+            var message = new ColonyRacetrackSettingsChangedMessage();
 
             // Act
-            m_Model.ColonyCostMatrixChangedHandler(message);
+            m_Model.ColonyRacetrackSettingsChangedHandler(message);
 
             // Assert
             m_MemoryBus.Received()
@@ -66,11 +66,11 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
         }
 
         [Test]
-        public void ConstructorSubscribesToColonyCostMatrixChangedMessageTest()
+        public void ConstructorSubscribesToColonyRacetrackSettingsChangedMessageTest()
         {
             m_Bus.Received()
                  .SubscribeAsync(m_Model.GetType().ToString(),
-                                 Arg.Any <Action <ColonyCostMatrixChangedMessage>>());
+                                 Arg.Any <Action <ColonyRacetrackSettingsChangedMessage>>());
         }
 
         [Test]

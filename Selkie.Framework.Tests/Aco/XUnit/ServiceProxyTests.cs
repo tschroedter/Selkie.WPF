@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 using NSubstitute;
+using NSubstitute.Core;
 using Ploeh.AutoFixture.Xunit;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Aco;
@@ -122,7 +123,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void StartedHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
+        public void StartedHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieInMemoryBus bus,
                                                            [NotNull] ServiceProxy sut,
                                                            [NotNull] StartedMessage message)
         {
@@ -178,7 +179,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void StoppedHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
+        public void StoppedHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieInMemoryBus bus,
                                                            [NotNull] ServiceProxy sut,
                                                            [NotNull] StoppedMessage message)
         {
@@ -234,7 +235,7 @@ namespace Selkie.Framework.Tests.Aco.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void FinishedHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieBus bus,
+        public void FinishedHandler_SendsMessage_WhenCalled([NotNull, Frozen] ISelkieInMemoryBus bus,
                                                             [NotNull] ServiceProxy sut,
                                                             [NotNull] FinishedMessage message)
         {
@@ -294,116 +295,64 @@ namespace Selkie.Framework.Tests.Aco.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CreateColony_SendsMessage_WhenCalled(
+            [NotNull, Frozen] IColonyParameters colonyParameters,
             [NotNull, Frozen] ISelkieBus bus,
-            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
-            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
             [NotNull] ServiceProxy sut)
         {
             // Arrange
-            int[][] matrix = CreateValidMatrix();
-            int[] costPerLine = CreateValidCostPerLine();
-
-            costMatrixSourceManager.Matrix.Returns(matrix);
-            linesSourceManager.CostPerLine.Returns(costPerLine);
+            colonyParameters.CostMatrix = CreateValidMatrix();
+            colonyParameters.CostPerLine = CreateValidCostPerLine();
+            colonyParameters.IsFixedStartNode = false;
+            colonyParameters.FixedStartNode = 0;
 
             // Act
-            sut.CreateColony();
+            sut.CreateColony(colonyParameters);
 
             // Assert
             bus.Received()
-               .PublishAsync(Arg.Is <CreateColonyMessage>(x => x.CostMatrix == costMatrixSourceManager.Matrix &&
-                                                               x.CostPerLine.SequenceEqual(
-                                                                                           linesSourceManager
-                                                                                               .CostPerLine)));
+               .PublishAsync(Arg.Is <CreateColonyMessage>(x =>
+                                                          x.CostMatrix.SequenceEqual(colonyParameters.CostMatrix) &&
+                                                          x.CostPerLine.SequenceEqual(colonyParameters.CostPerLine) &&
+                                                          x.IsFixedStartNode == false &&
+                                                          x.FixedStartNode == colonyParameters.FixedStartNode));
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void CreateColony_DoesNotSendsMessage_WhenMatrixIsEmpty(
+        public void CreateColony_DoesNotSendsMessage_WhenColonyParametersAreInvalid(
+            [NotNull] IColonyParameters colonyParameters,
+            [NotNull, Frozen] IColonyParametersValidator validator,
             [NotNull, Frozen] ISelkieBus bus,
-            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
             [NotNull] ServiceProxy sut)
         {
             // Arrange
-            costMatrixSourceManager.Matrix.Returns(new int[0][]);
+            validator.When(x => x.Validate(Arg.Any <IColonyParameters>()))
+                     .Do(ThrowArgumentException);
 
             // Act
             // Assert
-            Assert.Throws <ArgumentException>(() => sut.CreateColony());
+            Assert.Throws <ArgumentException>(() => sut.CreateColony(colonyParameters));
         }
 
-        [Theory]
-        [AutoNSubstituteData]
-        public void CreateColony_DoesNotSendsMessage_WhenCostPerLineIsEmpty(
-            [NotNull, Frozen] ISelkieBus bus,
-            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
-            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
-            [NotNull] ServiceProxy sut)
+        private void ThrowArgumentException(CallInfo callInfo)
         {
-            // Arrange
-            var matrixDoesNotMatter = new[]
-                                      {
-                                          new[]
-                                          {
-                                              1
-                                          }
-                                      };
-
-            costMatrixSourceManager.Matrix.Returns(matrixDoesNotMatter);
-            linesSourceManager.CostPerLine.Returns(new int[0]);
-
-            // Act
-            // Assert
-            Assert.Throws <ArgumentException>(() => sut.CreateColony());
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void CreateColony_DoesNotSendsMessage_WhenMatrixAndCostPerDoNotMatch(
-            [NotNull, Frozen] ISelkieBus bus,
-            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
-            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
-            [NotNull] ServiceProxy sut)
-        {
-            // Arrange
-            var matrix = new[]
-                         {
-                             new[]
-                             {
-                                 1
-                             }
-                         };
-
-            var costPerLine = new[]
-                              {
-                                  1,
-                                  2
-                              };
-
-            costMatrixSourceManager.Matrix.Returns(matrix);
-            linesSourceManager.CostPerLine.Returns(costPerLine);
-
-            // Act
-            // Assert
-            Assert.Throws <ArgumentException>(() => sut.CreateColony());
+            throw new ArgumentException("Test");
         }
 
         [Theory]
         [AutoNSubstituteData]
         public void CreateColony_SetsIsColonyCreatedToFalse_WhenCalled(
-            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
-            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
+            [NotNull] IColonyParameters colonyParameters,
             [NotNull] ServiceProxy sut)
         {
             // Arrange
-            int[][] matrix = CreateValidMatrix();
-            int[] costPerLine = CreateValidCostPerLine();
-
-            costMatrixSourceManager.Matrix.Returns(matrix);
-            linesSourceManager.CostPerLine.Returns(costPerLine);
+            colonyParameters.CostMatrix = CreateValidMatrix();
+            colonyParameters.CostPerLine = CreateValidCostPerLine();
+            colonyParameters.IsFixedStartNode = false;
+            colonyParameters.FixedStartNode = 0;
 
             // Act
-            sut.CreateColony();
+            sut.CreateColony(colonyParameters);
 
             // Assert
             Assert.False(sut.IsColonyCreated);
@@ -412,20 +361,18 @@ namespace Selkie.Framework.Tests.Aco.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CreateColony_SetsIsRunningToFalse_WhenCalled(
-            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
-            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
+            [NotNull] IColonyParameters colonyParameters,
             [NotNull] ServiceProxy sut)
         {
             // Arrange
-            int[][] matrix = CreateValidMatrix();
-            int[] costPerLine = CreateValidCostPerLine();
-
-            costMatrixSourceManager.Matrix.Returns(matrix);
-            linesSourceManager.CostPerLine.Returns(costPerLine);
-
+            colonyParameters.CostMatrix = CreateValidMatrix();
+            colonyParameters.CostPerLine = CreateValidCostPerLine();
+            colonyParameters.IsFixedStartNode = false;
+            colonyParameters.FixedStartNode = 0;
 
             // Act
-            sut.CreateColony();
+            sut.CreateColony(colonyParameters);
+
 
             // Assert
             Assert.False(sut.IsRunning);
@@ -434,20 +381,18 @@ namespace Selkie.Framework.Tests.Aco.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CreateColony_CallsLogCostMatrix_WhenCalled(
+            [NotNull] IColonyParameters colonyParameters,
             [NotNull, Frozen] IAcoProxyLogger logger,
-            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
-            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
             [NotNull] ServiceProxy sut)
         {
             // Arrange
-            int[][] matrix = CreateValidMatrix();
-            int[] costPerLine = CreateValidCostPerLine();
-
-            costMatrixSourceManager.Matrix.Returns(matrix);
-            linesSourceManager.CostPerLine.Returns(costPerLine);
+            colonyParameters.CostMatrix = CreateValidMatrix();
+            colonyParameters.CostPerLine = CreateValidCostPerLine();
+            colonyParameters.IsFixedStartNode = false;
+            colonyParameters.FixedStartNode = 0;
 
             // Act
-            sut.CreateColony();
+            sut.CreateColony(colonyParameters);
 
             // Assert
             logger.Received().LogCostMatrix(Arg.Any <int[][]>());
@@ -456,20 +401,18 @@ namespace Selkie.Framework.Tests.Aco.XUnit
         [Theory]
         [AutoNSubstituteData]
         public void CreateColony_CallsLogCostPerLine_WhenCalled(
+            [NotNull] IColonyParameters colonyParameters,
             [NotNull, Frozen] IAcoProxyLogger logger,
-            [NotNull, Frozen] ICostMatrixSourceManager costMatrixSourceManager,
-            [NotNull, Frozen] ILinesSourceManager linesSourceManager,
             [NotNull] ServiceProxy sut)
         {
             // Arrange
-            int[][] matrix = CreateValidMatrix();
-            int[] costPerLine = CreateValidCostPerLine();
-
-            costMatrixSourceManager.Matrix.Returns(matrix);
-            linesSourceManager.CostPerLine.Returns(costPerLine);
+            colonyParameters.CostMatrix = CreateValidMatrix();
+            colonyParameters.CostPerLine = CreateValidCostPerLine();
+            colonyParameters.IsFixedStartNode = false;
+            colonyParameters.FixedStartNode = 0;
 
             // Act
-            sut.CreateColony();
+            sut.CreateColony(colonyParameters);
 
             // Assert
             logger.Received().LogCostPerLine(Arg.Any <int[]>());

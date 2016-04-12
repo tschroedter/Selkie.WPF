@@ -9,9 +9,9 @@ namespace Selkie.Framework.Services.Handlers
     [ProjectComponent(Lifestyle.Startable)]
     public class PheromonesHandler : SelkieMessageHandlerAsync <PheromonesMessage>
     {
-        private readonly ISelkieBus m_Bus;
+        private readonly ISelkieInMemoryBus m_Bus;
 
-        public PheromonesHandler([NotNull] ISelkieBus bus)
+        public PheromonesHandler([NotNull] ISelkieInMemoryBus bus)
         {
             m_Bus = bus;
         }

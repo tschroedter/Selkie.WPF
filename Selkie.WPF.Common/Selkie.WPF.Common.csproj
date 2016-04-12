@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Converters\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Converters\GeometryPointToWindowsPointConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\LinesToTransferPointsConverter.cs" />
     <Compile Include="Converters\LineToWindowPointsConverter.cs" />
     <Compile Include="DisplayLine.cs" />

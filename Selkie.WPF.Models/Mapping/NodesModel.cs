@@ -14,18 +14,17 @@ namespace Selkie.WPF.Models.Mapping
 {
     public class NodesModel : INodesModel
     {
+        private readonly ISelkieInMemoryBus m_Bus;
         private readonly ILinesSourceManager m_LinesSourceManager;
         private readonly ISelkieLogger m_Logger;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
         private readonly List <INodeModel> m_Nodes = new List <INodeModel>();
 
         public NodesModel([NotNull] ISelkieLogger logger,
-                          [NotNull] ISelkieBus bus,
-                          [NotNull] ISelkieInMemoryBus memoryBus,
+                          [NotNull] ISelkieInMemoryBus bus,
                           [NotNull] ILinesSourceManager linesSourceManager)
         {
             m_Logger = logger;
-            m_MemoryBus = memoryBus;
+            m_Bus = bus;
             m_LinesSourceManager = linesSourceManager;
 
             LoadNodes();
@@ -60,7 +59,7 @@ namespace Selkie.WPF.Models.Mapping
                 m_Nodes.AddRange(models);
             }
 
-            m_MemoryBus.Publish(new NodesModelChangedMessage());
+            m_Bus.Publish(new NodesModelChangedMessage());
         }
 
         internal IEnumerable <INodeModel> CreateNodeModels([NotNull] ILine line)

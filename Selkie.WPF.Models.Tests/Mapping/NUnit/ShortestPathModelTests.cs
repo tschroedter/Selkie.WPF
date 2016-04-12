@@ -24,26 +24,23 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             m_NodeToDisplayLineConverter = Substitute.For <ILineToLineNodeConverterToDisplayLineConverter>();
 
             m_Logger = Substitute.For <ISelkieLogger>();
-            m_Bus = Substitute.For <ISelkieBus>();
-            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Converter = Substitute.For <IPathToLineToLineNodeConverter>();
             m_Factory = Substitute.For <ILineToLineNodeConverterToDisplayLineConverterFactory>();
             m_Factory.Create().Returns(m_NodeToDisplayLineConverter);
 
             m_Model = new ShortestPathModel(m_Logger,
                                             m_Bus,
-                                            m_MemoryBus,
                                             m_Converter,
                                             m_Factory);
         }
 
         private ShortestPathModel m_Model;
         private ISelkieLogger m_Logger;
-        private ISelkieBus m_Bus;
         private IPathToLineToLineNodeConverter m_Converter;
         private ILineToLineNodeConverterToDisplayLineConverterFactory m_Factory;
         private ILineToLineNodeConverterToDisplayLineConverter m_NodeToDisplayLineConverter;
-        private ISelkieInMemoryBus m_MemoryBus;
+        private ISelkieInMemoryBus m_Bus;
 
         private ColonyBestTrailMessage CreateBestTrailMessage()
         {
@@ -170,8 +167,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
 
             m_Model.Update(message);
 
-            m_MemoryBus.Received()
-                       .Publish(Arg.Any <ShortestPathModelChangedMessage>());
+            m_Bus.Received()
+                 .Publish(Arg.Any <ShortestPathModelChangedMessage>());
         }
 
         [Test]

@@ -1,6 +1,6 @@
-using System;
-using System.Linq;
+using Castle.Core;
 using JetBrains.Annotations;
+using Selkie.Aop.Aspects;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
@@ -10,24 +10,25 @@ using Selkie.Windsor;
 
 namespace Selkie.Framework.Aco
 {
+    [Interceptor(typeof ( StatusAspect ))]
     [ProjectComponent(Lifestyle.Transient)]
     public class ServiceProxy : IServiceProxy
     {
         internal const int DefaultNumberOfIterations = 2000;
         private readonly IAcoProxyLogger m_AcoProxylogger;
         private readonly ISelkieBus m_Bus;
-        private readonly ICostMatrixSourceManager m_CostMatrixSourceManager;
-        private readonly ILinesSourceManager m_LinesSourceManager;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
+        private readonly IColonyParametersValidator m_Validator;
 
         public ServiceProxy([NotNull] IAcoProxyLogger acoProxylogger,
                             [NotNull] ISelkieBus bus,
-                            [NotNull] ICostMatrixSourceManager costMatrixSourceManager,
-                            [NotNull] ILinesSourceManager linesSourceManager)
+                            [NotNull] ISelkieInMemoryBus memoryBus,
+                            [NotNull] IColonyParametersValidator validator)
         {
             m_AcoProxylogger = acoProxylogger;
             m_Bus = bus;
-            m_CostMatrixSourceManager = costMatrixSourceManager;
-            m_LinesSourceManager = linesSourceManager;
+            m_MemoryBus = memoryBus;
+            m_Validator = validator;
 
             string subscriptionId = GetType().FullName;
 
@@ -47,50 +48,29 @@ namespace Selkie.Framework.Aco
         public bool IsColonyCreated { get; private set; }
         public bool IsRunning { get; private set; }
 
-        public void CreateColony()
+        [Status("Received request to create colony.")]
+        public void CreateColony(IColonyParameters colonyParameters)
         {
             IsColonyCreated = false;
             IsRunning = false;
 
-            int[][] costMatrix = m_CostMatrixSourceManager.Matrix;
-            int[] costPerLine = m_LinesSourceManager.CostPerLine.ToArray();
+            m_AcoProxylogger.LogCostMatrix(colonyParameters.CostMatrix);
+            m_AcoProxylogger.LogCostPerLine(colonyParameters.CostPerLine);
 
-            m_AcoProxylogger.LogCostMatrix(costMatrix);
-            m_AcoProxylogger.LogCostPerLine(costPerLine);
-
-            ValidateCostMatrixAndCostPerLine(costMatrix,
-                                             costPerLine);
+            m_Validator.Validate(colonyParameters);
 
             var createMessage = new CreateColonyMessage
                                 {
-                                    CostMatrix = costMatrix,
-                                    CostPerLine = costPerLine
+                                    CostMatrix = colonyParameters.CostMatrix,
+                                    CostPerLine = colonyParameters.CostPerLine,
+                                    IsFixedStartNode = colonyParameters.IsFixedStartNode,
+                                    FixedStartNode = colonyParameters.FixedStartNode
                                 };
 
             m_Bus.PublishAsync(createMessage);
         }
 
-        // ReSharper disable UnusedParameter.Local
-        private void ValidateCostMatrixAndCostPerLine(int[][] costMatrix,
-                                                      int[] costPerLine)
-        // ReSharper restore UnusedParameter.Local
-        {
-            if ( costMatrix.Length == 0 )
-            {
-                throw new ArgumentException("Cost Matrix is not set!");
-            }
-
-            if ( costPerLine.Length == 0 )
-            {
-                throw new ArgumentException("CostPerLine array is not set!");
-            }
-
-            if ( costPerLine.Length != costMatrix.Length )
-            {
-                throw new ArgumentException("CostMatrix and CostPerLine do not match!");
-            }
-        }
-
+        [Status("Received request to start colony calculation.")]
         public bool Start()
         {
             if ( !IsColonyCreated )
@@ -108,6 +88,7 @@ namespace Selkie.Framework.Aco
             return true;
         }
 
+        [Status("Received request to stop colony calculation.")]
         public void Stop()
         {
             m_Bus.PublishAsync(new StopRequestMessage());
@@ -115,36 +96,40 @@ namespace Selkie.Framework.Aco
 
         public bool IsFinished { get; private set; }
 
+        [Status("Colony was created!")]
         internal void CreatedColonyHandler(CreatedColonyMessage message)
         {
             IsColonyCreated = true;
             IsFinished = false;
         }
 
+        [Status("Colony calculation started...")]
         internal void StartedHandler(StartedMessage message)
         {
             IsRunning = true;
             IsFinished = false;
 
-            m_Bus.PublishAsync(new ColonyStartedMessage());
+            m_MemoryBus.PublishAsync(new ColonyStartedMessage());
         }
 
+        [Status("Colony calculation was stopped!")]
         internal void StoppedHandler(StoppedMessage message)
         {
             IsRunning = false;
             IsColonyCreated = false;
             IsFinished = false;
 
-            m_Bus.PublishAsync(new ColonyStoppedMessage());
+            m_MemoryBus.PublishAsync(new ColonyStoppedMessage());
         }
 
+        [Status("Colony calculation finished!")]
         internal void FinishedHandler(FinishedMessage message)
         {
             IsRunning = false;
             IsColonyCreated = false;
             IsFinished = true;
 
-            m_Bus.PublishAsync(new ColonyFinishedMessage());
+            m_MemoryBus.PublishAsync(new ColonyFinishedMessage());
         }
     }
 }

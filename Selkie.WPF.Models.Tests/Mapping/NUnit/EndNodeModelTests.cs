@@ -16,19 +16,16 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Bus = Substitute.For <ISelkieBus>();
-            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Helper = Substitute.For <INodeIdHelper>();
 
             m_Model = new EndNodeModel(m_Bus,
-                                       m_MemoryBus,
                                        m_Helper);
         }
 
-        private ISelkieBus m_Bus;
         private EndNodeModel m_Model;
         private INodeIdHelper m_Helper;
-        private ISelkieInMemoryBus m_MemoryBus;
+        private ISelkieInMemoryBus m_Bus;
 
         [Test]
         public void DetermieNodeIdReversesTest()
@@ -50,8 +47,8 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         {
             m_Model.SendMessage();
 
-            m_MemoryBus.Received()
-                       .Publish(Arg.Any <EndNodeModelChangedMessage>());
+            m_Bus.Received()
+                 .Publish(Arg.Any <EndNodeModelChangedMessage>());
         }
     }
 }

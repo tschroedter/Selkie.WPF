@@ -17,20 +17,19 @@ namespace Selkie.WPF.Models.Mapping
         : ILinesModel,
           IDisposable
     {
+        private readonly ISelkieInMemoryBus m_Bus;
         private readonly IDisplayLineFactory m_DisplayLineFactory;
         private readonly List <IDisplayLine> m_DisplayLines;
         private readonly ILinesSourceManager m_LinesSourceManager;
         private readonly ISelkieLogger m_Logger;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
 
         public LinesModel([NotNull] ISelkieLogger logger,
-                          [NotNull] ISelkieBus bus,
-                          [NotNull] ISelkieInMemoryBus memoryBus,
+                          [NotNull] ISelkieInMemoryBus bus,
                           [NotNull] ILinesSourceManager linesSourceManager,
                           [NotNull] IDisplayLineFactory displayLineFactory)
         {
             m_Logger = logger;
-            m_MemoryBus = memoryBus;
+            m_Bus = bus;
             m_LinesSourceManager = linesSourceManager;
             m_DisplayLineFactory = displayLineFactory;
             m_DisplayLines = new List <IDisplayLine>();
@@ -40,8 +39,8 @@ namespace Selkie.WPF.Models.Mapping
             bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
                                                            ColonyLinesChangedHandler);
 
-            memoryBus.SubscribeAsync <LinesModelLinesRequestMessage>(GetType().ToString(),
-                                                                     LinesModelLinesRequestHandler);
+            bus.SubscribeAsync <LinesModelLinesRequestMessage>(GetType().ToString(),
+                                                               LinesModelLinesRequestHandler);
         }
 
         public void Dispose()
@@ -51,7 +50,7 @@ namespace Selkie.WPF.Models.Mapping
 
         internal void LinesModelLinesRequestHandler(LinesModelLinesRequestMessage obj)
         {
-            m_MemoryBus.PublishAsync(new LinesModelChangedMessage());
+            m_Bus.PublishAsync(new LinesModelChangedMessage());
         }
 
         internal void ColonyLinesChangedHandler(ColonyLinesChangedMessage message)
@@ -103,7 +102,7 @@ namespace Selkie.WPF.Models.Mapping
                 m_DisplayLines.Add(displayLine);
             }
 
-            m_MemoryBus.PublishAsync(new LinesModelChangedMessage());
+            m_Bus.PublishAsync(new LinesModelChangedMessage());
         }
 
         #endregion

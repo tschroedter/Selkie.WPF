@@ -1,42 +1,60 @@
 ﻿using System;
 using System.Threading;
+using Castle.Core;
 using JetBrains.Annotations;
+using Selkie.Aop.Aspects;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Interfaces;
 using Selkie.Framework.Interfaces.Aco;
+using Selkie.Framework.Messages;
 using Selkie.Services.Aco.Common.Messages;
 using Selkie.Windsor;
 
 namespace Selkie.Framework
 {
+    [Interceptor(typeof ( StatusAspect ))]
     [ProjectComponent(Lifestyle.Singleton)]
     public sealed class Colony : IColony
     {
         internal const int SleepTimeOneSecond = 1000;
+        private readonly IAntSettingsSourceManager m_AntSettingsSourceManager;
         private readonly ISelkieBus m_Bus;
+        private readonly IColonyParametersFactory m_ColonyParametersFactory;
         private readonly ISelkieLogger m_Logger;
+        private readonly ICostMatrixCalculationManager m_Manager;
         private readonly IServiceProxy m_ServiceProxy;
 
         public Colony([NotNull] ISelkieLogger logger,
                       [NotNull] ISelkieBus bus,
-                      [NotNull] IServiceProxy serviceProxy)
+                      [NotNull] ISelkieInMemoryBus memoryBus,
+                      [NotNull] IServiceProxy serviceProxy,
+                      [NotNull] ICostMatrixCalculationManager manager,
+                      [NotNull] IAntSettingsSourceManager antSettingsSourceManager,
+                      [NotNull] IColonyParametersFactory colonyParametersFactory)
+
         {
             SleepTimeInMs = SleepTimeOneSecond;
             m_Logger = logger;
             m_Bus = bus;
+            ISelkieInMemoryBus memoryBus1 = memoryBus;
             m_ServiceProxy = serviceProxy;
+            m_Manager = manager;
+            m_AntSettingsSourceManager = antSettingsSourceManager;
+            m_ColonyParametersFactory = colonyParametersFactory;
 
             string subscriptionId = GetType().FullName;
 
-            m_Bus.SubscribeAsync <ColonyStartRequestMessage>(subscriptionId,
-                                                             ColonyStartRequestHandler);
+            memoryBus1.SubscribeAsync <ColonyStartRequestMessage>(subscriptionId,
+                                                                  ColonyStartRequestHandler);
 
-            m_Bus.SubscribeAsync <ColonyStopRequestMessage>(subscriptionId,
-                                                            ColonyStopRequestHandler);
+            memoryBus1.SubscribeAsync <ColonyStopRequestMessage>(subscriptionId,
+                                                                 ColonyStopRequestHandler);
 
-            m_Bus.SubscribeAsync <ColonyPheromonesRequestMessage>(subscriptionId,
-                                                                  ColonyPheromonesRequestHandler);
+            memoryBus1.SubscribeAsync <ColonyPheromonesRequestMessage>(subscriptionId,
+                                                                       ColonyPheromonesRequestHandler);
+            m_Bus.SubscribeAsync <CostMatrixCalculatedMessage>(subscriptionId,
+                                                               CostMatrixCalculatedMessageHandler);
         }
 
         public int SleepTimeInMs { get; private set; }
@@ -59,9 +77,7 @@ namespace Selkie.Framework
 
         internal void ColonyStartRequestHandler(ColonyStartRequestMessage message)
         {
-            m_ServiceProxy.CreateColony();
-            WaitForIsColonyCreatedMessage();
-            m_ServiceProxy.Start();
+            m_Manager.Calculate();
         }
 
         internal void ColonyStopRequestHandler(ColonyStopRequestMessage message)
@@ -72,6 +88,23 @@ namespace Selkie.Framework
         internal void ColonyPheromonesRequestHandler(ColonyPheromonesRequestMessage message)
         {
             m_Bus.PublishAsync(new PheromonesRequestMessage());
+        }
+
+        [Status("Waiting for colony to be created...")]
+        internal void CostMatrixCalculatedMessageHandler(CostMatrixCalculatedMessage message)
+        {
+            IAntSettingsSource antSettingsSource = m_AntSettingsSourceManager.Source;
+
+            IColonyParameters colonyParameters = m_ColonyParametersFactory.Create(message.Matrix,
+                                                                                  message.CostPerLine,
+                                                                                  antSettingsSource.IsFixedStartNode,
+                                                                                  antSettingsSource.FixedStartNode);
+
+            m_ServiceProxy.CreateColony(colonyParameters);
+
+            WaitForIsColonyCreatedMessage();
+
+            m_ServiceProxy.Start();
         }
 
         private void WaitForIsColonyCreatedMessage()

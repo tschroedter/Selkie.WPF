@@ -29,11 +29,15 @@ namespace Selkie.WPF.Views
                 var mapView = viewFactory.CreateView <IMapView>();
                 var pheromonesView = viewFactory.CreateView <IPheromonesView>();
                 var bestTrailsHistoryView = viewFactory.CreateView <ITrailsHistoryView>();
+                var antSettingsView = viewFactory.CreateView <IAntSettingsView>();
                 var settingsView = viewFactory.CreateView <ISettingsView>();
+                var statusView = viewFactory.CreateView <IStatusView>();
 
                 dockingCenter.SetManager(m_DockManager);
                 dockingCenter.AssignToArea(controlView,
                                            "Control");
+                dockingCenter.AssignToArea(antSettingsView,
+                                           "Ant Settings");
                 dockingCenter.AssignToArea(mapView,
                                            "Preview");
                 dockingCenter.AssignToArea(pheromonesView,
@@ -42,6 +46,8 @@ namespace Selkie.WPF.Views
                                            "History");
                 dockingCenter.AssignToArea(settingsView,
                                            "Settings");
+                dockingCenter.AssignToArea(statusView,
+                                           "Status");
 
                 Closing += MainView_Closing;
             }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 using Selkie.EasyNetQ;
@@ -78,7 +79,7 @@ namespace Selkie.Framework
             LogRacetracks(forwardToForward);
         }
 
-        private void LogRacetracks(IPath[][] forwardToForward)
+        private void LogRacetracks(IEnumerable <IPath[]> forwardToForward)
         {
             m_Logger.Info("Racetracks");
 

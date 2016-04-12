@@ -29,8 +29,8 @@ namespace Selkie.WPF.Models.Settings
             memoryBus.SubscribeAsync <RacetrackSettingsRequestMessage>(subscriptionId,
                                                                        RacetrackSettingsRequestHandler);
 
-            m_Bus.SubscribeAsync <ColonyCostMatrixChangedMessage>(subscriptionId,
-                                                                  ColonyCostMatrixChangedHandler);
+            m_Bus.SubscribeAsync <ColonyRacetrackSettingsChangedMessage>(subscriptionId,
+                                                                         ColonyRacetrackSettingsChangedHandler);
         }
 
         public double TurnRadius
@@ -57,7 +57,7 @@ namespace Selkie.WPF.Models.Settings
             }
         }
 
-        internal void ColonyCostMatrixChangedHandler(ColonyCostMatrixChangedMessage message)
+        internal void ColonyRacetrackSettingsChangedHandler(ColonyRacetrackSettingsChangedMessage message)
         {
             IRacetrackSettingsSource source = m_Manager.Source;
 

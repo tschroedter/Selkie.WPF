@@ -17,18 +17,15 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         public void Setup()
         {
             m_Logger = Substitute.For <ISelkieLogger>();
-            m_Bus = Substitute.For <ISelkieBus>();
-            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
 
             m_Model = new ControlModel(m_Logger,
-                                       m_Bus,
-                                       m_MemoryBus);
+                                       m_Bus);
         }
 
         private ISelkieLogger m_Logger;
-        private ISelkieBus m_Bus;
         private ControlModel m_Model;
-        private ISelkieInMemoryBus m_MemoryBus;
+        private ISelkieInMemoryBus m_Bus;
 
         [Test]
         public void Apply_SendsColonyTestLineSetMessage_WhenCalled()
@@ -61,8 +58,8 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
             m_Model.Apply();
 
             // Assert
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => x.IsApplying));
+            m_Bus.Received()
+                 .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => x.IsApplying));
         }
 
         [Test]
@@ -90,10 +87,10 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
             m_Model.ColonyFinishedHandler(new ColonyFinishedMessage());
 
             // Assert
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => !x.IsRunning &&
-                                                                              x.IsFinished &&
-                                                                              !x.IsApplying));
+            m_Bus.Received()
+                 .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => !x.IsRunning &&
+                                                                        x.IsFinished &&
+                                                                        !x.IsApplying));
         }
 
         [Test]
@@ -132,8 +129,8 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
             m_Model.ColonyLinesChangedHandler(message);
 
             // Assert
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => !x.IsApplying));
+            m_Bus.Received()
+                 .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => !x.IsApplying));
         }
 
         [Test]
@@ -157,10 +154,10 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
             m_Model.ColonyStartedHandler(new ColonyStartedMessage());
 
             // Assert
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => x.IsRunning &&
-                                                                              !x.IsFinished &&
-                                                                              !x.IsApplying));
+            m_Bus.Received()
+                 .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => x.IsRunning &&
+                                                                        !x.IsFinished &&
+                                                                        !x.IsApplying));
         }
 
         [Test]
@@ -195,10 +192,10 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
             m_Model.ColonyStoppedHandler(new ColonyStoppedMessage());
 
             // Assert
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => !x.IsRunning &&
-                                                                              !x.IsFinished &&
-                                                                              !x.IsApplying));
+            m_Bus.Received()
+                 .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => !x.IsRunning &&
+                                                                        !x.IsFinished &&
+                                                                        !x.IsApplying));
         }
 
         [Test]
@@ -239,8 +236,8 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
             m_Model.Apply();
 
             // Assert
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => !x.IsApplying));
+            m_Bus.Received()
+                 .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => !x.IsApplying));
         }
 
         [Test]
@@ -273,8 +270,8 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
                                                    });
 
             // Assert
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Is <ControlModelTestLinesChangedMessage>(x => x.TestLineTypes == types));
+            m_Bus.Received()
+                 .PublishAsync(Arg.Is <ControlModelTestLinesChangedMessage>(x => x.TestLineTypes == types));
         }
 
         [Test]
@@ -356,9 +353,9 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         [Test]
         public void Constructor_SubscribeToControlModelTestLinesRequestMessage_WhenCreated()
         {
-            m_MemoryBus.Received()
-                       .SubscribeAsync(m_Model.GetType().FullName,
-                                       Arg.Any <Action <ControlModelTestLineSetMessage>>());
+            m_Bus.Received()
+                 .SubscribeAsync(m_Model.GetType().FullName,
+                                 Arg.Any <Action <ControlModelTestLineSetMessage>>());
         }
 
         [Test]

@@ -12,11 +12,9 @@ namespace Selkie.WPF.Models.Mapping
         : BaseNodeModel,
           IStartNodeModel
     {
-        public StartNodeModel([NotNull] ISelkieBus bus,
-                              [NotNull] ISelkieInMemoryBus memoryBus,
+        public StartNodeModel([NotNull] ISelkieInMemoryBus bus,
                               [NotNull] INodeIdHelper nodeIdHelper)
             : base(bus,
-                   memoryBus,
                    nodeIdHelper)
         {
         }
@@ -28,7 +26,7 @@ namespace Selkie.WPF.Models.Mapping
 
         public override void SendMessage()
         {
-            MemoryBus.Publish(new StartNodeModelChangedMessage());
+            Bus.Publish(new StartNodeModelChangedMessage());
         }
     }
 }

@@ -25,7 +25,6 @@ namespace Selkie.WPF.Models.TrailHistory
         private List <ITrailDetails> m_TrailDetails = new List <ITrailDetails>();
 
         public TrailHistoryModel([NotNull] ISelkieLogger logger,
-                                 [NotNull] ISelkieBus bus,
                                  [NotNull] ISelkieInMemoryBus memoryBus,
                                  [NotNull] ITrailDetailsFactory factory)
         {
@@ -35,11 +34,11 @@ namespace Selkie.WPF.Models.TrailHistory
 
             string subscriptionId = GetType().FullName;
 
-            bus.SubscribeAsync <ColonyBestTrailMessage>(subscriptionId,
-                                                        ColonyBestTrailHandler);
+            m_MemoryBus.SubscribeAsync <ColonyBestTrailMessage>(subscriptionId,
+                                                                ColonyBestTrailHandler);
 
-            bus.SubscribeAsync <ColonyStartRequestMessage>(subscriptionId,
-                                                           ColonyStartRequestHandler);
+            m_MemoryBus.SubscribeAsync <ColonyStartRequestMessage>(subscriptionId,
+                                                                   ColonyStartRequestHandler);
         }
 
         public void Dispose()

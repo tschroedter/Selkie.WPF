@@ -19,19 +19,16 @@ namespace Selkie.WPF.Models.Tests.Pheromones.NUnit
         [SetUp]
         public void Setup()
         {
-            m_Bus = Substitute.For <ISelkieBus>();
-            m_MemoryBus = Substitute.For <ISelkieInMemoryBus>();
+            m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Timer = Substitute.For <ITimer>();
 
             m_Model = new PheromonesModel(m_Bus,
-                                          m_MemoryBus,
                                           m_Timer);
         }
 
         private PheromonesModel m_Model;
-        private ISelkieBus m_Bus;
         private ITimer m_Timer;
-        private ISelkieInMemoryBus m_MemoryBus;
+        private ISelkieInMemoryBus m_Bus;
 
         private ColonyPheromonesMessage CreatePheromonesMessage()
         {
@@ -138,8 +135,8 @@ namespace Selkie.WPF.Models.Tests.Pheromones.NUnit
             // Arrange
             // Act
             // Assert
-            m_MemoryBus.Received().SubscribeAsync(m_Model.GetType().ToString(),
-                                                  Arg.Any <Action <PheromonesModelsSetMessage>>());
+            m_Bus.Received().SubscribeAsync(m_Model.GetType().ToString(),
+                                            Arg.Any <Action <PheromonesModelsSetMessage>>());
         }
 
         [Test]
@@ -260,8 +257,8 @@ namespace Selkie.WPF.Models.Tests.Pheromones.NUnit
             m_Model.PheromonesHandler(message);
 
             // Assert
-            m_MemoryBus.Received()
-                       .PublishAsync(Arg.Any <PheromonesModelChangedMessage>());
+            m_Bus.Received()
+                 .PublishAsync(Arg.Any <PheromonesModelChangedMessage>());
         }
 
         [Test]
