@@ -25,7 +25,7 @@ namespace Selkie.WPF.Models.Tests.Status.NUnit
         private StatusModel m_Sut;
 
         [Test]
-        public void ColonyStatusMessageHandler_SendsMessage_WhenCalled()
+        public void ColonyStatusHandler_SendsMessage_WhenCalled()
         {
             // Arrange
             const string expected = "Text";
@@ -35,7 +35,7 @@ namespace Selkie.WPF.Models.Tests.Status.NUnit
                           };
 
             // Act
-            m_Sut.StatusMessageHandler(message);
+            m_Sut.StatusHandler(message);
 
             // Assert
             m_Bus.Received().PublishAsync(Arg.Is <StatusChangedMessage>(x => x.Text == expected));

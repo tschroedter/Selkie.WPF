@@ -7,5 +7,7 @@ namespace Selkie.WPF.ViewModels.Interfaces
     {
         [NotNull]
         string Status { get; }
+
+        string ExceptionThrown { get; }
     }
 }

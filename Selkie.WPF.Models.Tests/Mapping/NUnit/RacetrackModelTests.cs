@@ -64,13 +64,13 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
-        public void ColonyLinesChangedHandler_CallsUpdate_WhenCalled()
+        public void ColonyLineResponsedHandler_CallsUpdate_WhenCalled()
         {
             // Arrange
-            var message = new ColonyLinesChangedMessage();
+            var message = new ColonyLineResponseMessage();
 
             // Act
-            m_Model.ColonyLinesChangedHandler(message);
+            m_Model.ColonyLineResponsedHandler(message);
 
             // Assert
             m_Bus.Received()
@@ -78,13 +78,13 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
-        public void ColonyLinesChangedHandler_ClearsRacetracks_WhenCalled()
+        public void ColonyLineResponsedHandler_ClearsRacetracks_WhenCalled()
         {
             // Arrange
-            var message = new ColonyLinesChangedMessage();
+            var message = new ColonyLineResponseMessage();
 
             // Act
-            m_Model.ColonyLinesChangedHandler(message);
+            m_Model.ColonyLineResponsedHandler(message);
 
             // Assert
             m_Bus.Received()
@@ -99,10 +99,10 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
-        public void Constructor_SubscribeToColonyLinesChangedMessage_WhenCreated()
+        public void Constructor_SubscribeToColonyLineResponseMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <ColonyLinesChangedMessage>>());
+                                            Arg.Any <Action <ColonyLineResponseMessage>>());
         }
 
         [Test]

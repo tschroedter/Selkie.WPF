@@ -25,8 +25,8 @@ namespace Selkie.WPF.Models.Mapping
             memoryBus.SubscribeAsync <ColonyBestTrailMessage>(GetType().FullName,
                                                               ColonyBestTrailHandler);
 
-            memoryBus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
-                                                                 ColonyLinesChangedHandler);
+            memoryBus.SubscribeAsync <ColonyLineResponseMessage>(GetType().ToString(),
+                                                                 ColonyLineResponsedHandler);
         }
 
         public IEnumerable <INodeModel> Nodes
@@ -37,7 +37,7 @@ namespace Selkie.WPF.Models.Mapping
             }
         }
 
-        internal void ColonyLinesChangedHandler(ColonyLinesChangedMessage message)
+        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
         {
             UpdateNodes(new int[0]);
         }

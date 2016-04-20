@@ -52,9 +52,9 @@ namespace Selkie.WPF.ViewModels.Settings
             AllowedTurns = DetermineAllowedTurns(IsPortTurnAllowed,
                                                  IsStarboardTurnAllowed);
 
-            bus.SubscribeAsync <RacetrackSettingsChangedMessage>(GetType().ToString(),
-                                                                 // todo this should be Colony...message
-                                                                 RacetrackSettingsChangedHandler);
+            bus.SubscribeAsync <RacetrackSettingsResponseMessage>(GetType().ToString(),
+                                                                  // todo this should be Colony...message
+                                                                  RacetrackSettingsResponseHandler);
 
             bus.PublishAsync(new RacetrackSettingsRequestMessage());
         }
@@ -149,12 +149,12 @@ namespace Selkie.WPF.ViewModels.Settings
             return PossibleTurns.StarPort;
         }
 
-        internal void RacetrackSettingsChangedHandler(RacetrackSettingsChangedMessage message)
+        internal void RacetrackSettingsResponseHandler(RacetrackSettingsResponseMessage message)
         {
             m_Dispatcher.BeginInvoke(() => UpdateAndNotify(message));
         }
 
-        private void UpdateAndNotify(RacetrackSettingsChangedMessage message)
+        private void UpdateAndNotify(RacetrackSettingsResponseMessage message)
         {
             Update(message.TurnRadiusForPort,
                    message.TurnRadiusForStarboard,

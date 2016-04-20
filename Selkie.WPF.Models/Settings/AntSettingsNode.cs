@@ -7,7 +7,6 @@ namespace Selkie.WPF.Models.Settings
     [ProjectComponent(Lifestyle.Transient)]
     public class AntSettingsNode : IAntSettingsNode
     {
-        // todo testing
         public AntSettingsNode(int id,
                                [NotNull] string description)
         {

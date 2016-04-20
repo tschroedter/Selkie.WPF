@@ -48,9 +48,9 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
             m_Model.IsStarboardTurnAllowed = true;
         }
 
-        private static RacetrackSettingsChangedMessage CreateRacetrackSettingsChangedMessage()
+        private static RacetrackSettingsResponseMessage CreateRacetrackSettingsResponseMessage()
         {
-            return new RacetrackSettingsChangedMessage
+            return new RacetrackSettingsResponseMessage
                    {
                        TurnRadiusForPort = 200.0,
                        TurnRadiusForStarboard = 300.0,
@@ -286,15 +286,15 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
         }
 
         [Test]
-        public void RacetrackSettingsChangedHandler_RaisesEventIsApplyEnabled_WhenCalled()
+        public void RacetrackSettingsResponseHandler_RaisesEventIsApplyEnabled_WhenCalled()
         {
             // Arrange
             var test = new TestNotifyPropertyChanged(m_Model,
                                                      "IsApplyEnabled");
-            RacetrackSettingsChangedMessage message = CreateRacetrackSettingsChangedMessage();
+            RacetrackSettingsResponseMessage message = CreateRacetrackSettingsResponseMessage();
 
             // Act
-            m_Model.RacetrackSettingsChangedHandler(message);
+            m_Model.RacetrackSettingsResponseHandler(message);
 
 
             // Assert
@@ -303,13 +303,13 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
         }
 
         [Test]
-        public void RacetrackSettingsChangedHandler_SetsIsApplyingToFalse_WhenCalled()
+        public void RacetrackSettingsResponseHandler_SetsIsApplyingToFalse_WhenCalled()
         {
             // Arrange
-            RacetrackSettingsChangedMessage message = CreateRacetrackSettingsChangedMessage();
+            RacetrackSettingsResponseMessage message = CreateRacetrackSettingsResponseMessage();
 
             // Act
-            m_Model.RacetrackSettingsChangedHandler(message);
+            m_Model.RacetrackSettingsResponseHandler(message);
 
 
             // Assert
@@ -320,10 +320,10 @@ namespace Selkie.WPF.ViewModels.Tests.Settings.NUnit
         public void SettingsModelChangedHandler_CallsUpdate_WhenCalled()
         {
             // Arrange
-            RacetrackSettingsChangedMessage message = CreateRacetrackSettingsChangedMessage();
+            RacetrackSettingsResponseMessage message = CreateRacetrackSettingsResponseMessage();
 
             // Act
-            m_Model.RacetrackSettingsChangedHandler(message);
+            m_Model.RacetrackSettingsResponseHandler(message);
 
             // Assert
             Assert.True(Math.Abs(m_Model.TurnRadiusForPort - 200.0) < double.Epsilon,

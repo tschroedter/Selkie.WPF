@@ -22,8 +22,8 @@ namespace Selkie.WPF.Models.Settings
 
             m_InMemoryBus.SubscribeAsync <ColonyAntSettingsResponseMessage>(subscriptionId,
                                                                             ColonyAntSettingsResponseHandler);
-            m_InMemoryBus.SubscribeAsync <ColonyLinesChangedMessage>(subscriptionId,
-                                                                     ColonyLinesChangedHandler);
+            m_InMemoryBus.SubscribeAsync <ColonyLineResponseMessage>(subscriptionId,
+                                                                     ColonyLineResponsedHandler);
             m_InMemoryBus.SubscribeAsync <AntSettingsModelRequestMessage>(subscriptionId,
                                                                           AntSettingsModelRequestHandler);
             m_InMemoryBus.SubscribeAsync <AntSettingsModelSetMessage>(subscriptionId,
@@ -60,7 +60,7 @@ namespace Selkie.WPF.Models.Settings
             m_InMemoryBus.PublishAsync(forward);
         }
 
-        internal void ColonyLinesChangedHandler(ColonyLinesChangedMessage message)
+        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
         {
             CreateNodesForCurrentLines();
         }

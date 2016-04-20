@@ -1,6 +1,6 @@
 namespace Selkie.WPF.Models.Common.Messages
 {
-    public class RacetrackSettingsChangedMessage
+    public class RacetrackSettingsResponseMessage
     {
         public double TurnRadiusForPort { get; set; }
         public double TurnRadiusForStarboard { get; set; }

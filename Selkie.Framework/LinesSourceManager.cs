@@ -6,7 +6,6 @@ using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
-using Selkie.Framework.Messages;
 using Selkie.Geometry.Shapes;
 using Selkie.Services.Lines.Common;
 using Selkie.Services.Lines.Common.Messages;
@@ -37,22 +36,14 @@ namespace Selkie.Framework
             m_Factory = factory;
             m_Converter = converter;
 
-            bus.PublishAsync(new TestLineRequestMessage
-                             {
-                                 Types = new[]
-                                         {
-                                             TestLineType.Type.Create45DegreeLines
-                                         }
-                             });
-
             bus.SubscribeAsync <TestLineResponseMessage>(GetType().FullName,
                                                          TestLineResponseHandler);
 
             memoryBus.SubscribeAsync <ColonyLinesRequestMessage>(GetType().FullName,
                                                                  ColonyLinesRequestHandler);
 
-            memoryBus.SubscribeAsync <ColonyTestLinesRequestMessage>(GetType().FullName,
-                                                                     ColonyTestLinesRequestHandler);
+            memoryBus.SubscribeAsync <ColonyAvailabeTestLinesRequestMessage>(GetType().FullName,
+                                                                             ColonyAvailabeTestLinesRequestHandler);
 
             memoryBus.SubscribeAsync <ColonyTestLineSetMessage>(GetType().FullName,
                                                                 ColonyTestLineSetHandler);
@@ -99,12 +90,17 @@ namespace Selkie.Framework
 
         internal void ColonyLinesRequestHandler(ColonyLinesRequestMessage message)
         {
-            SendColonyLinesChangedMessage();
+            SendColonyLinesResponseMessage();
         }
 
-        internal void SendColonyLinesChangedMessage()
+        internal void SendColonyLinesResponseMessage()
         {
-            m_MemoryBus.PublishAsync(new ColonyLinesChangedMessage());
+            var message = new ColonyLinesResponseMessage
+                          {
+                              Lines = m_Source.Lines
+                          };
+
+            m_MemoryBus.PublishAsync(message);
 
             LogLines(m_Source.Lines);
         }
@@ -132,25 +128,14 @@ namespace Selkie.Framework
 
             m_Source = m_Factory.Create(m_Converter.Lines);
 
-            SendColonyLinesChangedMessage();
-            SendLinesSourceChangedMessage();
+            m_MemoryBus.PublishAsync(new ColonyLineResponseMessage());
         }
 
-        private void SendLinesSourceChangedMessage()
-        {
-            var response = new LinesSourceChangedMessage // todo check if memory bus
-                           {
-                               Lines = m_Source.Lines
-                           };
-
-            m_Bus.PublishAsync(response);
-        }
-
-        internal void ColonyTestLinesRequestHandler(ColonyTestLinesRequestMessage message)
+        internal void ColonyAvailabeTestLinesRequestHandler(ColonyAvailabeTestLinesRequestMessage message)
         {
             IEnumerable <string> types = GetTestLineTypes();
 
-            var response = new ColonyTestLinesResponseMessage
+            var response = new ColonyAvailableTestLinesResponseMessage
                            {
                                Types = types
                            };
@@ -160,7 +145,12 @@ namespace Selkie.Framework
 
         public IEnumerable <string> GetTestLineTypes()
         {
-            return Enum.GetNames(typeof ( TestLineType.Type )).ToList();
+            List <string> types = Enum.GetNames(typeof ( TestLineType.Type )).ToList();
+
+            // todo removed CreateCrossForwardReverse because there is a bug with these lines
+            types = types.Where(x => x != TestLineType.Type.CreateCrossForwardReverse.ToString()).ToList();
+
+            return types;
         }
     }
 }

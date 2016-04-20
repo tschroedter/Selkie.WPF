@@ -36,8 +36,8 @@ namespace Selkie.WPF.Models.Mapping
 
             LoadDisplayLines(linesSourceManager.Lines);
 
-            bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
-                                                           ColonyLinesChangedHandler);
+            bus.SubscribeAsync <ColonyLineResponseMessage>(GetType().ToString(),
+                                                           ColonyLineResponsedHandler);
 
             bus.SubscribeAsync <LinesModelLinesRequestMessage>(GetType().ToString(),
                                                                LinesModelLinesRequestHandler);
@@ -53,7 +53,7 @@ namespace Selkie.WPF.Models.Mapping
             m_Bus.PublishAsync(new LinesModelChangedMessage());
         }
 
-        internal void ColonyLinesChangedHandler(ColonyLinesChangedMessage message)
+        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
         {
             m_Logger.Debug("Handling '{0}'...".Inject(message.GetType()));
 

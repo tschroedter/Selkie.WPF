@@ -34,22 +34,22 @@ namespace Selkie.WPF.Models.Control
             m_Bus.SubscribeAsync <ColonyFinishedMessage>(subscriptionId,
                                                          ColonyFinishedHandler);
 
-            m_Bus.SubscribeAsync <ColonyTestLinesResponseMessage>(subscriptionId,
-                                                                  ColonyTestLinesResponseHandler);
+            m_Bus.SubscribeAsync <ColonyAvailableTestLinesResponseMessage>(subscriptionId,
+                                                                           ColonyAvailableTestLinesResponseHandler);
 
-            m_Bus.SubscribeAsync <ColonyLinesChangedMessage>(subscriptionId,
-                                                             ColonyLinesChangedHandler);
+            m_Bus.SubscribeAsync <ColonyLinesResponseMessage>(subscriptionId,
+                                                              ColonyLinesResponsedHandler);
 
             m_Bus.SubscribeAsync <ControlModelTestLinesRequestMessage>(subscriptionId,
                                                                        ControlModelTestLinesRequestHandler);
 
-            m_Bus.SubscribeAsync <ColonyTestLinesChangedMessage>(subscriptionId,
-                                                                 ColonyTestLineResponseHandler);
+            m_Bus.SubscribeAsync <ColonyLineResponseMessage>(subscriptionId,
+                                                             ColonyTestLineResponseHandler);
 
             m_Bus.SubscribeAsync <ControlModelTestLineSetMessage>(subscriptionId,
                                                                   ControlModelTestLineSetHandler);
 
-            m_Bus.PublishAsync(new ColonyTestLinesRequestMessage());
+            m_Bus.PublishAsync(new ColonyAvailabeTestLinesRequestMessage());
         }
 
         public string SelectedTestLine { get; private set; }
@@ -95,7 +95,7 @@ namespace Selkie.WPF.Models.Control
 
         public bool IsRunning { get; private set; }
 
-        internal void ColonyLinesChangedHandler(ColonyLinesChangedMessage message)
+        internal void ColonyLinesResponsedHandler(ColonyLinesResponseMessage message)
         {
             IsApplying = false;
 
@@ -104,7 +104,7 @@ namespace Selkie.WPF.Models.Control
                                IsApplying);
         }
 
-        internal void ColonyTestLineResponseHandler(ColonyTestLinesChangedMessage message)
+        internal void ColonyTestLineResponseHandler(ColonyLineResponseMessage message)
         {
             IsApplying = false;
 
@@ -120,7 +120,7 @@ namespace Selkie.WPF.Models.Control
 
         internal void ControlModelTestLinesRequestHandler(ControlModelTestLinesRequestMessage obj)
         {
-            m_Bus.PublishAsync(new ColonyTestLinesRequestMessage());
+            m_Bus.PublishAsync(new ColonyAvailabeTestLinesRequestMessage());
         }
 
         internal void ColonyFinishedHandler(ColonyFinishedMessage message)
@@ -171,11 +171,11 @@ namespace Selkie.WPF.Models.Control
                                IsApplying);
         }
 
-        internal void ColonyTestLinesResponseHandler(ColonyTestLinesResponseMessage message)
+        internal void ColonyAvailableTestLinesResponseHandler(ColonyAvailableTestLinesResponseMessage message)
         {
             TestLineTypes = message.Types;
 
-            m_Bus.PublishAsync(new ControlModelTestLinesChangedMessage
+            m_Bus.PublishAsync(new ControlModelTestLinesResponseMessage
                                {
                                    TestLineTypes = message.Types
                                });

@@ -47,6 +47,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Models.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.ViewModels.Tests", "Selkie.WPF.ViewModels.Tests\Selkie.WPF.ViewModels.Tests.csproj", "{B86162FB-44F9-4ADF-B416-7A0863BDDD54}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Selkie.WPF.Application.Setup", "Selkie.WPF.Application.Setup\Selkie.WPF.Application.Setup.vdproj", "{BE3BF9BD-9AE5-453D-85D5-E17CE0EF9D16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selkie.WPF.Application.Setup.CustomInstaller", "Selkie.WPF.Application.Setup.CustomInstaller\Selkie.WPF.Application.Setup.CustomInstaller.csproj", "{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -276,6 +280,21 @@ Global
 		{B86162FB-44F9-4ADF-B416-7A0863BDDD54}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B86162FB-44F9-4ADF-B416-7A0863BDDD54}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
 		{B86162FB-44F9-4ADF-B416-7A0863BDDD54}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{BE3BF9BD-9AE5-453D-85D5-E17CE0EF9D16}.CD_ROM|Any CPU.ActiveCfg = Release
+		{BE3BF9BD-9AE5-453D-85D5-E17CE0EF9D16}.Debug|Any CPU.ActiveCfg = Debug
+		{BE3BF9BD-9AE5-453D-85D5-E17CE0EF9D16}.DVD-5|Any CPU.ActiveCfg = Debug
+		{BE3BF9BD-9AE5-453D-85D5-E17CE0EF9D16}.Release|Any CPU.ActiveCfg = Release
+		{BE3BF9BD-9AE5-453D-85D5-E17CE0EF9D16}.SingleImage|Any CPU.ActiveCfg = Release
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC8DC72-CADA-4CD1-8748-A5C29D2E11FF}.SingleImage|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

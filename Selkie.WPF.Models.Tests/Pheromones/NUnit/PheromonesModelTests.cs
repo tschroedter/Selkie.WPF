@@ -318,6 +318,35 @@ namespace Selkie.WPF.Models.Tests.Pheromones.NUnit
         }
 
         [Test]
+        public void SetHandler_SendsMessage_WhenCalled()
+        {
+            // Act
+            var message = new PheromonesModelsSetMessage();
+
+            // Arrange
+            m_Model.SetHandler(message);
+
+            // Assert
+            m_Bus.Received().PublishAsync(Arg.Any <PheromonesModelChangedMessage>());
+        }
+
+        [Test]
+        public void SetHandler_SetsIsShowPheromones_WhenCalled()
+        {
+            // Act
+            var message = new PheromonesModelsSetMessage
+                          {
+                              IsShowPheromones = true
+                          };
+
+            // Arrange
+            m_Model.SetHandler(message);
+
+            // Assert
+            Assert.True(m_Model.IsShowPheromones);
+        }
+
+        [Test]
         public void StartedHandler_SendsMessage_WhenCalled()
         {
             // Arrange

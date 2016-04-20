@@ -24,8 +24,8 @@ namespace Selkie.WPF.Models.Mapping
             m_Bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().ToString(),
                                                           ColonyBestTrailHandler);
 
-            m_Bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
-                                                             ColonyLinesChangedHandler);
+            m_Bus.SubscribeAsync <ColonyLineResponseMessage>(GetType().ToString(),
+                                                             ColonyLineResponsedHandler);
         }
 
         protected ISelkieInMemoryBus Bus
@@ -52,7 +52,7 @@ namespace Selkie.WPF.Models.Mapping
             }
         }
 
-        internal void ColonyLinesChangedHandler(ColonyLinesChangedMessage message)
+        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
         {
             Update(new int[0]);
         }

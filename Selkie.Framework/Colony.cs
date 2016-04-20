@@ -14,6 +14,7 @@ using Selkie.Windsor;
 namespace Selkie.Framework
 {
     [Interceptor(typeof ( StatusAspect ))]
+    [Interceptor(typeof ( MessageHandlerAspect ))]
     [ProjectComponent(Lifestyle.Singleton)]
     public sealed class Colony : IColony
     {

@@ -29,8 +29,8 @@ namespace Selkie.WPF.Models.Mapping
 
             LoadNodes();
 
-            bus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().FullName,
-                                                           LinesChangedHandler);
+            bus.SubscribeAsync <ColonyLineResponseMessage>(GetType().FullName,
+                                                           ColonyLineResponseHandler);
         }
 
         public IEnumerable <INodeModel> Nodes
@@ -41,7 +41,7 @@ namespace Selkie.WPF.Models.Mapping
             }
         }
 
-        internal void LinesChangedHandler(ColonyLinesChangedMessage message)
+        internal void ColonyLineResponseHandler(ColonyLineResponseMessage message)
         {
             m_Logger.Debug("Handling '{0}'...".Inject(message.GetType()));
 

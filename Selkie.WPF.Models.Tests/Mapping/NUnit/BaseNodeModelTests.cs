@@ -112,26 +112,26 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
-        public void ColonyLinesChangedHandlerCallsUpdateTest()
+        public void ColonyLineResponsedHandlerCallsUpdateTest()
         {
             // Arrange
-            var message = new ColonyLinesChangedMessage();
+            var message = new ColonyLineResponseMessage();
 
             // Act
-            m_Model.ColonyLinesChangedHandler(message);
+            m_Model.ColonyLineResponsedHandler(message);
 
             // Assert
             m_Bus.Received().Publish(Arg.Any <TestBaseNodeModelChangedMessage>());
         }
 
         [Test]
-        public void ColonyLinesChangedHandlerClearsNodeModelTest()
+        public void ColonyLineResponsedHandlerClearsNodeModelTest()
         {
             // Arrange
-            var message = new ColonyLinesChangedMessage();
+            var message = new ColonyLineResponseMessage();
 
             // Act
-            m_Model.ColonyLinesChangedHandler(message);
+            m_Model.ColonyLineResponsedHandler(message);
 
             // Assert
             Assert.True(m_Model.Node == NodeModel.Unknown);
@@ -217,10 +217,10 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
-        public void SubscribeToColonyLinesChangedMessageest()
+        public void SubscribeToColonyLinesResponseMessageest()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <ColonyLinesChangedMessage>>());
+                                            Arg.Any <Action <ColonyLineResponseMessage>>());
         }
 
         [Test]

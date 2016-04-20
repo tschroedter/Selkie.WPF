@@ -80,6 +80,33 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         }
 
         [Test]
+        public void ColonyAvailableTestLinesResponseHandler_SendsMessage_WhenCalled()
+        {
+            // Arrange
+            var message = new ColonyAvailableTestLinesResponseMessage();
+
+            // Act
+            m_Model.ColonyAvailableTestLinesResponseHandler(message);
+
+            // Assert
+            m_Bus.Received()
+                 .PublishAsync(Arg.Is <ControlModelTestLinesResponseMessage>(x => x.TestLineTypes.Equals(message.Types)));
+        }
+
+        [Test]
+        public void ColonyAvailableTestLinesResponseHandler_SetIsApplyingToFalse_WhenCalled()
+        {
+            // Arrange
+            var message = new ColonyAvailableTestLinesResponseMessage();
+
+            // Act
+            m_Model.ColonyAvailableTestLinesResponseHandler(message);
+
+            // Assert
+            Assert.False(m_Model.IsApplying);
+        }
+
+        [Test]
         public void ColonyFinishedHandler_SendsMessage_WhenCalled()
         {
             // Arrange
@@ -120,13 +147,13 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         }
 
         [Test]
-        public void ColonyLinesChangedHandler_SendsMessage_WhenCalled()
+        public void ColonyLinesResponsedHandler_SendsMessage_WhenCalled()
         {
             // Arrange
-            var message = new ColonyLinesChangedMessage();
+            var message = new ColonyLinesResponseMessage();
 
             // Act
-            m_Model.ColonyLinesChangedHandler(message);
+            m_Model.ColonyLinesResponsedHandler(message);
 
             // Assert
             m_Bus.Received()
@@ -134,13 +161,13 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         }
 
         [Test]
-        public void ColonyLinesChangedHandler_SetsIsApplyingToFalse_WhenCalled()
+        public void ColonyLinesResponsedHandler_SetsIsApplyingToFalse_WhenCalled()
         {
             // Arrange
-            var message = new ColonyLinesChangedMessage();
+            var message = new ColonyLinesResponseMessage();
 
             // Act
-            m_Model.ColonyLinesChangedHandler(message);
+            m_Model.ColonyLinesResponsedHandler(message);
 
             // Assert
             Assert.False(m_Model.IsApplying);
@@ -225,35 +252,6 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         }
 
         [Test]
-        public void ColonyTestLineResponseHandler_SendsMessage_WhenCalled()
-        {
-            // Arrange
-            var message = new ColonyTestLinesChangedMessage();
-
-            m_Model.ColonyTestLineResponseHandler(message);
-
-            // Act
-            m_Model.Apply();
-
-            // Assert
-            m_Bus.Received()
-                 .PublishAsync(Arg.Is <ControlModelChangedMessage>(x => !x.IsApplying));
-        }
-
-        [Test]
-        public void ColonyTestLineResponseHandler_SetIsApplyingToFalse_WhenCalled()
-        {
-            // Arrange
-            var message = new ColonyTestLinesChangedMessage();
-
-            // Act
-            m_Model.ColonyTestLineResponseHandler(message);
-
-            // Assert
-            Assert.False(m_Model.IsApplying);
-        }
-
-        [Test]
         public void ColonyTestLinesResponseHandler_SendsMessage_WhenCalled()
         {
             // Arrange
@@ -264,14 +262,14 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
                         };
 
             // Act
-            m_Model.ColonyTestLinesResponseHandler(new ColonyTestLinesResponseMessage
-                                                   {
-                                                       Types = types
-                                                   });
+            m_Model.ColonyAvailableTestLinesResponseHandler(new ColonyAvailableTestLinesResponseMessage
+                                                            {
+                                                                Types = types
+                                                            });
 
             // Assert
             m_Bus.Received()
-                 .PublishAsync(Arg.Is <ControlModelTestLinesChangedMessage>(x => x.TestLineTypes == types));
+                 .PublishAsync(Arg.Is <ControlModelTestLinesResponseMessage>(x => x.TestLineTypes == types));
         }
 
         [Test]
@@ -285,10 +283,10 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
                         };
 
             // Act
-            m_Model.ColonyTestLinesResponseHandler(new ColonyTestLinesResponseMessage
-                                                   {
-                                                       Types = types
-                                                   });
+            m_Model.ColonyAvailableTestLinesResponseHandler(new ColonyAvailableTestLinesResponseMessage
+                                                            {
+                                                                Types = types
+                                                            });
 
             // Assert
             Assert.AreEqual(m_Model.TestLineTypes,
@@ -296,10 +294,10 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         }
 
         [Test]
-        public void Constructor_SendsColonyTestLinesRequestMessage_WhenCreated()
+        public void Constructor_SendsColonyAvailableTestLinesResponseMessage_WhenCreated()
         {
             m_Bus.Received()
-                 .PublishAsync(Arg.Any <ColonyTestLinesRequestMessage>());
+                 .PublishAsync(Arg.Any <ColonyAvailabeTestLinesRequestMessage>());
         }
 
         [Test]
@@ -311,11 +309,11 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         }
 
         [Test]
-        public void Constructor_SubscribeToColonyLinesChangedMessage_WhenCreated()
+        public void Constructor_SubscribeToColonyLinesResponseMessage_WhenCreated()
         {
             m_Bus.Received()
                  .SubscribeAsync(m_Model.GetType().FullName,
-                                 Arg.Any <Action <ColonyLinesChangedMessage>>());
+                                 Arg.Any <Action <ColonyLinesResponseMessage>>());
         }
 
         [Test]
@@ -339,7 +337,7 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         {
             m_Bus.Received()
                  .SubscribeAsync(m_Model.GetType().FullName,
-                                 Arg.Any <Action <ColonyTestLinesChangedMessage>>());
+                                 Arg.Any <Action <ColonyAvailableTestLinesResponseMessage>>());
         }
 
         [Test]
@@ -347,7 +345,7 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
         {
             m_Bus.Received()
                  .SubscribeAsync(m_Model.GetType().FullName,
-                                 Arg.Any <Action <ColonyTestLinesResponseMessage>>());
+                                 Arg.Any <Action <ColonyAvailableTestLinesResponseMessage>>());
         }
 
         [Test]
@@ -382,7 +380,7 @@ namespace Selkie.WPF.Models.Tests.Control.NUnit
             m_Model.ControlModelTestLinesRequestHandler(new ControlModelTestLinesRequestMessage());
 
             // Assert
-            m_Bus.Received().PublishAsync(Arg.Any <ColonyTestLinesRequestMessage>());
+            m_Bus.Received().PublishAsync(Arg.Any <ColonyAvailabeTestLinesRequestMessage>());
         }
 
         [Test]

@@ -48,6 +48,15 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
                                       true);
         }
 
+        private void SetIsLinesWereAppliedToTrue(ControlViewModel model)
+        {
+            m_Model.SelectedTestLine = "Something";
+
+            var message = new ControlModelChangedMessage();
+
+            model.ControlModelChangedHandler(message);
+        }
+
         private static void SendMessageToSetIsRunning(ControlViewModel model,
                                                       bool isRunning)
         {
@@ -174,9 +183,23 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         }
 
         [Test]
+        public void CanExecuteStartCommand_ReturnsFalse_WhenIsLinesWereAppliedIsFalse()
+        {
+            // Arrange
+            SetIsRunningToTrue(m_Model);
+
+            // Act
+            m_Model.CanExecuteStartCommand();
+
+            // Assert
+            Assert.False(m_Model.CanExecuteStartCommand());
+        }
+
+        [Test]
         public void CanExecuteStartCommand_ReturnsFalse_WhenIsRunningIsTrue()
         {
             // Arrange
+            SetIsLinesWereAppliedToTrue(m_Model);
             SetIsRunningToTrue(m_Model);
 
             // Act
@@ -190,6 +213,7 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         public void CanExecuteStartCommand_ReturnsTrue_WhenIsRunningIsFalse()
         {
             // Arrange
+            SetIsLinesWereAppliedToTrue(m_Model);
             SetIsNotRunningToTrue(m_Model);
 
             // Act
@@ -233,10 +257,10 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         }
 
         [Test]
-        public void Constructor_SubscribeToControlModelTestLinesChangedMessage_WhenCreated()
+        public void Constructor_SubscribeToControlModelTestLinesResponseMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <ControlModelTestLinesChangedMessage>>());
+                                            Arg.Any <Action <ControlModelTestLinesResponseMessage>>());
         }
 
         [Test]
@@ -271,6 +295,36 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         }
 
         [Test]
+        public void ControlModelChangedHandler_SetsIsLinesWereAppliedToFalse_WhenSelectedTestLineIsInvalid()
+        {
+            // Arrange
+            m_Model.SelectedTestLine = string.Empty;
+
+            var message = new ControlModelChangedMessage();
+
+            // Act
+            m_Model.ControlModelChangedHandler(message);
+
+            // Assert
+            Assert.False(m_Model.IsLinesWereApplied);
+        }
+
+        [Test]
+        public void ControlModelChangedHandler_SetsIsLinesWereAppliedToTrue_WhenSelectedTestLineIsValid()
+        {
+            // Arrange
+            m_Model.SelectedTestLine = "Something";
+
+            var message = new ControlModelChangedMessage();
+
+            // Act
+            m_Model.ControlModelChangedHandler(message);
+
+            // Assert
+            Assert.True(m_Model.IsLinesWereApplied);
+        }
+
+        [Test]
         public void ControlModelChangedHandler_SetsIsRunning_WhenCalled()
         {
             // Arrange
@@ -287,22 +341,22 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         }
 
         [Test]
-        public void ControlModelTestLinesChangedHandler_CallsBeginInvoke_WhenCalled()
+        public void ControlModelTestLinesResponseHandler_CallsBeginInvoke_WhenCalled()
         {
             // Arrange
             var dispatcher = Substitute.For <IApplicationDispatcher>();
             ControlViewModel model = CreateModel(dispatcher);
-            var message = new ControlModelTestLinesChangedMessage();
+            var message = new ControlModelTestLinesResponseMessage();
 
             // Act
-            model.ControlModelTestLinesChangedHandler(message);
+            model.ControlModelTestLinesResponseHandler(message);
 
             // Assert
             dispatcher.Received().BeginInvoke(model.Update);
         }
 
         [Test]
-        public void ControlModelTestLinesChangedHandler_SetsTestLines_WhenCalled()
+        public void ControlModelTestLinesResponseHandler_SetsTestLines_WhenCalled()
         {
             // Arrange
             var types = new[]
@@ -310,13 +364,13 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
                             "Test Line 1"
                         };
 
-            var message = new ControlModelTestLinesChangedMessage
+            var message = new ControlModelTestLinesResponseMessage
                           {
                               TestLineTypes = types
                           };
 
             // Act
-            m_Model.ControlModelTestLinesChangedHandler(message);
+            m_Model.ControlModelTestLinesResponseHandler(message);
 
             // Assert
             Assert.True(types.SequenceEqual(m_Model.TestLines));
@@ -404,6 +458,7 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         public void IsStartEnabled_ReturnsFalse_WhenIsRunningIsTrue()
         {
             // Arrange
+            SetIsLinesWereAppliedToTrue(m_Model);
             SetIsRunningToTrue(m_Model);
 
             // Act
@@ -415,6 +470,7 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         public void IsStartEnabled_ReturnsTrue_WhenIsRunningIsFalse()
         {
             // Arrange
+            SetIsLinesWereAppliedToTrue(m_Model);
             SetIsNotRunningToTrue(m_Model);
 
             // Act
@@ -470,15 +526,14 @@ namespace Selkie.WPF.ViewModels.Tests.Control.NUnit
         }
 
         [Test]
-        public void SelectedTestLine_SetsGetsValue_WhenSetGetCalled()
+        public void SelectedTestLine_SetsIsLinesWereAppliedToFalse_WhenSetGetCalled()
         {
             // Arrange
             // Act
             m_Model.SelectedTestLine = "Hello";
 
             // Assert
-            Assert.AreEqual("Hello",
-                            m_Model.SelectedTestLine);
+            Assert.False(m_Model.IsLinesWereApplied);
         }
 
         [Test]

@@ -17,10 +17,10 @@ namespace Selkie.WPF.Models.Status
             string subscriptionId = GetType().ToString();
 
             bus.SubscribeAsync <ColonyStatusMessage>(subscriptionId,
-                                                     StatusMessageHandler);
+                                                     StatusHandler);
         }
 
-        internal void StatusMessageHandler(ColonyStatusMessage message)
+        internal void StatusHandler(ColonyStatusMessage message)
         {
             var changedMessage = new StatusChangedMessage
                                  {

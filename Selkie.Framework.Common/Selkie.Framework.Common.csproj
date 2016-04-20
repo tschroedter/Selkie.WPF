@@ -54,16 +54,16 @@
       <HintPath>..\packages\NLog.4.1.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Common, Version=0.6.228.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Common.0.6.228.0\lib\net45\Selkie.Common.dll</HintPath>
+    <Reference Include="Selkie.Common, Version=0.6.232.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Common.0.6.232.0\lib\net45\Selkie.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Geometry, Version=0.6.137.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Geometry.0.6.137.0\lib\net45\Selkie.Geometry.dll</HintPath>
+    <Reference Include="Selkie.Geometry, Version=0.6.141.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Geometry.0.6.141.0\lib\net45\Selkie.Geometry.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Windsor, Version=0.6.256.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Windsor.0.6.256.0\lib\net45\Selkie.Windsor.dll</HintPath>
+    <Reference Include="Selkie.Windsor, Version=0.6.257.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Windsor.0.6.257.0\lib\net45\Selkie.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -80,8 +80,9 @@
     <Compile Include="Messages\ColonyAntSettingsSetMessage.cs" />
     <Compile Include="Messages\ColonyBestTrailMessage.cs" />
     <Compile Include="Messages\ColonyCostMatrixChangedMessage.cs" />
+    <Compile Include="Messages\ColonyExceptionThrownMessage.cs" />
     <Compile Include="Messages\ColonyFinishedMessage.cs" />
-    <Compile Include="Messages\ColonyLinesChangedMessage.cs" />
+    <Compile Include="Messages\ColonyLinesResponseMessage.cs" />
     <Compile Include="Messages\ColonyLinesRequestMessage.cs" />
     <Compile Include="Messages\ColonyPheromonesMessage.cs" />
     <Compile Include="Messages\ColonyPheromonesRequestMessage.cs" />
@@ -95,10 +96,10 @@
     <Compile Include="Messages\ColonyStatusMessage.cs" />
     <Compile Include="Messages\ColonyStoppedMessage.cs" />
     <Compile Include="Messages\ColonyStopRequestMessage.cs" />
-    <Compile Include="Messages\ColonyTestLinesChangedMessage.cs" />
+    <Compile Include="Messages\ColonyLineResponseMessage.cs" />
     <Compile Include="Messages\ColonyTestLineSetMessage.cs" />
-    <Compile Include="Messages\ColonyTestLinesRequestMessage.cs" />
-    <Compile Include="Messages\ColonyTestLinesResponseMessage.cs" />
+    <Compile Include="Messages\ColonyAvailabeTestLinesRequestMessage.cs" />
+    <Compile Include="Messages\ColonyAvailableTestLinesResponseMessage.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

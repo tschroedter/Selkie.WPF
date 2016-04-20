@@ -77,7 +77,7 @@ namespace Selkie.WPF.ViewModels.Pheromones
             }
         }
 
-        public bool IsShowPheromones // todo testing
+        public bool IsShowPheromones
         {
             get
             {
@@ -106,9 +106,9 @@ namespace Selkie.WPF.ViewModels.Pheromones
             m_Minimum = m_Model.Minimum.ToString(CultureInfo.InvariantCulture);
             m_Maximum = m_Model.Maximum.ToString(CultureInfo.InvariantCulture);
             m_Average = m_Model.Average.ToString(CultureInfo.InvariantCulture);
-            m_IsShowPheromones = m_Model.IsShowPheromones; // todo testing
+            m_IsShowPheromones = m_Model.IsShowPheromones;
 
-            m_ImageSource = m_BitmapSourceConverter.ImageSource; // todo should have default image
+            m_ImageSource = m_BitmapSourceConverter.ImageSource;
 
             NotifyPropertyChanged("");
         }

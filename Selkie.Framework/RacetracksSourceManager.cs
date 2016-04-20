@@ -33,8 +33,8 @@ namespace Selkie.Framework
             m_Bus.SubscribeAsync <ColonyRacetracksRequestMessage>(subscriptionId,
                                                                   ColonyRacetracksGetHandler);
 
-            m_Bus.SubscribeAsync <RacetracksChangedMessage>(subscriptionId,
-                                                            RacetracksChangedHandler);
+            m_Bus.SubscribeAsync <RacetracksResponseMessage>(subscriptionId,
+                                                             RacetracksResponseHandler);
 
             m_Bus.PublishAsync(new RacetracksGetMessage()); // todo rename message to ...Request...
         }
@@ -49,10 +49,10 @@ namespace Selkie.Framework
 
         internal void ColonyRacetracksGetHandler(ColonyRacetracksRequestMessage message)
         {
-            SendColonyRacetracksChangedMessage();
+            SendColonyRacetracksResponseMessage();
         }
 
-        internal void RacetracksChangedHandler([NotNull] RacetracksChangedMessage message)
+        internal void RacetracksResponseHandler([NotNull] RacetracksResponseMessage message)
         {
             lock ( m_Padlock )
             {
@@ -62,10 +62,10 @@ namespace Selkie.Framework
                 m_Racetracks = m_Converter.Racetracks;
             }
 
-            SendColonyRacetracksChangedMessage();
+            SendColonyRacetracksResponseMessage();
         }
 
-        internal void SendColonyRacetracksChangedMessage()
+        internal void SendColonyRacetracksResponseMessage()
         {
             IPath[][] forwardToForward = m_Racetracks.ForwardToForward;
 
@@ -74,7 +74,7 @@ namespace Selkie.Framework
                 return;
             }
 
-            m_Bus.PublishAsync(new ColonyRacetracksChangedMessage());
+            m_Bus.PublishAsync(new ColonyRacetracksResponseMessage());
 
             LogRacetracks(forwardToForward);
         }

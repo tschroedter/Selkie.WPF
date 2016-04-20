@@ -36,7 +36,7 @@ namespace Selkie.Framework
 
         internal void ColonyRacetrackSettingsRequestHandler(ColonyRacetrackSettingsRequestMessage message)
         {
-            m_Bus.PublishAsync(new ColonyRacetrackSettingsChangedMessage());
+            m_Bus.PublishAsync(new ColonyRacetrackSettingsResponseMessage());
         }
 
         internal void ColonyRacetrackSettingsSetHandler(ColonyRacetrackSettingsSetMessage message)
@@ -48,7 +48,7 @@ namespace Selkie.Framework
                                       message.IsPortTurnAllowed,
                                       message.IsStarboardTurnAllowed);
 
-            m_Bus.PublishAsync(new ColonyRacetrackSettingsChangedMessage());
+            m_Bus.PublishAsync(new ColonyRacetrackSettingsResponseMessage());
         }
     }
 }

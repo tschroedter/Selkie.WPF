@@ -69,9 +69,9 @@ namespace Selkie.Framework.Tests.NUnit
                    };
         }
 
-        private RacetracksChangedMessage CreateRacetracksChangedMessage()
+        private RacetracksResponseMessage CreateRacetracksResponseMessage()
         {
-            var message = new RacetracksChangedMessage
+            var message = new RacetracksResponseMessage
                           {
                               Racetracks = new RacetracksDto()
                           };
@@ -93,20 +93,20 @@ namespace Selkie.Framework.Tests.NUnit
         }
 
         [Test]
-        public void Constructor_SubscribeToRacetracksChangedMessage_WhenCreated()
+        public void Constructor_SubscribeToRacetracksResponseMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Sut.GetType().FullName,
-                                            Arg.Any <Action <RacetracksChangedMessage>>());
+                                            Arg.Any <Action <RacetracksResponseMessage>>());
         }
 
         [Test]
         public void RacetracksChangedHandler_CallsConvert_WhenCalled()
         {
             // Arrange
-            RacetracksChangedMessage message = CreateRacetracksChangedMessage();
+            RacetracksResponseMessage message = CreateRacetracksResponseMessage();
 
             // Act
-            m_Sut.RacetracksChangedHandler(message);
+            m_Sut.RacetracksResponseHandler(message);
 
             // Assert
             m_Converter.Received().Convert();
@@ -116,24 +116,24 @@ namespace Selkie.Framework.Tests.NUnit
         public void RacetracksChangedHandler_SendsMessage_WhenCalled()
         {
             // Arrange
-            RacetracksChangedMessage message = CreateRacetracksChangedMessage();
+            RacetracksResponseMessage message = CreateRacetracksResponseMessage();
             m_Converter.Racetracks.Returns(CreateRacetracks());
 
             // Act
-            m_Sut.RacetracksChangedHandler(message);
+            m_Sut.RacetracksResponseHandler(message);
 
             // Assert
-            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetracksChangedMessage>());
+            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetracksResponseMessage>());
         }
 
         [Test]
         public void RacetracksChangedHandler_SetsDto_WhenCalled()
         {
             // Arrange
-            RacetracksChangedMessage message = CreateRacetracksChangedMessage();
+            RacetracksResponseMessage message = CreateRacetracksResponseMessage();
 
             // Act
-            m_Sut.RacetracksChangedHandler(message);
+            m_Sut.RacetracksResponseHandler(message);
 
             // Assert
             Assert.AreEqual(message.Racetracks,
@@ -144,11 +144,11 @@ namespace Selkie.Framework.Tests.NUnit
         public void RacetracksChangedHandler_SetsRacetracks_WhenCalled()
         {
             // Arrange
-            RacetracksChangedMessage message = CreateRacetracksChangedMessage();
+            RacetracksResponseMessage message = CreateRacetracksResponseMessage();
             m_Converter.Racetracks.Returns(new Racetracks());
 
             // Act
-            m_Sut.RacetracksChangedHandler(message);
+            m_Sut.RacetracksResponseHandler(message);
 
             // Assert
             Assert.AreEqual(m_Converter.Racetracks,
@@ -156,58 +156,58 @@ namespace Selkie.Framework.Tests.NUnit
         }
 
         [Test]
-        public void SendColonyRacetracksChangedMessage_CallsSendColonyRacetracksChangedMessage_WhenCalled()
+        public void SendColonyRacetracksResponseMessage_CallsSendColonyRacetracksResponseMessage_WhenCalled()
         {
-            RacetracksChangedMessage message = CreateRacetracksChangedMessage();
+            RacetracksResponseMessage message = CreateRacetracksResponseMessage();
             m_Converter.Racetracks.Returns(CreateRacetracks());
-            m_Sut.RacetracksChangedHandler(message);
+            m_Sut.RacetracksResponseHandler(message);
 
             // Act
             m_Sut.ColonyRacetracksGetHandler(new ColonyRacetracksRequestMessage());
 
             // Assert
-            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetracksChangedMessage>());
+            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetracksResponseMessage>());
         }
 
         [Test]
-        public void SendColonyRacetracksChangedMessage_DoesnNotSendMessage_ForRacetracksEmpty()
+        public void SendColonyRacetracksResponseMessage_DoesnNotSendMessage_ForRacetracksEmpty()
         {
             // Arrange
             Assert.False(m_Sut.Racetracks.ForwardToForward.Any());
 
             // Act
-            m_Sut.SendColonyRacetracksChangedMessage();
+            m_Sut.SendColonyRacetracksResponseMessage();
 
             // Assert
-            m_Bus.DidNotReceive().PublishAsync(Arg.Any <ColonyRacetracksChangedMessage>());
+            m_Bus.DidNotReceive().PublishAsync(Arg.Any <ColonyRacetracksResponseMessage>());
         }
 
         [Test]
-        public void SendColonyRacetracksChangedMessage_LogsRacetracks_ForRacetracks()
+        public void SendColonyRacetracksResponseMessage_LogsRacetracks_ForRacetracks()
         {
-            RacetracksChangedMessage message = CreateRacetracksChangedMessage();
+            RacetracksResponseMessage message = CreateRacetracksResponseMessage();
             m_Converter.Racetracks.Returns(CreateRacetracks());
-            m_Sut.RacetracksChangedHandler(message);
+            m_Sut.RacetracksResponseHandler(message);
 
             // Act
-            m_Sut.SendColonyRacetracksChangedMessage();
+            m_Sut.SendColonyRacetracksResponseMessage();
 
             // Assert
             m_Logger.Received().Info("Racetracks");
         }
 
         [Test]
-        public void SendColonyRacetracksChangedMessage_SendsMessage_ForRacetracks()
+        public void SendColonyRacetracksResponseMessage_SendsMessage_ForRacetracks()
         {
-            RacetracksChangedMessage message = CreateRacetracksChangedMessage();
+            RacetracksResponseMessage message = CreateRacetracksResponseMessage();
             m_Converter.Racetracks.Returns(CreateRacetracks());
-            m_Sut.RacetracksChangedHandler(message);
+            m_Sut.RacetracksResponseHandler(message);
 
             // Act
-            m_Sut.SendColonyRacetracksChangedMessage();
+            m_Sut.SendColonyRacetracksResponseMessage();
 
             // Assert
-            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetracksChangedMessage>());
+            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetracksResponseMessage>());
         }
     }
 }

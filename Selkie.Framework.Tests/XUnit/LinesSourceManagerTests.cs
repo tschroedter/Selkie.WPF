@@ -10,7 +10,6 @@ using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
-using Selkie.Framework.Messages;
 using Selkie.Geometry;
 using Selkie.Geometry.Shapes;
 using Selkie.Services.Lines.Common;
@@ -28,21 +27,6 @@ namespace Selkie.Framework.Tests.XUnit
     public sealed class LinesSourceManagerTests
     {
         private const double Tolerance = 0.01;
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void Constructor_SendsRequestMessage_WhenCalled(
-            [NotNull] ISelkieLogger logger,
-            [NotNull, Frozen] ISelkieBus bus)
-        {
-            // Arrange
-            // ReSharper disable once UnusedVariable
-            LinesSourceManager sut = CreateManager(logger,
-                                                   bus);
-            // Act
-            // Assert
-            bus.Received().PublishAsync(Arg.Any <TestLineRequestMessage>());
-        }
 
         private static LinesSourceManager CreateManager(ISelkieLogger logger,
                                                         ISelkieBus bus)
@@ -108,7 +92,7 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribesToColonyTestLinesRequestMessage_WhenCalled(
+        public void Constructor_SubscribesToColonyAvailableTestLinesResponseMessage_WhenCalled(
             [NotNull] ISelkieLogger logger,
             [NotNull] ISelkieBus bus,
             [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus)
@@ -120,7 +104,7 @@ namespace Selkie.Framework.Tests.XUnit
             // Act
             // Assert
             inMemoryBus.Received().SubscribeAsync(sut.GetType().FullName,
-                                                  Arg.Any <Action <ColonyTestLinesRequestMessage>>());
+                                                  Arg.Any <Action <ColonyAvailabeTestLinesRequestMessage>>());
         }
 
         [Theory]
@@ -181,26 +165,7 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void TestLineResponseHandler_SendsLinesSourceChangedMessage_WhenCalled(
-            [NotNull] ISelkieLogger logger,
-            [NotNull, Frozen] ISelkieBus bus,
-            [NotNull] TestLineResponseMessage
-                message)
-        {
-            // Arrange
-            LinesSourceManager sut = CreateManager(logger,
-                                                   bus);
-
-            // Act
-            sut.TestLineResponseHandler(message);
-
-            // Assert
-            bus.Received().PublishAsync(Arg.Is <LinesSourceChangedMessage>(x => x.Lines.Count() == sut.Lines.Count()));
-        }
-
-        [Theory]
-        [AutoNSubstituteData]
-        public void TestLineResponseHandler_SendsColonyLinesChangedMessage_WhenCalled(
+        public void TestLineResponseHandler_SendsColonyLinesResponseMessage_WhenCalled(
             [NotNull] ISelkieLogger logger,
             [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus,
@@ -215,12 +180,12 @@ namespace Selkie.Framework.Tests.XUnit
             sut.TestLineResponseHandler(message);
 
             // Assert
-            inMemoryBus.Received().PublishAsync(Arg.Any <ColonyLinesChangedMessage>());
+            inMemoryBus.Received().PublishAsync(Arg.Any <ColonyLineResponseMessage>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void SendColonyLinesChangedMessage_UpdatesLines_WhenCalled(
+        public void SendColonyLinesResponseMessage_UpdatesLines_WhenCalled(
             [NotNull] ISelkieLogger logger,
             [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus)
@@ -231,15 +196,15 @@ namespace Selkie.Framework.Tests.XUnit
                                                    inMemoryBus);
 
             // Act
-            sut.SendColonyLinesChangedMessage();
+            sut.SendColonyLinesResponseMessage();
 
             // Assert
-            inMemoryBus.Received().PublishAsync(Arg.Any <ColonyLinesChangedMessage>());
+            inMemoryBus.Received().PublishAsync(Arg.Any <ColonyLinesResponseMessage>());
         }
 
         [Theory]
         [AutoNSubstituteData]
-        public void SendColonyLinesChangedMessage_LogsLines_WhenCalled(
+        public void SendColonyLinesResponseMessage_LogsLines_WhenCalled(
             [NotNull] ISelkieLogger logger,
             [NotNull, Frozen] ISelkieBus bus)
         {
@@ -248,7 +213,7 @@ namespace Selkie.Framework.Tests.XUnit
                                                    bus);
 
             // Act
-            sut.SendColonyLinesChangedMessage();
+            sut.SendColonyLinesResponseMessage();
 
             // Assert
             logger.Received().Info(Arg.Is <string>(x => x.StartsWith("Lines")));
@@ -271,7 +236,7 @@ namespace Selkie.Framework.Tests.XUnit
             sut.ColonyLinesRequestHandler(message);
 
             // Assert
-            inMemoryBus.Received().PublishAsync(Arg.Any <ColonyLinesChangedMessage>());
+            inMemoryBus.Received().PublishAsync(Arg.Any <ColonyLinesResponseMessage>());
         }
 
         [Theory]
@@ -333,11 +298,11 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyTestLinesRequestHandler_SendsMessage_WhenCalled(
+        public void ColonyAvailabeTestLinesRequestHandler_SendsMessage_WhenCalled(
             [NotNull] ISelkieLogger logger,
             [NotNull, Frozen] ISelkieBus bus,
             [NotNull, Frozen] ISelkieInMemoryBus inMemoryBus,
-            [NotNull] ColonyTestLinesRequestMessage message)
+            [NotNull] ColonyAvailabeTestLinesRequestMessage message)
         {
             // Arrange
             LinesSourceManager sut = CreateManager(logger,
@@ -345,10 +310,10 @@ namespace Selkie.Framework.Tests.XUnit
                                                    inMemoryBus);
 
             // Act
-            sut.ColonyTestLinesRequestHandler(message);
+            sut.ColonyAvailabeTestLinesRequestHandler(message);
 
             // Assert
-            inMemoryBus.Received().PublishAsync(Arg.Is <ColonyTestLinesResponseMessage>(x => x.Types.Any()));
+            inMemoryBus.Received().PublishAsync(Arg.Is <ColonyAvailableTestLinesResponseMessage>(x => x.Types.Any()));
         }
 
         [Theory]
@@ -365,7 +330,7 @@ namespace Selkie.Framework.Tests.XUnit
             IEnumerable <string> actual = sut.GetTestLineTypes();
 
             // Assert
-            Assert.True(actual.Count() == 16);
+            Assert.True(actual.Count() == 15);
         }
 
         private TestLineResponseMessage CreateMessage()

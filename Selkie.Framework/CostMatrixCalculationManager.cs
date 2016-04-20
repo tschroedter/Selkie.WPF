@@ -19,7 +19,6 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Transient)]
     public class CostMatrixCalculationManager : ICostMatrixCalculationManager
     {
-        // todo testing (Check if there is a SAGA in EasyNetQ)
         private readonly ISelkieBus m_Bus;
         private readonly IDoubleArrayToIntegerArrayConverter m_Converter;
         private readonly ILinesSourceManager m_LinesSourceManager;
@@ -39,24 +38,18 @@ namespace Selkie.Framework
             m_Converter = converter;
 
             Lines = new ILine[0];
+            LineDtos = new LineDto[0];
             CostPerLine = new int[0];
 
             string subscriptionId = GetType().FullName;
 
-            m_Bus.SubscribeAsync <LinesChangedMessage>(subscriptionId,
-                                                       LinesChangedHandler);
-
-            m_Bus.SubscribeAsync <RacetrackSettingsChangedMessage>(subscriptionId,
-                                                                   RacetrackSettingsChangedHandler);
-
-            m_Bus.SubscribeAsync <CostMatrixChangedMessage>(subscriptionId,
-                                                            CostMatrixChangedHandler);
+            m_Bus.SubscribeAsync <CostMatrixResponseMessage>(subscriptionId,
+                                                             CostMatrixResponseHandler);
         }
 
-        public bool IsCalculating { get; private set; }
-        public bool IsReceivedColonyLinesChangedMessage { get; private set; }
-        public bool IsReceivedColonyRacetrackSettingsChangedMessage { get; private set; }
+        public IRacetrackSettingsSource Settings { get; private set; }
         public IEnumerable <ILine> Lines { get; private set; }
+        public IEnumerable <LineDto> LineDtos { get; private set; }
         public IEnumerable <int> CostPerLine { get; private set; }
 
         public int[][] Matrix
@@ -70,35 +63,132 @@ namespace Selkie.Framework
         [Status("Calculating cost matrix...")]
         public void Calculate()
         {
-            if ( IsCalculating )
+            ILine[] lines = m_LinesSourceManager.Lines.ToArray();
+            int[] costPerLine = m_LinesSourceManager.CostPerLine.ToArray();
+
+            if ( !IsAllConditionOkay(lines,
+                                     costPerLine) )
             {
                 return;
             }
 
-            IsCalculating = true;
-            IsReceivedColonyLinesChangedMessage = false;
-            IsReceivedColonyRacetrackSettingsChangedMessage = false;
+            LineDto[] lineDtos = CreateLineDtos(lines);
 
-            Lines = m_LinesSourceManager.Lines;
-            CostPerLine = m_LinesSourceManager.CostPerLine;
+            Lines = lines;
+            CostPerLine = costPerLine;
+            LineDtos = lineDtos;
+            Settings = m_RacetrackSettingsSourceManager.Source;
 
-            SendLinesSetMessage();
+            SendCostMatrixCalculateMessage(lineDtos,
+                                           Settings);
         }
 
-        [Status("Sending LinesSetMessage...")]
-        private void SendLinesSetMessage()
+        [Status("Sending SendCostMatrixCalculateMessage...")]
+        internal void SendCostMatrixCalculateMessage(
+            [NotNull] LineDto[] lineDtos,
+            [NotNull] IRacetrackSettingsSource settings)
         {
-            LineDto[] dtos = CreateLineDtos(Lines).ToArray();
+            var calculateMessage = new CostMatrixCalculateMessage
+                                   {
+                                       LineDtos = lineDtos,
+                                       TurnRadiusForPort = settings.TurnRadiusForPort,
+                                       TurnRadiusForStarboard = settings.TurnRadiusForStarboard,
+                                       IsPortTurnAllowed = settings.IsPortTurnAllowed,
+                                       IsStarboardTurnAllowed = settings.IsStarboardTurnAllowed
+                                   };
 
-            var linesSetMessage = new LinesSetMessage
-                                  {
-                                      LineDtos = dtos
-                                  };
-
-            m_Bus.PublishAsync(linesSetMessage);
+            m_Bus.PublishAsync(calculateMessage);
         }
 
-        internal IEnumerable <LineDto> CreateLineDtos(IEnumerable <ILine> lines)
+
+        [Status("Sending CostMatrixCalculatedMessage...")]
+        internal void CostMatrixResponseHandler(CostMatrixResponseMessage message)
+        {
+            if ( !ValidateMatrix(message) )
+            {
+                return;
+            }
+
+            SendCostMatrixResponseMessage(message);
+        }
+
+        private void SendCostMatrixResponseMessage(CostMatrixResponseMessage message)
+        {
+            m_Converter.DoubleMatrix = message.Matrix;
+            m_Converter.Convert();
+
+            var calculatedMessage = new CostMatrixCalculatedMessage
+                                    {
+                                        Matrix = m_Converter.IntegerMatrix,
+                                        CostPerLine = CostPerLine.ToArray()
+                                    };
+
+            m_Bus.PublishAsync(calculatedMessage);
+        }
+
+        private bool ValidateMatrix(CostMatrixResponseMessage message)
+        {
+            if ( message.Matrix == null ||
+                 message.Matrix.Length == 0 )
+            {
+                HandleMatrixIsNullCase();
+
+                return false;
+            }
+
+            if ( message.Matrix.Length != Lines.Count() * 2 )
+            {
+                HandleIncorrectMatrix(message);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private void HandleIncorrectMatrix(CostMatrixResponseMessage message)
+        {
+            m_Logger.Info("Ignoring message! - " +
+                          "Received CostMatrixResponseMessage with matrix length {0} ".Inject(message.Matrix.Length) +
+                          "but expected is {0}!".Inject(Lines.Count() * 2));
+        }
+
+        [Status("Received cost matrix is null!")]
+        private void HandleMatrixIsNullCase()
+        {
+            const string text = "Received CostMatrixResponseMessage with Matrix set to null!";
+            m_Logger.Warn(text);
+        }
+
+        internal bool IsAllConditionOkay(
+            [NotNull] ILine[] lines,
+            [NotNull] int[] costPerLines)
+        {
+            if ( !lines.Any() )
+            {
+                m_Logger.Warn("Lines not set in LinesSourceManager!");
+
+                return false;
+            }
+
+            if ( !costPerLines.Any() )
+            {
+                m_Logger.Warn("CostPerLine not set in LinesSourceManager!");
+
+                return false;
+            }
+
+            if ( costPerLines.Length != lines.Length * 2 )
+            {
+                m_Logger.Warn("CostPerLine and Lines do not match in LinesSourceManager!");
+
+                return false;
+            }
+
+            return true;
+        }
+
+        internal LineDto[] CreateLineDtos(IEnumerable <ILine> lines)
         {
             return lines.Select(line => new LineDto
                                         {
@@ -109,92 +199,7 @@ namespace Selkie.Framework
                                             Y1 = line.Y1,
                                             X2 = line.X2,
                                             Y2 = line.Y2
-                                        }).ToList();
-        }
-
-        [Status("Received LinesChangedMessage...")]
-        internal void LinesChangedHandler(LinesChangedMessage message)
-        {
-            if ( !IsCalculating )
-            {
-                return;
-            }
-
-            if ( Lines.Count() != message.LineDtos.Length )
-            {
-                m_Logger.Info("Ignoring message! - " +
-                              "Received LinesChangedMessage with {0} ".Inject(message.LineDtos.Length) +
-                              "lines put expected {0}!".Inject(Lines.Count()));
-                return;
-            }
-
-            IsReceivedColonyLinesChangedMessage = true;
-
-            SendRacetrackSettingsSetMessage();
-        }
-
-        [Status("Sending RacetrackSettingsSetMessage...")]
-        private void SendRacetrackSettingsSetMessage()
-        {
-            IRacetrackSettingsSource source = m_RacetrackSettingsSourceManager.Source;
-
-            var message = new RacetrackSettingsSetMessage
-                          {
-                              TurnRadiusForPort = source.TurnRadiusForPort,
-                              TurnRadiusForStarboard = source.TurnRadiusForStarboard,
-                              IsPortTurnAllowed = source.IsPortTurnAllowed,
-                              IsStarboardTurnAllowed = source.IsStarboardTurnAllowed
-                          };
-
-            m_Bus.PublishAsync(message);
-        }
-
-
-        [Status("Received RacetrackSettingsChangedMessage...")]
-        internal void RacetrackSettingsChangedHandler([NotNull] RacetrackSettingsChangedMessage message)
-        {
-            if ( !IsCalculating )
-            {
-                return;
-            }
-
-            IsReceivedColonyRacetrackSettingsChangedMessage = true;
-
-            m_Bus.PublishAsync(new CostMatrixCalculateMessage());
-        }
-
-        [Status("Sending CostMatrixCalculatedMessage...")]
-        internal void CostMatrixChangedHandler(CostMatrixChangedMessage message)
-        {
-            if ( !IsCalculating )
-            {
-                return;
-            }
-
-            IsCalculating = false;
-
-            if ( message.Matrix == null )
-            {
-                HandleMatrixIsNullCase();
-
-                return;
-            }
-
-            m_Converter.DoubleMatrix = message.Matrix;
-            m_Converter.Convert();
-
-            m_Bus.PublishAsync(new CostMatrixCalculatedMessage
-                               {
-                                   Matrix = m_Converter.IntegerMatrix,
-                                   CostPerLine = CostPerLine.ToArray()
-                               });
-        }
-
-        [Status("Received cost matrix is null!")]
-        private void HandleMatrixIsNullCase()
-        {
-            const string text = "Received CostMatrixChangedMessage with Matrix set to null!";
-            m_Logger.Warn(text);
+                                        }).ToArray();
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace Selkie.Framework.Common.Messages
 {
     [ExcludeFromCodeCoverage]
-    public class ColonyRacetrackSettingsChangedMessage
+    public class ColonyRacetrackSettingsResponseMessage
     {
     }
 }

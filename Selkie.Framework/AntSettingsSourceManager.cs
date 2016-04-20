@@ -31,8 +31,8 @@ namespace Selkie.Framework
             m_Bus.SubscribeAsync <ColonyAntSettingsSetMessage>(subscriptionId,
                                                                ColonyAntSettingsSetHandler);
 
-            m_Bus.SubscribeAsync <ColonyLinesChangedMessage>(subscriptionId,
-                                                             ColonyLinesChangedHandler);
+            m_Bus.SubscribeAsync <ColonyLineResponseMessage>(subscriptionId,
+                                                             ColonyLineResponseHandler);
 
             SendResponseMessage();
         }
@@ -63,7 +63,7 @@ namespace Selkie.Framework
             SendResponseMessage();
         }
 
-        internal void ColonyLinesChangedHandler(ColonyLinesChangedMessage message)
+        internal void ColonyLineResponseHandler(ColonyLineResponseMessage message)
         {
             UpdateSource(false,
                          0);

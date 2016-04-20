@@ -83,6 +83,17 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
+        public void ColonyLineResponseHandlerCallsLoadNodesTest()
+        {
+            var message = new ColonyLineResponseMessage();
+
+            m_Model.ColonyLineResponseHandler(message);
+
+            m_Bus.Received()
+                 .Publish(Arg.Any <NodesModelChangedMessage>());
+        }
+
+        [Test]
         public void CreateModelsCreatesTwoModelsTest()
         {
             var line = new Line(1,
@@ -145,17 +156,6 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         public void DefaultNodesTest()
         {
             Assert.NotNull(m_Model.Nodes);
-        }
-
-        [Test]
-        public void LinesChangedHandlerCallsLoadNodesTest()
-        {
-            var message = new ColonyLinesChangedMessage();
-
-            m_Model.LinesChangedHandler(message);
-
-            m_Bus.Received()
-                 .Publish(Arg.Any <NodesModelChangedMessage>());
         }
 
         [Test]

@@ -11,8 +11,8 @@ namespace Selkie.WPF.Models.Handlers
     public class ExceptionThrownMessageToStringConverter : IExceptionThrownMessageToStringConverter
     {
         public string Convert(ExceptionThrownMessage message)
-        {   
-            var text = ExceptionInformationToString(message.Exception);
+        {
+            string text = ExceptionInformationToString(message.Exception);
 
             text += InnerException(message.InnerExceptions);
 
@@ -21,14 +21,14 @@ namespace Selkie.WPF.Models.Handlers
 
         private static string InnerException(ExceptionInformation[] informationArray)
         {
-            if (informationArray == null)
+            if ( informationArray == null )
             {
                 return string.Empty;
             }
 
-            var innerExceptions = string.Empty;
+            string innerExceptions = string.Empty;
 
-            foreach (ExceptionInformation information in informationArray)
+            foreach ( ExceptionInformation information in informationArray )
             {
                 innerExceptions += "Inner Exception:" + Environment.NewLine;
                 innerExceptions += ExceptionInformationToString(information);

@@ -46,11 +46,13 @@
     <Compile Include="Messages\AntSettingsModelChangedMessage.cs" />
     <Compile Include="Messages\AntSettingsModelRequestMessage.cs" />
     <Compile Include="Messages\AntSettingsModelSetMessage.cs" />
+    <Compile Include="Messages\ExceptionThrownClearErrorMessage.cs" />
     <Compile Include="Messages\ControlModelChangedMessage.cs" />
     <Compile Include="Messages\ControlModelTestLinesChangedMessage.cs" />
     <Compile Include="Messages\ControlModelTestLineSetMessage.cs" />
     <Compile Include="Messages\ControlModelTestLinesRequestMessage.cs" />
     <Compile Include="Messages\EndNodeModelChangedMessage.cs" />
+    <Compile Include="Messages\ExceptionThrownChangedMessage.cs" />
     <Compile Include="Messages\LinesModelChangedMessage.cs" />
     <Compile Include="Messages\LinesModelLinesRequestMessage.cs" />
     <Compile Include="Messages\NodesModelChangedMessage.cs" />

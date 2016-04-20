@@ -5,7 +5,7 @@ namespace Selkie.WPF.Models.Common.Messages
 {
     //ncrunch: no coverage start
     [ExcludeFromCodeCoverage]
-    public class RacetracksChangedMessage
+    public class RacetracksResponseMessage
     {
         public IRacetracks Racetracks { get; set; }
     }

@@ -128,45 +128,43 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
         }
 
         [Test]
-        public void ColonyAntSettingsResponseHandler_SetsIsFixedStartNode_WhenCalled()
+        public void ColonyLineResponsedHandler_CallsManager_WhenCalled()
         {
             // Arrange
-            var message = new ColonyAntSettingsResponseMessage
-                          {
-                              IsFixedStartNode = true
-                          };
+            var message = new ColonyLineResponseMessage();
 
             // Act
-            m_Sut.ColonyAntSettingsResponseHandler(message);
-
-            // Assert
-            Assert.True(m_Sut.IsFixedStartNode);
-        }
-
-        [Test]
-        public void ColonyLinesChangedHandler_CallsManager_WhenCalled()
-        {
-            // Arrange
-            var message = new ColonyLinesChangedMessage();
-
-            // Act
-            m_Sut.ColonyLinesChangedHandler(message);
+            m_Sut.ColonyLineResponsedHandler(message);
 
             // Assert
             m_Manager.Received().CreateNodesForCurrentLines();
         }
 
         [Test]
-        public void ColonyLinesChangedHandler_SendsMessage_WhenCalled()
+        public void ColonyLineResponsedHandler_SendsMessage_WhenCalled()
         {
             // Arrange
-            var message = new ColonyLinesChangedMessage();
+            var message = new ColonyLineResponseMessage();
 
             // Act
-            m_Sut.ColonyLinesChangedHandler(message);
+            m_Sut.ColonyLineResponsedHandler(message);
 
             // Assert
             m_Bus.Received().PublishAsync(Arg.Any <AntSettingsModelChangedMessage>());
+        }
+
+        [Test]
+        public void ColonyLineResponsedHandler_SetsFixedStartNodeToZero_WhenCalled()
+        {
+            // Arrange
+            var message = new ColonyLineResponseMessage();
+
+            // Act
+            m_Sut.ColonyLineResponsedHandler(message);
+
+            // Assert
+            Assert.AreEqual(0,
+                            m_Sut.FixedStartNode);
         }
 
         [Test]
@@ -213,14 +211,14 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
         }
 
         [Test]
-        public void Constructor_SubscribesToColonyLinesChangedMessage_WhenCalled()
+        public void Constructor_SubscribesToColonyLinesResponseMessage_WhenCalled()
         {
             // Arrange
             // Act
             // Assert
             m_Bus.Received()
                  .SubscribeAsync(m_Sut.GetType().ToString(),
-                                 Arg.Any <Action <ColonyLinesChangedMessage>>());
+                                 Arg.Any <Action <ColonyLineResponseMessage>>());
         }
 
         [Test]

@@ -11,6 +11,7 @@ using Selkie.Windsor;
 namespace Selkie.Framework.Aco
 {
     [Interceptor(typeof ( StatusAspect ))]
+    [Interceptor(typeof ( MessageHandlerAspect ))]
     [ProjectComponent(Lifestyle.Transient)]
     public class ServiceProxy : IServiceProxy
     {

@@ -89,7 +89,7 @@ namespace Selkie.WPF.Models.Pheromones
                 Average = message.Average;
             }
 
-            m_Bus.PublishAsync(new PheromonesModelChangedMessage()); // todo better to include parameters???
+            m_Bus.PublishAsync(new PheromonesModelChangedMessage());
         }
 
         internal void FinishedHandler(ColonyFinishedMessage message)
@@ -97,7 +97,7 @@ namespace Selkie.WPF.Models.Pheromones
             IsRequestingEnabled = false;
         }
 
-        internal void SetHandler(PheromonesModelsSetMessage message) // todo testing
+        internal void SetHandler(PheromonesModelsSetMessage message)
         {
             IsShowPheromones = message.IsShowPheromones;
 

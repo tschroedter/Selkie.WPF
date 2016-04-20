@@ -6,12 +6,10 @@ using JetBrains.Annotations;
 using NSubstitute;
 using NUnit.Framework;
 using Selkie.EasyNetQ;
-using Selkie.Framework.Interfaces;
 using Selkie.WPF.Common.Interfaces;
-using Selkie.WPF.Converters.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
-using Selkie.WPF.Models.Interfaces.Mapping;
 using Selkie.WPF.ViewModels.Mapping;
+using Selkie.WPF.ViewModels.Mapping.Handlers;
 using Selkie.WPF.ViewModels.Tests.NUnit;
 
 namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
@@ -22,57 +20,30 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
         [SetUp]
         public void Setup()
         {
+            m_Handler = Substitute.For <IMapViewModelMessageHandler>();
+
             m_Bus = Substitute.For <ISelkieInMemoryBus>();
             m_Dispatcher = new TestImmediateDispatcher();
-            m_ConverterNodes = Substitute.For <ILineNodeToDisplayLineNodeConverter>();
-            m_ConverterStartNodeModel = Substitute.For <INodeModelToDisplayNodeConverter>();
-            m_ConverterEndNodeModel = Substitute.For <INodeModelToDisplayNodeConverter>();
-            m_ConverterRacetrack = Substitute.For <IRacetrackPathsToFiguresConverter>();
-            m_ConverterDirections = Substitute.For <INodesToDisplayNodesConverter>();
-            m_LinesModel = Substitute.For <ILinesModel>();
-            m_NodesModel = Substitute.For <INodesModel>();
-            m_StartNodeModel = Substitute.For <IStartNodeModel>();
-            m_EndNodeModel = Substitute.For <IEndNodeModel>();
-            m_ShortestPathModel = Substitute.For <IShortestPathModel>();
-            m_ShortestPathDirectionModel = Substitute.For <IShortestPathDirectionModel>();
-            m_RacetrackModel = Substitute.For <IRacetrackModel>();
+            m_Handlers = new[]
+                         {
+                             m_Handler
+                         };
 
-            m_Model = CreateModel(m_Dispatcher);
+            m_Sut = CreateModel(m_Dispatcher);
         }
 
         private MapViewModel CreateModel([NotNull] IApplicationDispatcher dispatcher)
         {
             return new MapViewModel(m_Bus,
                                     dispatcher,
-                                    m_ConverterNodes,
-                                    m_ConverterStartNodeModel,
-                                    m_ConverterEndNodeModel,
-                                    m_ConverterRacetrack,
-                                    m_ConverterDirections,
-                                    m_LinesModel,
-                                    m_NodesModel,
-                                    m_StartNodeModel,
-                                    m_EndNodeModel,
-                                    m_ShortestPathModel,
-                                    m_ShortestPathDirectionModel,
-                                    m_RacetrackModel);
+                                    m_Handlers);
         }
 
         private ISelkieInMemoryBus m_Bus;
         private TestImmediateDispatcher m_Dispatcher;
-        private ILineNodeToDisplayLineNodeConverter m_ConverterNodes;
-        private INodeModelToDisplayNodeConverter m_ConverterStartNodeModel;
-        private INodeModelToDisplayNodeConverter m_ConverterEndNodeModel;
-        private IRacetrackPathsToFiguresConverter m_ConverterRacetrack;
-        private INodesToDisplayNodesConverter m_ConverterDirections;
-        private ILinesModel m_LinesModel;
-        private INodesModel m_NodesModel;
-        private IStartNodeModel m_StartNodeModel;
-        private IEndNodeModel m_EndNodeModel;
-        private IShortestPathModel m_ShortestPathModel;
-        private IShortestPathDirectionModel m_ShortestPathDirectionModel;
-        private IRacetrackModel m_RacetrackModel;
-        private MapViewModel m_Model;
+        private MapViewModel m_Sut;
+        private IMapViewModelMessageHandler[] m_Handlers;
+        private IMapViewModelMessageHandler m_Handler;
 
         [Test]
         public void Constructor_SendsLinesModelLinesRequestMessage_WhenCreated()
@@ -81,108 +52,12 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
         }
 
         [Test]
-        public void Constructor_SetsFillBrushToRedForEndNodes_WhenCreated()
-        {
-            Assert.True(m_ConverterEndNodeModel.FillBrush.Equals(Brushes.Red));
-        }
-
-        [Test]
-        public void Constructor_SetsStrokeBrushToDarkRedForEndNodes_WhenCreated()
-        {
-            Assert.True(m_ConverterEndNodeModel.StrokeBrush.Equals(Brushes.DarkRed));
-        }
-
-        [Test]
-        public void Constructor_SubscribeToColonyFinishedMessageLinesModelChangedMessage_WhenCreated()
-        {
-            m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <LinesModelChangedMessage>>());
-        }
-
-        [Test]
-        public void Constructor_SubscribeToEndNodeModelChangedMessage_WhenCreated()
-        {
-            m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <EndNodeModelChangedMessage>>());
-        }
-
-        [Test]
-        public void Constructor_SubscribeToNodesModelChangedMessage_WhenCreated()
-        {
-            m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <NodesModelChangedMessage>>());
-        }
-
-        [Test]
-        public void Constructor_SubscribeToRacetrackModelChangedMessage_WhenCreated()
-        {
-            m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <RacetrackModelChangedMessage>>());
-        }
-
-        [Test]
-        public void Constructor_SubscribeToShortestPathDirectionModelChangedMessage_WhenCreated()
-        {
-            m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <ShortestPathDirectionModelChangedMessage>>());
-        }
-
-        [Test]
-        public void Constructor_SubscribeToShortestPathModelChangedMessage_WhenCreated()
-        {
-            m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <ShortestPathModelChangedMessage>>());
-        }
-
-        [Test]
-        public void Constructor_SubscribeToStartNodeModelChangedMessage_WhenCreated()
-        {
-            m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <StartNodeModelChangedMessage>>());
-        }
-
-        [Test]
-        public void EndNodeModelChangedHandler_CallsBeginInvoke_WhenCalled()
+        public void Constructor_SetsModelInHandler_WhenCalled()
         {
             // Arrange
-            var dispatcher = Substitute.For <IApplicationDispatcher>();
-            MapViewModel model = CreateModel(dispatcher);
-            var message = new EndNodeModelChangedMessage();
-
             // Act
-            model.EndNodeModelChangedHandler(message);
-
             // Assert
-            dispatcher.Received().BeginInvoke(model.UpdateEndNode);
-        }
-
-        [Test]
-        public void EndNodeModelChangedHandler_CallsConvert_WhenCalled()
-        {
-            // Arrange
-            var message = new EndNodeModelChangedMessage();
-
-            // Act
-            m_Model.EndNodeModelChangedHandler(message);
-
-            // Assert
-            m_ConverterEndNodeModel.Received().Convert();
-        }
-
-        [Test]
-        public void EndNodeModelChangedHandler_SetsNodeModel_WhenCalled()
-        {
-            // Arrange
-            var nodeModel = Substitute.For <INodeModel>();
-            m_EndNodeModel.Node.Returns(nodeModel);
-            var message = new EndNodeModelChangedMessage();
-
-            // Act
-            m_Model.EndNodeModelChangedHandler(message);
-
-            // Assert
-            Assert.AreEqual(nodeModel,
-                            m_ConverterEndNodeModel.NodeModel);
+            m_Handler.Received().SetMapViewModel(m_Sut);
         }
 
         [Test]
@@ -191,119 +66,229 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
             // Arrange
             var dispatcher = Substitute.For <IApplicationDispatcher>();
             MapViewModel model = CreateModel(dispatcher);
-            var message = new LinesModelChangedMessage();
 
             // Act
-            model.LinesModelChangedMessageHandler(message);
+            model.SetLines(new IDisplayLine[0]);
 
             // Assert
-            dispatcher.Received().BeginInvoke(model.UpdateLines);
+            dispatcher.Received().BeginInvoke(Arg.Any <Action>());
         }
 
         [Test]
-        public void NodesModelChangedHandler_CallsBeginInvoke_WhenCalled()
+        public void SetDirections_AddsDisplayNodes_WhenCalled()
         {
             // Arrange
-            var dispatcher = Substitute.For <IApplicationDispatcher>();
-            MapViewModel model = CreateModel(dispatcher);
-            var message = new NodesModelChangedMessage();
+            var displayNodes = new[]
+                               {
+                                   Substitute.For <IDisplayNode>()
+                               };
 
             // Act
-            model.NodesModelChangedHandler(message);
+            m_Sut.SetDirections(displayNodes);
 
             // Assert
-            dispatcher.Received().BeginInvoke(model.UpdateNodes);
+            Assert.True(displayNodes.SequenceEqual(m_Sut.PathDirections));
         }
 
         [Test]
-        public void NodesModelChangedHandler_CallsConvert_WhenCalled()
+        public void SetDirections_NotifyPropertyChanged_WhenCalled()
         {
             // Arrange
-            var message = new NodesModelChangedMessage();
+            var test = new TestNotifyPropertyChanged(m_Sut,
+                                                     "PathDirections");
 
             // Act
-            m_Model.NodesModelChangedHandler(message);
+            m_Sut.SetDirections(new IDisplayNode[0]);
 
             // Assert
-            m_ConverterNodes.Received().Convert();
+            Assert.True(test.IsExpectedNotified);
         }
 
         [Test]
-        public void NodesModelChangedHandler_SetsNodeModel_WhenCalled()
-        {
-            // Arrange
-            IEnumerable <INodeModel> nodeModels = new[]
-                                                  {
-                                                      Substitute.For <INodeModel>()
-                                                  };
-
-            m_NodesModel.Nodes.Returns(nodeModels);
-            var message = new NodesModelChangedMessage();
-
-            // Act
-            m_Model.NodesModelChangedHandler(message);
-
-            // Assert
-            Assert.AreEqual(nodeModels,
-                            m_ConverterNodes.NodeModels);
-        }
-
-        [Test]
-        public void RacetrackModelChangedHandler_CallsBeginInvoke_WhenCalled()
-        {
-            // Arrange
-            var dispatcher = Substitute.For <IApplicationDispatcher>();
-            MapViewModel model = CreateModel(dispatcher);
-            var message = new RacetrackModelChangedMessage();
-
-            // Act
-            model.RacetrackModelChangedHandler(message);
-
-            // Assert
-            dispatcher.Received().BeginInvoke(model.UpdateRacetrack);
-        }
-
-        [Test]
-        public void ShortestPathDirectionModelChangedHandlerhen_CallsConvert_WhenCalled()
-        {
-            // Arrange
-            var message = new ShortestPathDirectionModelChangedMessage();
-
-            // Act
-            m_Model.ShortestPathDirectionModelChangedHandler(message);
-
-            // Assert
-            m_ConverterDirections.Received().Convert();
-        }
-
-        [Test]
-        public void ShortestPathDirectionModelChangedHandlerhen_CallsUpdatePathDirections_WhenCalled()
+        public void SetEndNode_CallsBeginInvoke_WhenCalled()
         {
             // Arrange
             var dispatcher = Substitute.For <IApplicationDispatcher>();
             MapViewModel model = CreateModel(dispatcher);
 
-            var message = new ShortestPathDirectionModelChangedMessage();
-
             // Act
-            model.ShortestPathDirectionModelChangedHandler(message);
+            model.SetEndNode(Substitute.For <IDisplayNode>());
 
             // Assert
-            dispatcher.Received().BeginInvoke(model.UpdatePathDirections);
+            dispatcher.Received().BeginInvoke(Arg.Any <Action>());
         }
 
         [Test]
-        public void ShortestPathDirectionModelChangedHandlerhen_SetsNodeModels_WhenCalled()
+        public void SetEndNodeUpdateEndNode_SetsEndNode_WhenCalled()
         {
             // Arrange
-            var message = new ShortestPathDirectionModelChangedMessage();
+            var expected = Substitute.For <IDisplayNode>();
 
             // Act
-            m_Model.ShortestPathDirectionModelChangedHandler(message);
+            m_Sut.SetEndNode(expected);
 
             // Assert
-            Assert.AreEqual(m_ConverterDirections.NodeModels,
-                            m_ShortestPathDirectionModel.Nodes);
+            Assert.AreEqual(expected,
+                            m_Sut.EndNode);
+        }
+
+        [Test]
+        public void SetLines_AddsDisplayLines_WhenCalled()
+        {
+            // Arrange
+            IEnumerable <IDisplayLine> lines = new[]
+                                               {
+                                                   Substitute.For <IDisplayLine>()
+                                               };
+
+            // Act
+            m_Sut.SetLines(lines);
+
+            // Assert
+            Assert.True(lines.SequenceEqual(m_Sut.Lines));
+        }
+
+        [Test]
+        public void SetLines_NotifyPropertyChanged_WhenCalled()
+        {
+            // Arrange
+            var test = new TestNotifyPropertyChanged(m_Sut,
+                                                     "Lines");
+
+            // Act
+            m_Sut.SetLines(new List <IDisplayLine>());
+
+            // Assert
+            Assert.True(test.IsExpectedNotified);
+        }
+
+        [Test]
+        public void SetNodes_CallsBeginInvoke_WhenCalled()
+        {
+            // Arrange
+            var dispatcher = Substitute.For <IApplicationDispatcher>();
+            MapViewModel model = CreateModel(dispatcher);
+
+            // Act
+            model.SetNodes(new List <IDisplayNode>());
+
+            // Assert
+            dispatcher.Received().BeginInvoke(Arg.Any <Action>());
+        }
+
+        [Test]
+        public void SetNodes_NotifyPropertyChanged_WhenCalled()
+        {
+            // Arrange
+            var test = new TestNotifyPropertyChanged(m_Sut,
+                                                     "Nodes");
+
+            // Act
+            m_Sut.SetNodes(new IDisplayNode[0]);
+
+            // Assert
+            Assert.True(test.IsExpectedNotified);
+        }
+
+        [Test]
+        public void SetNodes_SetsNodes_WhenCalled()
+        {
+            // Arrange
+            IDisplayNode[] displayNodes =
+            {
+                Substitute.For <IDisplayNode>()
+            };
+
+            // Act
+            m_Sut.SetNodes(displayNodes);
+
+            // Assert
+            Assert.AreEqual(displayNodes,
+                            m_Sut.Nodes);
+        }
+
+        [Test]
+        public void SetRacetrack_CallsBeginInvoke_WhenCalled()
+        {
+            // Arrange
+            var dispatcher = Substitute.For <IApplicationDispatcher>();
+            MapViewModel model = CreateModel(dispatcher);
+
+            // Act
+            model.SetRacetracks(new PathFigureCollection[0]);
+
+            // Assert
+            dispatcher.Received().BeginInvoke(Arg.Any <Action>());
+        }
+
+        [Test]
+        public void SetRacetrack_NotifyPropertyChanged_WhenCalled()
+        {
+            // Arrange
+            var test = new TestNotifyPropertyChanged(m_Sut,
+                                                     "Racetracks");
+
+            // Act
+            m_Sut.SetRacetracks(new PathFigureCollection[0]);
+
+            // Assert
+            Assert.True(test.IsExpectedNotified);
+        }
+
+        [Test]
+        public void SetStartNode_CallsBeginInvoke_WhenCalled()
+        {
+            // Arrange
+            var dispatcher = Substitute.For <IApplicationDispatcher>();
+            MapViewModel model = CreateModel(dispatcher);
+
+            // Act
+            model.SetStartNode(Substitute.For <IDisplayNode>());
+
+            // Assert
+            dispatcher.Received().BeginInvoke(Arg.Any <Action>());
+        }
+
+        [Test]
+        public void SetStartNode_NotifyPropertyChanged_WhenCalled()
+        {
+            // Arrange
+            var test = new TestNotifyPropertyChanged(m_Sut,
+                                                     "StartNode");
+
+            // Act
+            m_Sut.SetStartNode(Substitute.For <IDisplayNode>());
+
+            // Assert
+            Assert.True(test.IsExpectedNotified);
+        }
+
+        [Test]
+        public void SetStartNode_SetsNodeModel_WhenCalled()
+        {
+            // Arrange
+            var expected = Substitute.For <IDisplayNode>();
+
+            // Act
+            m_Sut.SetStartNode(expected);
+
+            // Assert
+            Assert.AreEqual(expected,
+                            m_Sut.StartNode);
+        }
+
+        [Test]
+        public void SetStartNode_SetsStartNode_WhenCalled()
+        {
+            // Arrange
+            var expected = Substitute.For <IDisplayNode>();
+
+            // Act
+            m_Sut.SetStartNode(expected);
+
+            // Assert
+            Assert.AreEqual(expected,
+                            m_Sut.StartNode);
         }
 
         [Test]
@@ -312,305 +297,73 @@ namespace Selkie.WPF.ViewModels.Tests.Mapping.NUnit
             // Arrange
             var dispatcher = Substitute.For <IApplicationDispatcher>();
             MapViewModel model = CreateModel(dispatcher);
-            var message = new ShortestPathModelChangedMessage();
 
             // Act
-            model.ShortestPathModelChangedHandler(message);
+            model.SetshortestPath(new List <IDisplayLine>());
 
             // Assert
-            dispatcher.Received().BeginInvoke(model.UpdateShortestPath);
-        }
-
-        [Test]
-        public void StartNodeModelChangedHandler_CallsBeginInvoke_WhenCalled()
-        {
-            // Arrange
-            var dispatcher = Substitute.For <IApplicationDispatcher>();
-            MapViewModel model = CreateModel(dispatcher);
-            var message = new StartNodeModelChangedMessage();
-
-            // Act
-            model.StartNodeModelChangedHandler(message);
-
-            // Assert
-            dispatcher.Received().BeginInvoke(model.UpdateStartNode);
-        }
-
-        [Test]
-        public void StartNodeModelChangedHandler_CallsConvert_WhenCalled()
-        {
-            // Arrange
-            var message = new StartNodeModelChangedMessage();
-
-            // Act
-            m_Model.StartNodeModelChangedHandler(message);
-
-            // Assert
-            m_ConverterStartNodeModel.Received().Convert();
-        }
-
-        [Test]
-        public void StartNodeModelChangedHandler_SetsNodeModel_WhenCalled()
-        {
-            // Arrange
-            var nodeModel = Substitute.For <INodeModel>();
-            m_StartNodeModel.Node.Returns(nodeModel);
-            var message = new StartNodeModelChangedMessage();
-
-            // Act
-            m_Model.StartNodeModelChangedHandler(message);
-
-            // Assert
-            Assert.AreEqual(nodeModel,
-                            m_ConverterStartNodeModel.NodeModel);
+            dispatcher.Received().BeginInvoke(Arg.Any <Action>());
         }
 
         [Test]
         public void UpdateEndNode_NotifyPropertyChanged_WhenCalled()
         {
             // Arrange
-            var test = new TestNotifyPropertyChanged(m_Model,
+            var test = new TestNotifyPropertyChanged(m_Sut,
                                                      "EndNode");
 
             // Act
-            m_Model.UpdateEndNode();
+            m_Sut.SetEndNode(Substitute.For <IDisplayNode>());
 
             // Assert
             Assert.True(test.IsExpectedNotified);
-        }
-
-        [Test]
-        public void UpdateEndNode_SetsEndNode_WhenCalled()
-        {
-            // Arrange
-            var nodeModel = Substitute.For <IDisplayNode>();
-            m_ConverterEndNodeModel.DisplayNode.Returns(nodeModel);
-
-            // Act
-            m_Model.UpdateEndNode();
-
-            // Assert
-            Assert.AreEqual(nodeModel,
-                            m_Model.EndNode);
-        }
-
-        [Test]
-        public void UpdateLines_AddsDisplayLines_WhenCalled()
-        {
-            // Arrange
-            IEnumerable <IDisplayLine> lines = new[]
-                                               {
-                                                   Substitute.For <IDisplayLine>()
-                                               };
-
-            m_LinesModel.Lines.Returns(lines);
-
-            // Act
-            m_Model.UpdateLines();
-
-            // Assert
-            Assert.True(lines.SequenceEqual(m_Model.Lines));
-        }
-
-        [Test]
-        public void UpdateLines_NotifyPropertyChanged_WhenCalled()
-        {
-            // Arrange
-            var test = new TestNotifyPropertyChanged(m_Model,
-                                                     "Lines");
-
-            // Act
-            m_Model.UpdateLines();
-
-            // Assert
-            Assert.True(test.IsExpectedNotified);
-        }
-
-        [Test]
-        public void UpdateNodes_NotifyPropertyChanged_WhenCalled()
-        {
-            // Arrange
-            var test = new TestNotifyPropertyChanged(m_Model,
-                                                     "Nodes");
-
-            // Act
-            m_Model.UpdateNodes();
-
-            // Assert
-            Assert.True(test.IsExpectedNotified);
-        }
-
-        [Test]
-        public void UpdateNodes_SetsNodes_WhenCalled()
-        {
-            // Arrange
-            IDisplayNode[] nodeModel =
-            {
-                Substitute.For <IDisplayNode>()
-            };
-            m_ConverterNodes.DisplayNodes.Returns(nodeModel);
-
-            // Act
-            m_Model.UpdateNodes();
-
-            // Assert
-            Assert.AreEqual(nodeModel,
-                            m_Model.Nodes);
-        }
-
-        [Test]
-        public void UpdatePathDirections_AddsDisplayNodes_WhenCalled()
-        {
-            // Arrange
-            var displayNodes = new[]
-                               {
-                                   Substitute.For <IDisplayNode>()
-                               };
-            m_ConverterDirections.DisplayNodes.Returns(displayNodes);
-
-            // Act
-            m_Model.UpdatePathDirections();
-
-            // Assert
-            Assert.True(displayNodes.SequenceEqual(m_Model.PathDirections));
-        }
-
-        [Test]
-        public void UpdatePathDirections_NotifyPropertyChanged_WhenCalled()
-        {
-            // Arrange
-            var test = new TestNotifyPropertyChanged(m_Model,
-                                                     "PathDirections");
-
-            // Act
-            m_Model.UpdatePathDirections();
-
-            // Assert
-            Assert.True(test.IsExpectedNotified);
-        }
-
-        [Test]
-        public void UpdateRacetrack_CallsConvert_WhenCalled()
-        {
-            // Arrange
-            // Act
-            m_Model.UpdateRacetrack();
-
-            // Assert
-            m_ConverterRacetrack.Received().Convert();
-        }
-
-        [Test]
-        public void UpdateRacetrack_NotifyPropertyChanged_WhenCalled()
-        {
-            // Arrange
-            var test = new TestNotifyPropertyChanged(m_Model,
-                                                     "Racetracks");
-
-            // Act
-            m_Model.UpdateRacetrack();
-
-            // Assert
-            Assert.True(test.IsExpectedNotified);
-        }
-
-        [Test]
-        public void UpdateRacetrack_SetsPath_WhenCalled()
-        {
-            // Arrange
-            IEnumerable <IPath> paths = new[]
-                                        {
-                                            Substitute.For <IPath>()
-                                        };
-
-            m_RacetrackModel.Paths.Returns(paths);
-
-            // Act
-            m_Model.UpdateRacetrack();
-
-            // Assert
-            Assert.AreEqual(m_ConverterRacetrack.Paths,
-                            m_RacetrackModel.Paths);
         }
 
         [Test]
         public void UpdateRacetrack_SetsPathRacetracks_WhenCalled()
         {
             // Arrange
-            IEnumerable <PathFigureCollection> paths = new[]
-                                                       {
-                                                           new PathFigureCollection()
-                                                       };
-
-            m_ConverterRacetrack.Figures.Returns(paths);
+            IEnumerable <PathFigureCollection> expected = new[]
+                                                          {
+                                                              new PathFigureCollection()
+                                                          };
 
             // Act
-            m_Model.UpdateRacetrack();
+            m_Sut.SetRacetracks(expected);
 
             // Assert
-            Assert.AreEqual(m_Model.Racetracks,
-                            paths);
+            Assert.AreEqual(m_Sut.Racetracks,
+                            expected);
         }
 
         [Test]
         public void UpdateShortestPath_AddsPath_WhenCalled()
         {
             // Arrange
-            IEnumerable <IDisplayLine> lines = new[]
-                                               {
-                                                   Substitute.For <IDisplayLine>()
-                                               };
-
-            m_ShortestPathModel.Path.Returns(lines);
+            List <IDisplayLine> expected = new[]
+                                           {
+                                               Substitute.For <IDisplayLine>()
+                                           }.ToList();
 
             // Act
-            m_Model.UpdateShortestPath();
+            m_Sut.SetshortestPath(expected);
 
             // Assert
-            Assert.True(lines.SequenceEqual(m_Model.ShortestPath));
+            Assert.True(expected.SequenceEqual(m_Sut.ShortestPath));
         }
 
         [Test]
         public void UpdateShortestPath_NotifyPropertyChanged_WhenCalled()
         {
             // Arrange
-            var test = new TestNotifyPropertyChanged(m_Model,
+            var test = new TestNotifyPropertyChanged(m_Sut,
                                                      "ShortestPath");
 
             // Act
-            m_Model.UpdateShortestPath();
+            m_Sut.SetshortestPath(new List <IDisplayLine>());
 
             // Assert
             Assert.True(test.IsExpectedNotified);
-        }
-
-        [Test]
-        public void UpdateStartNode_NotifyPropertyChanged_WhenCalled()
-        {
-            // Arrange
-            var test = new TestNotifyPropertyChanged(m_Model,
-                                                     "StartNode");
-
-            // Act
-            m_Model.UpdateStartNode();
-
-            // Assert
-            Assert.True(test.IsExpectedNotified);
-        }
-
-        [Test]
-        public void UpdateStartNode_SetsEndNode_WhenCalled()
-        {
-            // Arrange
-            var nodeModel = Substitute.For <IDisplayNode>();
-            m_ConverterStartNodeModel.DisplayNode.Returns(nodeModel);
-
-            // Act
-            m_Model.UpdateStartNode();
-
-            // Assert
-            Assert.AreEqual(nodeModel,
-                            m_Model.StartNode);
         }
     }
 }

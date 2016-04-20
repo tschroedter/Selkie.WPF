@@ -59,6 +59,10 @@
       <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NLog, Version=4.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.1.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
@@ -69,16 +73,20 @@
       <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Common, Version=0.6.228.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Common.0.6.228.0\lib\net45\Selkie.Common.dll</HintPath>
+    <Reference Include="Selkie.Aop, Version=0.6.31.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Aop.0.6.31.0\lib\net45\Selkie.Aop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.EasyNetQ, Version=0.6.214.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.EasyNetQ.0.6.214.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
+    <Reference Include="Selkie.Common, Version=0.6.232.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Common.0.6.232.0\lib\net45\Selkie.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Windsor, Version=0.6.256.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Windsor.0.6.256.0\lib\net45\Selkie.Windsor.dll</HintPath>
+    <Reference Include="Selkie.EasyNetQ, Version=0.6.220.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.EasyNetQ.0.6.220.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Windsor, Version=0.6.257.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Windsor.0.6.257.0\lib\net45\Selkie.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -96,7 +104,17 @@
     <Compile Include="Control\ControlViewModel.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Mapping\Handlers\BaseMapViewModelMessageHandler.cs" />
+    <Compile Include="Mapping\Handlers\EndNodeModelChangeHandler.cs" />
+    <Compile Include="Mapping\Handlers\IMapViewModelMessageHandler.cs" />
+    <Compile Include="Mapping\Handlers\LinesModelChangedHandler.cs" />
+    <Compile Include="Mapping\Handlers\RacetrackModelChangedHandler.cs" />
+    <Compile Include="Mapping\Handlers\ShortestPathDirectionModelChangedHandler.cs" />
+    <Compile Include="Mapping\Handlers\StartNodeModelChangeHandler.cs" />
     <Compile Include="Mapping\MapViewModel.cs" />
+    <Compile Include="Mapping\Handlers\NodesModelChangedHandler.cs" />
+    <Compile Include="Mapping\Handlers\SelkieInMemoryBusMessageHandlerAsync.cs" />
+    <Compile Include="Mapping\Handlers\ShortestPathModelChangedHandler.cs" />
     <Compile Include="Settings\AntSettingsViewModel.cs" />
     <Compile Include="Status\StatusViewModel.cs" />
     <Compile Include="TrailHistory\Converters\ITrailDetailsToDisplayHistoryRowsConverter.cs" />

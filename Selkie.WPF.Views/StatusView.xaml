@@ -8,6 +8,19 @@
                 d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel LastChildFill="True">
         <Label DockPanel.Dock="Top"
+               FontSize="10"
                Content="{Binding Path=Status}" />
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal">
+            <Button FontSize="10"
+                    Command="{Binding ClearErrorCommand}"
+                    IsEnabled="{Binding IsClearErrorEnabled}"
+                    Content="Clear Error" />
+            <Label Foreground="Red"
+                   FontStyle="Italic"
+                   FontWeight="Bold"
+                   FontSize="10"
+                   Content="{Binding Path=ExceptionThrown}" />
+        </StackPanel>
     </DockPanel>
 </views:BaseView>

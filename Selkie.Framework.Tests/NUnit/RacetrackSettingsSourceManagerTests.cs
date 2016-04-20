@@ -46,7 +46,7 @@ namespace Selkie.Framework.Tests.NUnit
 
             m_Sut.ColonyRacetrackSettingsRequestHandler(message);
 
-            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetrackSettingsChangedMessage>());
+            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetrackSettingsResponseMessage>());
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace Selkie.Framework.Tests.NUnit
 
             m_Sut.ColonyRacetrackSettingsSetHandler(message);
 
-            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetrackSettingsChangedMessage>());
+            m_Bus.Received().PublishAsync(Arg.Any <ColonyRacetrackSettingsResponseMessage>());
         }
 
         [Test]

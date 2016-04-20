@@ -26,7 +26,7 @@
                                       DockHeight="90*">
                         <xcad:LayoutPanel Orientation="Vertical">
                             <xcad:LayoutAnchorablePaneGroup DockWidth="Auto"
-                                                            DockHeight="16*" >
+                                                            DockHeight="16*">
                                 <xcad:LayoutAnchorablePane>
                                     <xcad:LayoutAnchorable ContentId="Control"
                                                            Title="Control" />

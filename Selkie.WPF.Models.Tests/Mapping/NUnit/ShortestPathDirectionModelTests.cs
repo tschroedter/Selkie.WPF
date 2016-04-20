@@ -86,13 +86,13 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
-        public void ColonyLinesChangedHandler_CallsUpdateNodes_WhenCalled()
+        public void ColonyLineResponsedHandler_CallsUpdateNodes_WhenCalled()
         {
             // Arrange
-            var message = new ColonyLinesChangedMessage();
+            var message = new ColonyLineResponseMessage();
 
             // Act
-            m_Model.ColonyLinesChangedHandler(message);
+            m_Model.ColonyLineResponsedHandler(message);
 
             // Assert
             m_Bus.Received()
@@ -107,10 +107,10 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
-        public void Constructor_SubscribesToColonyLinesChangedMessage_WhenCreated()
+        public void Constructor_SubscribesToColonyLineResponseMessage_WhenCreated()
         {
             m_Bus.Received().SubscribeAsync(m_Model.GetType().FullName,
-                                            Arg.Any <Action <ColonyLinesChangedMessage>>());
+                                            Arg.Any <Action <ColonyLineResponseMessage>>());
         }
 
         [Test]

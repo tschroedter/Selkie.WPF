@@ -42,35 +42,35 @@ namespace Selkie.WPF.Models.Tests.Settings.NUnit
         private ISelkieInMemoryBus m_MemoryBus;
 
         [Test]
-        public void ColonyRacetrackSettingsChangedMessage_SendsMessage_WhenCalled()
+        public void ColonyRacetrackSettingsResponseMessage_SendsMessage_WhenCalled()
         {
             // Arrange
-            var message = new ColonyRacetrackSettingsChangedMessage();
+            var message = new ColonyRacetrackSettingsResponseMessage();
 
             // Act
-            m_Model.ColonyRacetrackSettingsChangedHandler(message);
+            m_Model.ColonyRacetrackSettingsResponseHandler(message);
 
             // Assert
             m_MemoryBus.Received()
-                       .PublishAsync(Arg.Is <RacetrackSettingsChangedMessage>(x =>
-                                                                              Math.Abs(x.TurnRadiusForPort -
-                                                                                       m_Source.TurnRadiusForPort) <
-                                                                              Tolerance &&
-                                                                              Math.Abs(x.TurnRadiusForStarboard -
-                                                                                       m_Source.TurnRadiusForStarboard) <
-                                                                              Tolerance &&
-                                                                              x.IsPortTurnAllowed ==
-                                                                              m_Source.IsPortTurnAllowed &&
-                                                                              x.IsStarboardTurnAllowed ==
-                                                                              m_Source.IsStarboardTurnAllowed));
+                       .PublishAsync(Arg.Is <RacetrackSettingsResponseMessage>(x =>
+                                                                               Math.Abs(x.TurnRadiusForPort -
+                                                                                        m_Source.TurnRadiusForPort) <
+                                                                               Tolerance &&
+                                                                               Math.Abs(x.TurnRadiusForStarboard -
+                                                                                        m_Source.TurnRadiusForStarboard) <
+                                                                               Tolerance &&
+                                                                               x.IsPortTurnAllowed ==
+                                                                               m_Source.IsPortTurnAllowed &&
+                                                                               x.IsStarboardTurnAllowed ==
+                                                                               m_Source.IsStarboardTurnAllowed));
         }
 
         [Test]
-        public void ConstructorSubscribesToColonyRacetrackSettingsChangedMessageTest()
+        public void ConstructorSubscribesToColonyRacetrackSettingsResponseMessageTest()
         {
             m_Bus.Received()
                  .SubscribeAsync(m_Model.GetType().ToString(),
-                                 Arg.Any <Action <ColonyRacetrackSettingsChangedMessage>>());
+                                 Arg.Any <Action <ColonyRacetrackSettingsResponseMessage>>());
         }
 
         [Test]

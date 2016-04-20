@@ -191,10 +191,10 @@ namespace Selkie.WPF.Converters.Tests.NUnit
         }
 
         [Test]
-        public void ConstructorSubscribesToColonyRacetracksChangedMessageTest()
+        public void ConstructorSubscribesToColonyRacetracksResponseMessageTest()
         {
             m_Bus.Received().SubscribeAsync(m_Converter.GetType().FullName,
-                                            Arg.Any <Action <ColonyRacetracksChangedMessage>>());
+                                            Arg.Any <Action <ColonyRacetracksResponseMessage>>());
         }
 
         [Test]
@@ -565,14 +565,14 @@ namespace Selkie.WPF.Converters.Tests.NUnit
         }
 
         [Test]
-        public void RacetrackSettingsChangedHandlerCallsUpdateTest()
+        public void RacetrackSettingsResponseHandlerCallsUpdateTest()
         {
             var racetracks = Substitute.For <IRacetracks>();
             m_Manager.Racetracks.Returns(racetracks);
 
-            var message = new ColonyRacetracksChangedMessage();
+            var message = new ColonyRacetracksResponseMessage();
 
-            m_Converter.ColonyRacetracksChangedHandler(message);
+            m_Converter.ColonyRacetracksResponseHandler(message);
 
             Assert.AreEqual(racetracks,
                             m_Converter.Racetracks);

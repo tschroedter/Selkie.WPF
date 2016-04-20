@@ -9,6 +9,7 @@ namespace Selkie.Framework.Aco
     [ProjectComponent(Lifestyle.Transient)]
     public class ColonyParametersValidator : IColonyParametersValidator
     {
+        // todo how is eating these exceptions???
         public void Validate(IColonyParameters colonyParameters)
         {
             if ( colonyParameters.CostMatrix.Length == 0 )

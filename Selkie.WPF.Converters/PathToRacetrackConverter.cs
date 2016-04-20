@@ -30,8 +30,8 @@ namespace Selkie.WPF.Converters
 
             Update();
 
-            bus.SubscribeAsync <ColonyRacetracksChangedMessage>(GetType().FullName,
-                                                                ColonyRacetracksChangedHandler);
+            bus.SubscribeAsync <ColonyRacetracksResponseMessage>(GetType().FullName,
+                                                                 ColonyRacetracksResponseHandler);
         }
 
         internal IRacetracks Racetracks { get; private set; }
@@ -41,7 +41,7 @@ namespace Selkie.WPF.Converters
             Racetracks = m_RacetracksSourceManager.Racetracks;
         }
 
-        internal void ColonyRacetracksChangedHandler(ColonyRacetracksChangedMessage message)
+        internal void ColonyRacetracksResponseHandler(ColonyRacetracksResponseMessage message)
         {
             Update();
         }

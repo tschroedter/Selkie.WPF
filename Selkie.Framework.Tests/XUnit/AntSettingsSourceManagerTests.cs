@@ -43,7 +43,7 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void Constructor_SubscribesToColonyLinesChangedMessage_WhenCalled(
+        public void Constructor_SubscribesToColonyLinesResponseMessage_WhenCalled(
             [NotNull, Frozen] ISelkieInMemoryBus bus,
             [NotNull] AntSettingsSourceManager sut)
         {
@@ -51,7 +51,7 @@ namespace Selkie.Framework.Tests.XUnit
             // Act
             // Assert
             bus.Received().SubscribeAsync(sut.GetType().FullName,
-                                          Arg.Any <Action <ColonyLinesChangedMessage>>());
+                                          Arg.Any <Action <ColonyLineResponseMessage>>());
         }
 
         [Theory]
@@ -114,16 +114,16 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyLinesChangedHandler_SendsMessage_WhenCalled(
+        public void ColonyLineResponsedHandler_SendsMessage_WhenCalled(
             [NotNull, Frozen] ISelkieInMemoryBus bus,
             [NotNull, Frozen] IAntSettingsSource source,
             [NotNull] AntSettingsSourceManager sut,
-            [NotNull] ColonyLinesChangedMessage message)
+            [NotNull] ColonyLineResponseMessage message)
         {
             // Arrange
             // Act
             // ReSharper disable once UnusedVariable
-            sut.ColonyLinesChangedHandler(message);
+            sut.ColonyLineResponseHandler(message);
 
             // Assert
             bus.Received()
@@ -134,15 +134,15 @@ namespace Selkie.Framework.Tests.XUnit
 
         [Theory]
         [AutoNSubstituteData]
-        public void ColonyLinesChangedHandler_CallsUpdateSource_WhenCalled(
+        public void ColonyLineResponsedHandler_CallsUpdateSource_WhenCalled(
             [NotNull, Frozen] IAntSettingsSourceFactory factory,
             [NotNull] AntSettingsSourceManager sut,
-            [NotNull] ColonyLinesChangedMessage message)
+            [NotNull] ColonyLineResponseMessage message)
         {
             // Arrange
             // Act
             // ReSharper disable once UnusedVariable
-            sut.ColonyLinesChangedHandler(message);
+            sut.ColonyLineResponseHandler(message);
 
             // Assert
             factory.Received()

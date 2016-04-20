@@ -96,6 +96,17 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
+        public void ColonyLineResponsedHandlerCallsUpdateTest()
+        {
+            var message = new ColonyLineResponseMessage();
+
+            m_Model.ColonyLineResponsedHandler(message);
+
+            m_Bus.Received()
+                 .PublishAsync(Arg.Any <LinesModelChangedMessage>());
+        }
+
+        [Test]
         public void ConstructorLoadsLinesTest()
         {
             m_Manager.Lines.Returns(m_Lines);
@@ -126,17 +137,6 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
             int count = m_Lines.Count();
 
             m_Factory.Received(count).Release(Arg.Any <IDisplayLine>());
-        }
-
-        [Test]
-        public void LinesChangedHandlerCallsUpdateTest()
-        {
-            var message = new ColonyLinesChangedMessage();
-
-            m_Model.ColonyLinesChangedHandler(message);
-
-            m_Bus.Received()
-                 .PublishAsync(Arg.Any <LinesModelChangedMessage>());
         }
 
         [Test]
@@ -206,11 +206,11 @@ namespace Selkie.WPF.Models.Tests.Mapping.NUnit
         }
 
         [Test]
-        public void SubscribeToLinesChangedMessageTest()
+        public void SubscribeToColonyLineResponseMessageTest()
         {
             m_Bus.Received()
                  .SubscribeAsync(m_Model.GetType().FullName,
-                                 Arg.Any <Action <ColonyLinesChangedMessage>>());
+                                 Arg.Any <Action <ColonyLineResponseMessage>>());
         }
 
         [Test]

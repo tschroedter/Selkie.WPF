@@ -5,7 +5,7 @@ using Selkie.Framework.Interfaces;
 namespace Selkie.Framework.Common.Messages
 {
     [ExcludeFromCodeCoverage]
-    public class ColonyRacetracksChangedMessage
+    public class ColonyRacetracksResponseMessage
     {
         [CanBeNull]
         public IRacetracks Racetracks { get; set; }

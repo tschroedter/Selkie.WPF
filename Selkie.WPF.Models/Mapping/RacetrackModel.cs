@@ -23,8 +23,8 @@ namespace Selkie.WPF.Models.Mapping
             memoryBus.SubscribeAsync <ColonyBestTrailMessage>(GetType().ToString(),
                                                               ColonyBestTrailHandler);
 
-            memoryBus.SubscribeAsync <ColonyLinesChangedMessage>(GetType().ToString(),
-                                                                 ColonyLinesChangedHandler);
+            memoryBus.SubscribeAsync <ColonyLineResponseMessage>(GetType().ToString(),
+                                                                 ColonyLineResponsedHandler);
         }
 
         public IEnumerable <IPath> Paths
@@ -35,7 +35,7 @@ namespace Selkie.WPF.Models.Mapping
             }
         }
 
-        internal void ColonyLinesChangedHandler(ColonyLinesChangedMessage message)
+        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
         {
             Update(new int[0]);
         }

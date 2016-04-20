@@ -41,8 +41,8 @@ namespace Selkie.WPF.ViewModels.Control
             bus.SubscribeAsync <ControlModelChangedMessage>(GetType().ToString(),
                                                             ControlModelChangedHandler);
 
-            bus.SubscribeAsync <ControlModelTestLinesChangedMessage>(GetType().ToString(),
-                                                                     ControlModelTestLinesChangedHandler);
+            bus.SubscribeAsync <ControlModelTestLinesResponseMessage>(GetType().ToString(),
+                                                                      ControlModelTestLinesResponseHandler);
 
             bus.PublishAsync(new ControlModelTestLinesRequestMessage());
         }
@@ -69,6 +69,8 @@ namespace Selkie.WPF.ViewModels.Control
 
         internal bool IsRunning { get; private set; }
         internal bool IsApplying { get; private set; }
+
+        public bool IsLinesWereApplied { get; private set; }
 
         public ICommand StopCommand
         {
@@ -142,6 +144,8 @@ namespace Selkie.WPF.ViewModels.Control
             {
                 m_SelectedTestLine = value;
 
+                IsLinesWereApplied = false;
+
                 m_Bus.PublishAsync(new ControlModelTestLineSetMessage
                                    {
                                        Type = m_SelectedTestLine
@@ -155,6 +159,9 @@ namespace Selkie.WPF.ViewModels.Control
         {
             IsRunning = message.IsRunning;
             IsApplying = message.IsApplying;
+
+            IsLinesWereApplied = !string.IsNullOrEmpty(SelectedTestLine);
+            // todo a bit of a hack here we really don't know
 
             m_Dispatcher.BeginInvoke(Update);
         }
@@ -189,7 +196,8 @@ namespace Selkie.WPF.ViewModels.Control
 
         internal bool CanExecuteStartCommand()
         {
-            return !IsRunning;
+            return !IsRunning &&
+                   IsLinesWereApplied;
         }
 
         internal bool CanExecuteStopCommand()
@@ -202,7 +210,7 @@ namespace Selkie.WPF.ViewModels.Control
             return true;
         }
 
-        internal void ControlModelTestLinesChangedHandler(ControlModelTestLinesChangedMessage message)
+        internal void ControlModelTestLinesResponseHandler(ControlModelTestLinesResponseMessage message)
         {
             m_TestLines = message.TestLineTypes;
 
