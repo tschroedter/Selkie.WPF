@@ -14,13 +14,14 @@ namespace Selkie.WPF.Common.Interfaces.Converters
         [NotNull]
         IRacetracks Racetracks { get; set; }
 
+        double CostEndToEnd([NotNull] ILine other);
+        double CostEndToStart([NotNull] ILine other);
+
         double CostForwardForward([NotNull] ILine other);
         double CostForwardReverse([NotNull] ILine other);
         double CostReverseForward([NotNull] ILine to);
         double CostReverseReverse([NotNull] ILine to);
-        double CostStartToStart([NotNull] ILine other);
-        double CostEndToStart([NotNull] ILine other);
-        double CostEndToEnd([NotNull] ILine other);
         double CostStartToEnd([NotNull] ILine to);
+        double CostStartToStart([NotNull] ILine other);
     }
 }

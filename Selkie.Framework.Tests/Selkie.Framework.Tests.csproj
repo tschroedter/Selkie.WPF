@@ -54,8 +54,8 @@
       <HintPath>..\packages\EasyNetQ.Management.Client.0.47.12.38\lib\net40\EasyNetQ.Management.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=10.1.4.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -66,72 +66,68 @@
       <HintPath>..\packages\NLog.4.1.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute, Version=1.8.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute, Version=1.10.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture">
-      <HintPath>..\packages\AutoFixture.3.31.3\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+    <Reference Include="Ploeh.AutoFixture, Version=3.46.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.3.46.0\lib\net40\Ploeh.AutoFixture.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture.AutoNSubstitute, Version=3.31.1.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.AutoNSubstitute.3.31.1\lib\net40\Ploeh.AutoFixture.AutoNSubstitute.dll</HintPath>
+    <Reference Include="Ploeh.AutoFixture.AutoNSubstitute, Version=3.46.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.AutoNSubstitute.3.46.0\lib\net40\Ploeh.AutoFixture.AutoNSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture.Xunit, Version=3.31.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.Xunit.3.31.0\lib\net40\Ploeh.AutoFixture.Xunit.dll</HintPath>
+    <Reference Include="Ploeh.AutoFixture.NUnit3, Version=3.46.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.NUnit3.3.46.0\lib\net40\Ploeh.AutoFixture.NUnit3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RabbitMQ.Client, Version=3.5.4.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Aop, Version=0.6.31.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Aop.0.6.31.0\lib\net45\Selkie.Aop.dll</HintPath>
+    <Reference Include="Selkie.Aop, Version=0.6.45.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Aop.0.6.45.0\lib\net45\Selkie.Aop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Common, Version=0.6.232.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Common.0.6.232.0\lib\net45\Selkie.Common.dll</HintPath>
+    <Reference Include="Selkie.Common, Version=0.6.254.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Common.0.6.254\lib\net45\Selkie.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.EasyNetQ, Version=0.6.220.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.EasyNetQ.0.6.220.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
+    <Reference Include="Selkie.EasyNetQ, Version=0.6.246.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.EasyNetQ.0.6.246\lib\net45\Selkie.EasyNetQ.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Geometry, Version=0.6.141.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Geometry.0.6.141.0\lib\net45\Selkie.Geometry.dll</HintPath>
+    <Reference Include="Selkie.Geometry, Version=0.6.170.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Geometry.0.6.170.0\lib\net45\Selkie.Geometry.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.NUnit.Extensions, Version=0.6.113.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.NUnit.Extensions.0.6.113.0\lib\net45\Selkie.NUnit.Extensions.dll</HintPath>
+    <Reference Include="Selkie.NUnit.Extensions, Version=0.6.142.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.NUnit.Extensions.0.6.142\lib\net45\Selkie.NUnit.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Services.Aco.Common, Version=0.6.17.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Services.Aco.Common.0.6.17.0\lib\net45\Selkie.Services.Aco.Common.dll</HintPath>
+    <Reference Include="Selkie.Services.Aco.Common, Version=0.6.20.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Aco.Common.0.6.20.0\lib\net45\Selkie.Services.Aco.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Services.Common.Dto, Version=0.6.17.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Services.Common.Dto.0.6.17.0\lib\net45\Selkie.Services.Common.Dto.dll</HintPath>
+    <Reference Include="Selkie.Services.Common.Dto, Version=0.6.22.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Common.Dto.0.6.22\lib\net45\Selkie.Services.Common.Dto.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Services.Lines.Common, Version=0.6.38.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Services.Lines.Common.0.6.38.0\lib\net45\Selkie.Services.Lines.Common.dll</HintPath>
+    <Reference Include="Selkie.Services.Lines.Common, Version=0.6.40.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Lines.Common.0.6.40.0\lib\net45\Selkie.Services.Lines.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Services.Racetracks.Common, Version=0.6.72.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Services.Racetracks.Common.0.6.72.0\lib\net45\Selkie.Services.Racetracks.Common.dll</HintPath>
+    <Reference Include="Selkie.Services.Racetracks.Common, Version=0.6.75.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Racetracks.Common.0.6.75.0\lib\net45\Selkie.Services.Racetracks.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Windsor, Version=0.6.257.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Windsor.0.6.257.0\lib\net45\Selkie.Windsor.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Selkie.XUnit.Extensions, Version=0.6.115.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.XUnit.Extensions.0.6.115.0\lib\net45\Selkie.XUnit.Extensions.dll</HintPath>
+    <Reference Include="Selkie.Windsor, Version=0.6.261.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Windsor.0.6.261\lib\net45\Selkie.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -141,40 +137,33 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.extensions, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.extensions.1.9.2\lib\net20\xunit.extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aco\XUnit\AcoProxyLoggerTests.cs" />
-    <Compile Include="Aco\XUnit\ColonyParametersTests.cs" />
-    <Compile Include="Aco\XUnit\ColonyParametersValidatorTests.cs" />
-    <Compile Include="Aco\XUnit\CostMatrixCalculationManagerTests.cs" />
-    <Compile Include="Aco\XUnit\ServiceProxyTests.cs" />
-    <Compile Include="Converters\NUnit\DoubleArrayToIntegerArrayConverterTests.cs" />
-    <Compile Include="Converters\NUnit\PathDtoToPathTests.cs" />
-    <Compile Include="Converters\NUnit\RacetracksDtoToRacetracksConverterTests.cs" />
-    <Compile Include="Converters\NUnit\TestLinesDtoToLinesConverterTests.cs" />
-    <Compile Include="NUnit\LinesSourceTests.cs" />
-    <Compile Include="NUnit\RacetrackSettingsSourceManagerTests.cs" />
-    <Compile Include="NUnit\RacetracksSourceManagerTests.cs" />
-    <Compile Include="NUnit\RacetracksSourceTests.cs" />
-    <Compile Include="NUnit\RacetracksTests.cs" />
+    <Compile Include="Aco\AcoProxyLoggerTests.cs" />
+    <Compile Include="Aco\ColonyParametersTests.cs" />
+    <Compile Include="Aco\ColonyParametersValidatorTests.cs" />
+    <Compile Include="Aco\CostMatrixCalculationManagerTests.cs" />
+    <Compile Include="Aco\ServiceProxyTests.cs" />
+    <Compile Include="Aco\SurveyFeatureToSurveyFeatureDtoConverterTests.cs" />
+    <Compile Include="Converters\DoubleArrayToIntegerArrayConverterTests.cs" />
+    <Compile Include="Converters\PathDtoToPathTests.cs" />
+    <Compile Include="Converters\RacetracksDtoToRacetracksConverterTests.cs" />
+    <Compile Include="Converters\TestLinesDtoToLinesConverterTests.cs" />
+    <Compile Include="Converters\SurveyFeaturesToCostPerSurveyFeatureConverterTests.cs" />
+    <Compile Include="SurveyFeatureSourceTests.cs" />
+    <Compile Include="RacetrackSettingsSourceManagerTests.cs" />
+    <Compile Include="RacetracksSourceManagerTests.cs" />
+    <Compile Include="RacetracksSourceTests.cs" />
+    <Compile Include="RacetracksTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Handlers\XUnit\ExceptionThrownHandlerTests.cs" />
-    <Compile Include="Services\Handlers\XUnit\StatusHandlerTests.cs" />
-    <Compile Include="Services\Handlers\XUnit\BestTrailHandlerTests.cs" />
-    <Compile Include="Services\Handlers\XUnit\PheromonesHandlerTests.cs" />
-    <Compile Include="XUnit\AntSettingsSourceManagerTests.cs" />
-    <Compile Include="XUnit\AntSettingsSourceTests.cs" />
-    <Compile Include="XUnit\ColonyTests.cs" />
-    <Compile Include="XUnit\LinesSourceManagerTests.cs" />
-    <Compile Include="XUnit\RacetracksTests.cs" />
+    <Compile Include="Services\Handlers\ExceptionThrownHandlerTests.cs" />
+    <Compile Include="Services\Handlers\StatusHandlerTests.cs" />
+    <Compile Include="Services\Handlers\BestTrailHandlerTests.cs" />
+    <Compile Include="Services\Handlers\PheromonesHandlerTests.cs" />
+    <Compile Include="AntSettingsSourceManagerTests.cs" />
+    <Compile Include="AntSettingsSourceTests.cs" />
+    <Compile Include="ColonyTests.cs" />
+    <Compile Include="LinesSourceManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Selkie.Framework.Common\Selkie.Framework.Common.csproj">
@@ -194,6 +183,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

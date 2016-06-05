@@ -6,8 +6,6 @@ namespace Selkie.Framework.Common.Messages
     [ExcludeFromCodeCoverage]
     public class ColonyPheromonesMessage
     {
-        private double[][] m_Values = new double[0][];
-
         [NotNull]
         public double[][] Values
         {
@@ -24,5 +22,6 @@ namespace Selkie.Framework.Common.Messages
         public double Minimum { get; set; }
         public double Maximum { get; set; }
         public double Average { get; set; }
+        private double[][] m_Values = new double[0][];
     }
 }

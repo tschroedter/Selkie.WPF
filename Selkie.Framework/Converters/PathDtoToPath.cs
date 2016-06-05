@@ -46,6 +46,39 @@ namespace Selkie.Framework.Converters
             }
         }
 
+        internal ICircle CreateCircleFormCircleDto(CircleDto dto)
+        {
+            if ( dto.IsUnknown )
+            {
+                return Circle.Unknown;
+            }
+
+            Point centrePoint = CreatePointFromPointDto(dto.CentrePoint);
+            double radius = dto.Radius;
+            var circle = new Circle(centrePoint,
+                                    radius);
+
+            return circle;
+        }
+
+        internal Constants.LineDirection CreateLineDirectionFromString(string runDirectionString)
+        {
+            Constants.LineDirection lineDirection;
+            if ( Enum.TryParse(runDirectionString,
+                               out lineDirection) )
+            {
+                return lineDirection;
+            }
+
+            throw new ArgumentException("Can't parse string {0} to determine LineDirection!".Inject(runDirectionString));
+        }
+
+        internal Point CreatePointFromPointDto(PointDto dto)
+        {
+            return new Point(dto.X,
+                             dto.Y);
+        }
+
         internal IPolyline CreatePolyline([NotNull] PolylineDto polylineDto)
         {
             var polyline = new Polyline(0,
@@ -95,6 +128,18 @@ namespace Selkie.Framework.Converters
             return polylineSegment;
         }
 
+        internal Constants.TurnDirection CreateTurnDirectionFromString(string turnDirectionString)
+        {
+            Constants.TurnDirection turnDirection;
+            if ( Enum.TryParse(turnDirectionString,
+                               out turnDirection) )
+            {
+                return turnDirection;
+            }
+
+            throw new ArgumentException("Can't parse string {0} to determine TurnDirection!".Inject(turnDirectionString));
+        }
+
         private ILine CreateLineFromLineDto(LineSegmentDto dto)
         {
             Point startPoint = CreatePointFromPointDto(dto.StartPoint);
@@ -105,18 +150,6 @@ namespace Selkie.Framework.Converters
                                 lineDirection);
 
             return line;
-        }
-
-        internal Constants.LineDirection CreateLineDirectionFromString(string runDirectionString)
-        {
-            Constants.LineDirection lineDirection;
-            if ( Enum.TryParse(runDirectionString,
-                               out lineDirection) )
-            {
-                return lineDirection;
-            }
-
-            throw new ArgumentException("Can't parse string {0} to determine LineDirection!".Inject(runDirectionString));
         }
 
         private ITurnCircleArcSegment CreateTurnCircleArcSegment(ArcSegmentDto segment,
@@ -135,39 +168,6 @@ namespace Selkie.Framework.Converters
             // todo equals for TurnCircleArcSegment
 
             return turnCircleArcSegment;
-        }
-
-        internal ICircle CreateCircleFormCircleDto(CircleDto dto)
-        {
-            if ( dto.IsUnknown )
-            {
-                return Circle.Unknown;
-            }
-
-            Point centrePoint = CreatePointFromPointDto(dto.CentrePoint);
-            double radius = dto.Radius;
-            var circle = new Circle(centrePoint,
-                                    radius);
-
-            return circle;
-        }
-
-        internal Constants.TurnDirection CreateTurnDirectionFromString(string turnDirectionString)
-        {
-            Constants.TurnDirection turnDirection;
-            if ( Enum.TryParse(turnDirectionString,
-                               out turnDirection) )
-            {
-                return turnDirection;
-            }
-
-            throw new ArgumentException("Can't parse string {0} to determine TurnDirection!".Inject(turnDirectionString));
-        }
-
-        internal Point CreatePointFromPointDto(PointDto dto)
-        {
-            return new Point(dto.X,
-                             dto.Y);
         }
     }
 }

@@ -9,10 +9,6 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Singleton)]
     public class RacetrackSettingsSourceManager : IRacetrackSettingsSourceManager
     {
-        internal static readonly double DefaultRadius = 30.0;
-        private readonly ISelkieBus m_Bus;
-        private readonly IRacetrackSettingsSourceFactory m_Factory;
-
         public RacetrackSettingsSourceManager([NotNull] ISelkieBus bus,
                                               [NotNull] IRacetrackSettingsSourceFactory factory)
         {
@@ -31,6 +27,10 @@ namespace Selkie.Framework
             m_Bus.SubscribeAsync <ColonyRacetrackSettingsRequestMessage>(subscriptionId,
                                                                          ColonyRacetrackSettingsRequestHandler);
         }
+
+        internal static readonly double DefaultRadius = 30.0;
+        private readonly ISelkieBus m_Bus;
+        private readonly IRacetrackSettingsSourceFactory m_Factory;
 
         public IRacetrackSettingsSource Source { get; private set; }
 

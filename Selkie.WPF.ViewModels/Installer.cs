@@ -10,7 +10,6 @@ using Selkie.WPF.ViewModels.Mapping.Handlers;
 
 namespace Selkie.WPF.ViewModels
 {
-    //ncrunch: no coverage start
     [ExcludeFromCodeCoverage]
     public class Installer : SelkieInstaller <Installer>
     {
@@ -22,12 +21,12 @@ namespace Selkie.WPF.ViewModels
 
             container.Register(Classes.FromThisAssembly()
                                       .BasedOn <IConverter>()
-                                      .WithServiceFromInterface(typeof ( IConverter ))
+                                      .WithServiceFromInterface(typeof( IConverter ))
                                       .Configure(c => c.LifeStyle.Is(LifestyleType.Transient)));
 
             container.Register(Classes.FromThisAssembly()
                                       .BasedOn <IViewModel>()
-                                      .WithServiceFromInterface(typeof ( IViewModel ))
+                                      .WithServiceFromInterface(typeof( IViewModel ))
                                       .Configure(c => c.LifeStyle.Is(LifestyleType.Transient)));
 
             container.Register(Component.For <IMapViewModelMessageHandler>() // todo find better way

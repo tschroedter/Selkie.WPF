@@ -16,14 +16,6 @@ namespace Selkie.WPF.ViewModels.Settings
         : ViewModel,
           IAntSettingsViewModel
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly ICommandManager m_CommandManager;
-        private readonly IApplicationDispatcher m_Dispatcher;
-        private ICommand m_ApplyCommand;
-        private bool m_IsFixedStartNode;
-        private IEnumerable <IAntSettingsNode> m_Nodes;
-        private IAntSettingsNode m_SelectedNode;
-
         public AntSettingsViewModel([NotNull] ISelkieLogger logger,
                                     [NotNull] ISelkieInMemoryBus bus,
                                     [NotNull] IApplicationDispatcher dispatcher,
@@ -56,6 +48,14 @@ namespace Selkie.WPF.ViewModels.Settings
                 NotifyPropertyChanged("Nodes");
             }
         }
+
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly ICommandManager m_CommandManager;
+        private readonly IApplicationDispatcher m_Dispatcher;
+        private ICommand m_ApplyCommand;
+        private bool m_IsFixedStartNode;
+        private IEnumerable <IAntSettingsNode> m_Nodes;
+        private IAntSettingsNode m_SelectedNode;
 
         [CanBeNull]
         public IAntSettingsNode SelectedNode
@@ -111,15 +111,28 @@ namespace Selkie.WPF.ViewModels.Settings
             m_Dispatcher.BeginInvoke(() => UpdateAndNotify(message));
         }
 
-        internal void UpdateAndNotify([NotNull] AntSettingsModelChangedMessage message)
+        internal void Apply()
         {
-            Update(message.IsFixedStartNode,
-                   message.FixedStartNode,
-                   message.Nodes);
+            IsApplying = true;
 
-            IsApplying = false;
+            int fixedStartNode = m_SelectedNode != null
+                                     ? m_SelectedNode.Id
+                                     : 0;
+
+            var message = new AntSettingsModelSetMessage
+                          {
+                              IsFixedStartNode = IsFixedStartNode,
+                              FixedStartNode = fixedStartNode
+                          };
+
+            m_Bus.PublishAsync(message);
 
             NotifyPropertyChanged("IsApplyEnabled");
+        }
+
+        internal bool ApplyCommandCanExecute()
+        {
+            return !IsApplying;
         }
 
         internal void Update(bool isFixedStartNode,
@@ -137,26 +150,13 @@ namespace Selkie.WPF.ViewModels.Settings
             Nodes = nodesArray;
         }
 
-        internal bool ApplyCommandCanExecute()
+        internal void UpdateAndNotify([NotNull] AntSettingsModelChangedMessage message)
         {
-            return !IsApplying;
-        }
+            Update(message.IsFixedStartNode,
+                   message.FixedStartNode,
+                   message.Nodes);
 
-        internal void Apply()
-        {
-            IsApplying = true;
-
-            int fixedStartNode = m_SelectedNode != null
-                                     ? m_SelectedNode.Id
-                                     : 0;
-
-            var message = new AntSettingsModelSetMessage
-                          {
-                              IsFixedStartNode = IsFixedStartNode,
-                              FixedStartNode = fixedStartNode
-                          };
-
-            m_Bus.PublishAsync(message);
+            IsApplying = false;
 
             NotifyPropertyChanged("IsApplyEnabled");
         }

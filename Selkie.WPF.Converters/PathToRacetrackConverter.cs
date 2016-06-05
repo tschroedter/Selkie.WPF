@@ -13,12 +13,6 @@ namespace Selkie.WPF.Converters
 {
     public class PathToRacetracksConverter : IPathToRacetracksConverter
     {
-        private readonly ISelkieLogger m_Logger;
-        private readonly INodeIdHelper m_NodeIdHelper;
-        private readonly List <IPath> m_Paths = new List <IPath>();
-        private readonly IRacetracksSourceManager m_RacetracksSourceManager;
-        private int[] m_Path;
-
         public PathToRacetracksConverter([NotNull] ISelkieLogger logger,
                                          [NotNull] ISelkieBus bus,
                                          [NotNull] INodeIdHelper nodeIdHelper,
@@ -35,15 +29,51 @@ namespace Selkie.WPF.Converters
         }
 
         internal IRacetracks Racetracks { get; private set; }
-
-        internal void Update()
-        {
-            Racetracks = m_RacetracksSourceManager.Racetracks;
-        }
+        private readonly ISelkieLogger m_Logger;
+        private readonly INodeIdHelper m_NodeIdHelper;
+        private readonly List <IPath> m_Paths = new List <IPath>();
+        private readonly IRacetracksSourceManager m_RacetracksSourceManager;
+        private int[] m_Path;
 
         internal void ColonyRacetracksResponseHandler(ColonyRacetracksResponseMessage message)
         {
             Update();
+        }
+
+        internal IPath GetPathForNodeForward(bool isToNodeForward,
+                                             int fromLineId,
+                                             int toLineId)
+        {
+            if ( Racetracks.ForwardToForward.Length > fromLineId &&
+                 Racetracks.ForwardToForward [ 0 ].Length > toLineId )
+            {
+                return isToNodeForward
+                           ? Racetracks.ForwardToForward [ fromLineId ] [ toLineId ]
+                           : Racetracks.ForwardToReverse [ fromLineId ] [ toLineId ];
+            }
+
+            m_Logger.Warn("From Line Id {0} and/or To Line Id {1} are invalid!".Inject(fromLineId,
+                                                                                       toLineId));
+
+            return Framework.Common.Path.Unknown;
+        }
+
+        internal IPath GetPathToNodeFoward(bool isToNodeForward,
+                                           int fromLineId,
+                                           int toLineId)
+        {
+            if ( Racetracks.ReverseToForward.Length > fromLineId &&
+                 Racetracks.ReverseToForward [ 0 ].Length > toLineId )
+            {
+                return isToNodeForward
+                           ? Racetracks.ReverseToForward [ fromLineId ] [ toLineId ]
+                           : Racetracks.ReverseToReverse [ fromLineId ] [ toLineId ];
+            }
+
+            m_Logger.Warn("From Line Id {0} and/or To Line Id {1} are invalid!".Inject(fromLineId,
+                                                                                       toLineId));
+
+            return Framework.Common.Path.Unknown;
         }
 
         internal IPath GetRacetrack(int[] path,
@@ -82,6 +112,11 @@ namespace Selkie.WPF.Converters
                                        toLineId);
         }
 
+        internal void Update()
+        {
+            Racetracks = m_RacetracksSourceManager.Racetracks;
+        }
+
         private void LogErrorIndexOutOfBounds(int[] path,
                                               int currentNode,
                                               int nextNode,
@@ -98,42 +133,6 @@ namespace Selkie.WPF.Converters
                             nextNode);
 
             m_Logger.Error(message);
-        }
-
-        internal IPath GetPathToNodeFoward(bool isToNodeForward,
-                                           int fromLineId,
-                                           int toLineId)
-        {
-            if ( Racetracks.ReverseToForward.Length > fromLineId &&
-                 Racetracks.ReverseToForward [ 0 ].Length > toLineId )
-            {
-                return isToNodeForward
-                           ? Racetracks.ReverseToForward [ fromLineId ] [ toLineId ]
-                           : Racetracks.ReverseToReverse [ fromLineId ] [ toLineId ];
-            }
-
-            m_Logger.Warn("From Line Id {0} and/or To Line Id {1} are invalid!".Inject(fromLineId,
-                                                                                       toLineId));
-
-            return Framework.Common.Path.Unknown;
-        }
-
-        internal IPath GetPathForNodeForward(bool isToNodeForward,
-                                             int fromLineId,
-                                             int toLineId)
-        {
-            if ( Racetracks.ForwardToForward.Length > fromLineId &&
-                 Racetracks.ForwardToForward [ 0 ].Length > toLineId )
-            {
-                return isToNodeForward
-                           ? Racetracks.ForwardToForward [ fromLineId ] [ toLineId ]
-                           : Racetracks.ForwardToReverse [ fromLineId ] [ toLineId ];
-            }
-
-            m_Logger.Warn("From Line Id {0} and/or To Line Id {1} are invalid!".Inject(fromLineId,
-                                                                                       toLineId));
-
-            return Framework.Common.Path.Unknown;
         }
 
         #region IPathToRacetracksConverter Members

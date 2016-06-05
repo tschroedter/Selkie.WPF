@@ -9,12 +9,12 @@ namespace Selkie.Framework.Services.Handlers
     [ProjectComponent(Lifestyle.Startable)]
     public class StatusHandler : SelkieMessageHandlerAsync <StatusMessage>
     {
-        private readonly ISelkieInMemoryBus m_InMemoryBus;
-
         public StatusHandler([NotNull] ISelkieInMemoryBus inMemoryBus)
         {
             m_InMemoryBus = inMemoryBus;
         }
+
+        private readonly ISelkieInMemoryBus m_InMemoryBus;
 
         public override void Handle(StatusMessage message)
         {

@@ -8,14 +8,10 @@ using Selkie.Windsor.Extensions;
 
 namespace Selkie.WPF.Models.Handlers
 {
-    [Interceptor(typeof ( MessageHandlerAspect ))]
+    [Interceptor(typeof( MessageHandlerAspect ))]
     public class ExceptionThrownHandler
         : SelkieMessageHandler <ExceptionThrownMessage>
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly IExceptionThrownMessageToStringConverter m_Converter;
-        private readonly ISelkieLogger m_Logger;
-
         public ExceptionThrownHandler([NotNull] ISelkieLogger logger,
                                       [NotNull] ISelkieInMemoryBus bus,
                                       [NotNull] IExceptionThrownMessageToStringConverter converter)
@@ -24,6 +20,10 @@ namespace Selkie.WPF.Models.Handlers
             m_Bus = bus;
             m_Converter = converter;
         }
+
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly IExceptionThrownMessageToStringConverter m_Converter;
+        private readonly ISelkieLogger m_Logger;
 
         public override void Handle(ExceptionThrownMessage message)
         {

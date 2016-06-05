@@ -7,6 +7,7 @@ using Selkie.Framework.Common.Messages;
 using Selkie.Framework.Converters;
 using Selkie.Framework.Interfaces;
 using Selkie.Geometry.Shapes;
+using Selkie.Geometry.Surveying;
 using Selkie.Services.Lines.Common;
 using Selkie.Services.Lines.Common.Messages;
 using Selkie.Windsor;
@@ -15,15 +16,8 @@ using Selkie.Windsor.Extensions;
 namespace Selkie.Framework
 {
     [ProjectComponent(Lifestyle.Singleton)]
-    public class LinesSourceManager : ILinesSourceManager
+    public class LinesSourceManager : ILinesSourceManager // todo change to SurveyFeature
     {
-        private readonly ISelkieBus m_Bus;
-        private readonly ITestLinesDtoToLinesConverter m_Converter;
-        private readonly ILinesSourceFactory m_Factory;
-        private readonly ISelkieLogger m_Logger;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
-        private ILinesSource m_Source = LinesSource.Unknown;
-
         public LinesSourceManager([NotNull] ISelkieLogger logger,
                                   [NotNull] ISelkieBus bus,
                                   [NotNull] ISelkieInMemoryBus memoryBus,
@@ -49,7 +43,14 @@ namespace Selkie.Framework
                                                                 ColonyTestLineSetHandler);
         }
 
-        public IEnumerable <ILine> Lines
+        private readonly ISelkieBus m_Bus;
+        private readonly ITestLinesDtoToLinesConverter m_Converter;
+        private readonly ILinesSourceFactory m_Factory;
+        private readonly ISelkieLogger m_Logger;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
+        private ISurveyFeatureSource m_Source = SurveyFeatureSource.Unknown;
+
+        public IEnumerable <ILine> Lines // todo maybe replaced with SurveyPolylines
         {
             get
             {
@@ -57,12 +58,54 @@ namespace Selkie.Framework
             }
         }
 
-        public IEnumerable <int> CostPerLine
+        public IEnumerable <ISurveyPolyline> SurveyPolylines // todo not used at the moment
         {
             get
             {
-                return m_Source.CostPerLine;
+                return m_Source.SurveyPolylines;
             }
+        }
+
+        public IEnumerable <ISurveyFeature> SurveyFeatures
+        {
+            get
+            {
+                return m_Source.SurveyPolylines;
+            }
+        }
+
+        public IEnumerable <int> CostPerFeature
+        {
+            get
+            {
+                return m_Source.CostPerFeature;
+            }
+        }
+
+        public IEnumerable <string> GetTestLineTypes()
+        {
+            List <string> types = Enum.GetNames(typeof( TestLineType.Type )).ToList();
+
+            types = types.Where(x => x != TestLineType.Type.CreateCrossForwardReverse.ToString()).ToList();
+
+            return types;
+        }
+
+        internal void ColonyAvailabeTestLinesRequestHandler(ColonyAvailabeTestLinesRequestMessage message)
+        {
+            IEnumerable <string> types = GetTestLineTypes();
+
+            var response = new ColonyAvailableTestLinesResponseMessage
+                           {
+                               Types = types
+                           };
+
+            m_MemoryBus.PublishAsync(response);
+        }
+
+        internal void ColonyLinesRequestHandler(ColonyLinesRequestMessage message)
+        {
+            SendColonyLinesResponseMessage();
         }
 
         internal void ColonyTestLineSetHandler(ColonyTestLineSetMessage message)
@@ -88,11 +131,6 @@ namespace Selkie.Framework
                                });
         }
 
-        internal void ColonyLinesRequestHandler(ColonyLinesRequestMessage message)
-        {
-            SendColonyLinesResponseMessage();
-        }
-
         internal void SendColonyLinesResponseMessage()
         {
             var message = new ColonyLinesResponseMessage
@@ -103,20 +141,6 @@ namespace Selkie.Framework
             m_MemoryBus.PublishAsync(message);
 
             LogLines(m_Source.Lines);
-        }
-
-        private void LogLines([NotNull] IEnumerable <ILine> lines)
-        {
-            ILine[] linesArray = lines.ToArray();
-
-            m_Logger.Info("Lines Count: {0}".Inject(linesArray.Length));
-
-            var count = 0;
-            foreach ( ILine line in linesArray )
-            {
-                m_Logger.Info("[{0}] {1}".Inject(count++,
-                                                 line));
-            }
         }
 
         internal void TestLineResponseHandler(TestLineResponseMessage message)
@@ -131,26 +155,18 @@ namespace Selkie.Framework
             m_MemoryBus.PublishAsync(new ColonyLineResponseMessage());
         }
 
-        internal void ColonyAvailabeTestLinesRequestHandler(ColonyAvailabeTestLinesRequestMessage message)
+        private void LogLines([NotNull] IEnumerable <ILine> lines)
         {
-            IEnumerable <string> types = GetTestLineTypes();
+            ILine[] linesArray = lines.ToArray();
 
-            var response = new ColonyAvailableTestLinesResponseMessage
-                           {
-                               Types = types
-                           };
+            m_Logger.Info("Lines Count: {0}".Inject(linesArray.Length));
 
-            m_MemoryBus.PublishAsync(response);
-        }
-
-        public IEnumerable <string> GetTestLineTypes()
-        {
-            List <string> types = Enum.GetNames(typeof ( TestLineType.Type )).ToList();
-
-            // todo removed CreateCrossForwardReverse because there is a bug with these lines
-            types = types.Where(x => x != TestLineType.Type.CreateCrossForwardReverse.ToString()).ToList();
-
-            return types;
+            var count = 0;
+            foreach ( ILine line in linesArray )
+            {
+                m_Logger.Info("[{0}] {1}".Inject(count++,
+                                                 line));
+            }
         }
     }
 }

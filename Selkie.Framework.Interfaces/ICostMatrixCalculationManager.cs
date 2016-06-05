@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
-using Selkie.Geometry.Shapes;
-using Selkie.Services.Common.Dto;
+using Selkie.Geometry.Surveying;
 
 namespace Selkie.Framework.Interfaces
 {
@@ -11,13 +10,10 @@ namespace Selkie.Framework.Interfaces
         int[][] Matrix { get; }
 
         [NotNull]
-        IEnumerable <ILine> Lines { get; }
+        IEnumerable <int> CostPerFeature { get; }
 
         [NotNull]
-        IEnumerable <LineDto> LineDtos { get; }
-
-        [NotNull]
-        IEnumerable <int> CostPerLine { get; }
+        ISurveyFeature[] SurveyFeature { get; }
 
         void Calculate();
     }

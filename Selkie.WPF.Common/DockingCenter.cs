@@ -12,21 +12,19 @@ using Xceed.Wpf.AvalonDock.Layout;
 
 namespace Selkie.WPF.Common
 {
-    //ncrunch: no coverage start
     [ExcludeFromCodeCoverage]
     [ProjectComponent(Lifestyle.Singleton)]
     public class DockingCenter : IDockingCenter
     {
-        private readonly Dictionary <string, LayoutAnchorablePane> m_DisplayMap;
-        private DockingManager m_DockManager;
-        private List <LayoutAnchorablePane> m_Layouts;
-
         public DockingCenter()
         {
             m_DisplayMap = new Dictionary <string, LayoutAnchorablePane>();
         }
 
         public ISelkieLogger Logger { get; set; }
+        private readonly Dictionary <string, LayoutAnchorablePane> m_DisplayMap;
+        private DockingManager m_DockManager;
+        private List <LayoutAnchorablePane> m_Layouts;
 
         public void AssignToArea([NotNull] IView view,
                                  [NotNull] string title)
@@ -62,6 +60,23 @@ namespace Selkie.WPF.Common
             InitializeDockingCenter();
         }
 
+        private void AddAreaPlaceholder(string key,
+                                        LayoutAnchorablePane thePlaceHolder)
+        {
+            if ( m_DisplayMap == null )
+            {
+                throw new NullReferenceException("display map not initialized yet");
+            }
+
+            if ( m_DisplayMap.Keys.Contains(key) )
+            {
+                throw new Exception("area placeholder already exists in dictionary");
+            }
+
+            m_DisplayMap.Add(key,
+                             thePlaceHolder);
+        }
+
         private void InitializeDockingCenter()
         {
             if ( m_DockManager == null )
@@ -81,23 +96,6 @@ namespace Selkie.WPF.Common
                 AddAreaPlaceholder(element.SelectedContent.Title,
                                    element);
             }
-        }
-
-        private void AddAreaPlaceholder(string key,
-                                        LayoutAnchorablePane thePlaceHolder)
-        {
-            if ( m_DisplayMap == null )
-            {
-                throw new NullReferenceException("display map not initialized yet");
-            }
-
-            if ( m_DisplayMap.Keys.Contains(key) )
-            {
-                throw new Exception("area placeholder already exists in dictionary");
-            }
-
-            m_DisplayMap.Add(key,
-                             thePlaceHolder);
         }
     }
 }

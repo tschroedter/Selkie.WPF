@@ -8,8 +8,6 @@ namespace Selkie.WPF.Models.Status
 {
     public class StatusModel : IStatusModel
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-
         public StatusModel([NotNull] ISelkieInMemoryBus bus)
         {
             m_Bus = bus;
@@ -19,6 +17,8 @@ namespace Selkie.WPF.Models.Status
             bus.SubscribeAsync <ColonyStatusMessage>(subscriptionId,
                                                      StatusHandler);
         }
+
+        private readonly ISelkieInMemoryBus m_Bus;
 
         internal void StatusHandler(ColonyStatusMessage message)
         {

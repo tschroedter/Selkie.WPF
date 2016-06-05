@@ -10,17 +10,11 @@ using Selkie.Windsor;
 
 namespace Selkie.Framework.Aco
 {
-    [Interceptor(typeof ( StatusAspect ))]
-    [Interceptor(typeof ( MessageHandlerAspect ))]
+    [Interceptor(typeof( StatusAspect ))]
+    [Interceptor(typeof( MessageHandlerAspect ))]
     [ProjectComponent(Lifestyle.Transient)]
     public class ServiceProxy : IServiceProxy
     {
-        internal const int DefaultNumberOfIterations = 2000;
-        private readonly IAcoProxyLogger m_AcoProxylogger;
-        private readonly ISelkieBus m_Bus;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
-        private readonly IColonyParametersValidator m_Validator;
-
         public ServiceProxy([NotNull] IAcoProxyLogger acoProxylogger,
                             [NotNull] ISelkieBus bus,
                             [NotNull] ISelkieInMemoryBus memoryBus,
@@ -46,6 +40,12 @@ namespace Selkie.Framework.Aco
                                                    FinishedHandler);
         }
 
+        internal const int DefaultNumberOfIterations = 2000;
+        private readonly IAcoProxyLogger m_AcoProxylogger;
+        private readonly ISelkieBus m_Bus;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
+        private readonly IColonyParametersValidator m_Validator;
+
         public bool IsColonyCreated { get; private set; }
         public bool IsRunning { get; private set; }
 
@@ -56,14 +56,14 @@ namespace Selkie.Framework.Aco
             IsRunning = false;
 
             m_AcoProxylogger.LogCostMatrix(colonyParameters.CostMatrix);
-            m_AcoProxylogger.LogCostPerLine(colonyParameters.CostPerLine);
+            m_AcoProxylogger.LogCostPerFeature(colonyParameters.CostPerFeature);
 
             m_Validator.Validate(colonyParameters);
 
             var createMessage = new CreateColonyMessage
                                 {
                                     CostMatrix = colonyParameters.CostMatrix,
-                                    CostPerLine = colonyParameters.CostPerLine,
+                                    CostPerFeature = colonyParameters.CostPerFeature,
                                     IsFixedStartNode = colonyParameters.IsFixedStartNode,
                                     FixedStartNode = colonyParameters.FixedStartNode
                                 };
@@ -104,6 +104,16 @@ namespace Selkie.Framework.Aco
             IsFinished = false;
         }
 
+        [Status("Colony calculation finished!")]
+        internal void FinishedHandler(FinishedMessage message)
+        {
+            IsRunning = false;
+            IsColonyCreated = false;
+            IsFinished = true;
+
+            m_MemoryBus.PublishAsync(new ColonyFinishedMessage());
+        }
+
         [Status("Colony calculation started...")]
         internal void StartedHandler(StartedMessage message)
         {
@@ -121,16 +131,6 @@ namespace Selkie.Framework.Aco
             IsFinished = false;
 
             m_MemoryBus.PublishAsync(new ColonyStoppedMessage());
-        }
-
-        [Status("Colony calculation finished!")]
-        internal void FinishedHandler(FinishedMessage message)
-        {
-            IsRunning = false;
-            IsColonyCreated = false;
-            IsFinished = true;
-
-            m_MemoryBus.PublishAsync(new ColonyFinishedMessage());
         }
     }
 }

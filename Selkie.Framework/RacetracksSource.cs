@@ -5,12 +5,6 @@ namespace Selkie.Framework
 {
     public class RacetracksSource : IRacetracks
     {
-        public static IRacetracks Unknown = new RacetracksSource(true);
-        private readonly IPath[][] m_ForwardToForward;
-        private readonly IPath[][] m_ForwardToReverse;
-        private readonly IPath[][] m_ReverseToForward;
-        private readonly IPath[][] m_ReverseToReverse;
-
         private RacetracksSource(bool isUnknown)
             : this(new IPath[0][],
                    new IPath[0][],
@@ -30,6 +24,12 @@ namespace Selkie.Framework
             m_ReverseToForward = reverseToForward;
             m_ReverseToReverse = reverseToReverse;
         }
+
+        public static IRacetracks Unknown = new RacetracksSource(true);
+        private readonly IPath[][] m_ForwardToForward;
+        private readonly IPath[][] m_ForwardToReverse;
+        private readonly IPath[][] m_ReverseToForward;
+        private readonly IPath[][] m_ReverseToReverse;
 
         public IPath[][] ForwardToForward
         {

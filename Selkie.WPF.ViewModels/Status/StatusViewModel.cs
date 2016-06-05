@@ -12,11 +12,6 @@ namespace Selkie.WPF.ViewModels.Status
         : ViewModel,
           IStatusViewModel
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly ICommandManager m_CommandManager;
-        private readonly IApplicationDispatcher m_Dispatcher;
-        private ICommand m_ClearErrorCommand;
-
         public StatusViewModel([NotNull] ISelkieInMemoryBus bus,
                                [NotNull] IApplicationDispatcher dispatcher,
                                [NotNull] ICommandManager commandManager,
@@ -55,26 +50,31 @@ namespace Selkie.WPF.ViewModels.Status
             }
         }
 
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly ICommandManager m_CommandManager;
+        private readonly IApplicationDispatcher m_Dispatcher;
+        private ICommand m_ClearErrorCommand;
+
         public string ExceptionThrown { get; private set; }
 
         public string Status { get; private set; }
-
-        internal void SendClearErrorMessage()
-        {
-            m_Bus.PublishAsync(new ExceptionThrownClearErrorMessage());
-        }
 
         internal bool CanExecuteClearErrorCommand()
         {
             return !string.IsNullOrEmpty(ExceptionThrown);
         }
 
-        internal void StatusChangedHandler(StatusChangedMessage message)
+        internal void ExceptionThrownChangedHandler(ExceptionThrownChangedMessage message)
         {
             m_Dispatcher.BeginInvoke(() => UpdateAndNotify(message));
         }
 
-        internal void ExceptionThrownChangedHandler(ExceptionThrownChangedMessage message)
+        internal void SendClearErrorMessage()
+        {
+            m_Bus.PublishAsync(new ExceptionThrownClearErrorMessage());
+        }
+
+        internal void StatusChangedHandler(StatusChangedMessage message)
         {
             m_Dispatcher.BeginInvoke(() => UpdateAndNotify(message));
         }

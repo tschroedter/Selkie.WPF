@@ -6,13 +6,10 @@ using Selkie.Windsor;
 
 namespace Selkie.WPF.ViewModels.Mapping.Handlers
 {
-    [Interceptor(typeof ( MessageHandlerAspect ))]
+    [Interceptor(typeof( MessageHandlerAspect ))]
     public abstract class SelkieInMemoryBusMessageHandlerAsync <T>
         where T : class
     {
-        protected readonly ISelkieInMemoryBus Bus;
-        protected readonly ISelkieLogger Logger;
-
         protected SelkieInMemoryBusMessageHandlerAsync(
             [NotNull] ISelkieLogger logger,
             [NotNull] ISelkieInMemoryBus bus)
@@ -25,6 +22,9 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
             bus.SubscribeAsync <T>(subscriptionId,
                                    Handle);
         }
+
+        protected readonly ISelkieInMemoryBus Bus;
+        protected readonly ISelkieLogger Logger;
 
         public abstract void Handle(T message);
     }

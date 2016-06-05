@@ -9,11 +9,6 @@ namespace Selkie.WPF.Models.Settings
 {
     public class RacetrackSettingsModel : IRacetrackSettingsModel
     {
-        internal static readonly double DefaultTurnRadius = 30.0;
-        private readonly ISelkieBus m_Bus;
-        private readonly IRacetrackSettingsSourceManager m_Manager;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
-
         public RacetrackSettingsModel([NotNull] ISelkieBus bus,
                                       [NotNull] ISelkieInMemoryBus memoryBus,
                                       [NotNull] IRacetrackSettingsSourceManager manager)
@@ -32,6 +27,11 @@ namespace Selkie.WPF.Models.Settings
             m_Bus.SubscribeAsync <ColonyRacetrackSettingsResponseMessage>(subscriptionId,
                                                                           ColonyRacetrackSettingsResponseHandler);
         }
+
+        internal static readonly double DefaultTurnRadius = 30.0;
+        private readonly ISelkieBus m_Bus;
+        private readonly IRacetrackSettingsSourceManager m_Manager;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
 
         public double TurnRadius
         {

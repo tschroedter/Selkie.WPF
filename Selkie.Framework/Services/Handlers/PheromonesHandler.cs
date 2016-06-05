@@ -9,12 +9,12 @@ namespace Selkie.Framework.Services.Handlers
     [ProjectComponent(Lifestyle.Startable)]
     public class PheromonesHandler : SelkieMessageHandlerAsync <PheromonesMessage>
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-
         public PheromonesHandler([NotNull] ISelkieInMemoryBus bus)
         {
             m_Bus = bus;
         }
+
+        private readonly ISelkieInMemoryBus m_Bus;
 
         public override void Handle(PheromonesMessage message)
         {

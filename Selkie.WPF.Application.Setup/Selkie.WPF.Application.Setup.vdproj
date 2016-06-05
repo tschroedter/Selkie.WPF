@@ -1457,7 +1457,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\hu\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\hu\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_9CA816FAADF44B3E9DA39D4E2D189288"
@@ -1674,7 +1674,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\it\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\it\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BE033A9AE8A24F9EBD1726FC41303E44"
@@ -1745,7 +1745,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_38C25008B95345DC9E377B57EEB3DA8F"
             {
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\NLog.xml"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\NLog.xml"
             "TargetName" = "8:NLog.xml"
             "Tag" = "8:"
             "Folder" = "8:_BFC29CAB5C4B4CFB91E8ED7CB859E6DA"
@@ -1838,7 +1838,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\ru\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\ru\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A8D9A826919C4EE384ABA1CFD1DCC38E"
@@ -1931,7 +1931,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\de\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\de\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4CE593B2E8D445B09E3A5A75A67F7BA8"
@@ -2303,7 +2303,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\sv\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\sv\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D711F1D4451E478DA2D85A6C4EF12296"
@@ -2365,7 +2365,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\zh-Hans\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\zh-Hans\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_95BDF6B1E67F4B6E871A94B593B4427E"
@@ -2478,7 +2478,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AB46AAC394764CD1910ED4E74C7201D1"
             {
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\NLog.config"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\NLog.config"
             "TargetName" = "8:NLog.config"
             "Tag" = "8:"
             "Folder" = "8:_BFC29CAB5C4B4CFB91E8ED7CB859E6DA"
@@ -2571,7 +2571,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\pt-BR\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\pt-BR\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_7846B9F53CF1456588DC2EB29A6B9292"
@@ -2695,7 +2695,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\fr\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\fr\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_FA45EEC4C57A4006AC23EEEF033800FE"
@@ -2850,7 +2850,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\Selkie.WPF.Application.exe"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\Selkie.WPF.Application.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BFC29CAB5C4B4CFB91E8ED7CB859E6DA"
@@ -2912,7 +2912,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\ro\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\ro\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_2308B423DC164AF697718103FAFC16E0"
@@ -2974,7 +2974,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Debug\\es\\Xceed.Wpf.AvalonDock.resources.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\bin\\Release\\es\\Xceed.Wpf.AvalonDock.resources.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_989D5F04A5954BD1BCDC4752E9486DCC"
@@ -3705,7 +3705,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_28C8DAC5DF534167A0704747450B982A"
             {
-            "SourcePath" = "8:..\\Selkie.WPF.Application\\obj\\Debug\\Selkie.WPF.Application.exe"
+            "SourcePath" = "8:..\\Selkie.WPF.Application\\obj\\Release\\Selkie.WPF.Application.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BFC29CAB5C4B4CFB91E8ED7CB859E6DA"
@@ -3733,7 +3733,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2F32BE4FD4074801837109A4F6DFF6DA"
             {
-            "SourcePath" = "8:..\\Selkie.WPF.Application.Setup.CustomInstaller\\obj\\Debug\\Selkie.WPF.Application.Setup.CustomInstaller.dll"
+            "SourcePath" = "8:..\\Selkie.WPF.Application.Setup.CustomInstaller\\obj\\Release\\Selkie.WPF.Application.Setup.CustomInstaller.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BFC29CAB5C4B4CFB91E8ED7CB859E6DA"

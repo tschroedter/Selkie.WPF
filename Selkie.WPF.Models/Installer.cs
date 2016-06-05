@@ -20,14 +20,14 @@ namespace Selkie.WPF.Models
             var register = container.Resolve <IRegisterMessageHandlers>();
 
             register.Register(container,
-                              Assembly.GetAssembly(typeof ( Installer )));
+                              Assembly.GetAssembly(typeof( Installer )));
 
             container.Release(register);
 
             container.Register(
                                Classes.FromThisAssembly()
                                       .BasedOn <IModel>()
-                                      .WithServiceFromInterface(typeof ( IModel ))
+                                      .WithServiceFromInterface(typeof( IModel ))
                                       .Configure(c => c.LifeStyle.Is(LifestyleType.Transient)));
         }
     }

@@ -2,8 +2,6 @@
 using JetBrains.Annotations;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
-using Selkie.Geometry.Primitives;
-using Selkie.Geometry.Shapes;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Models.Common.Messages;
 using Selkie.WPF.Models.Interfaces.Mapping;
@@ -12,15 +10,11 @@ namespace Selkie.WPF.Models.Mapping
 {
     public sealed class ShortestPathDirectionModel : IShortestPathDirectionModel
     {
-        private readonly ISelkieInMemoryBus m_MemoryBus;
-        private readonly INodeIdHelper m_NodeIdHelper;
-        private readonly List <INodeModel> m_Nodes = new List <INodeModel>();
-
         public ShortestPathDirectionModel([NotNull] ISelkieInMemoryBus memoryBus,
-                                          [NotNull] INodeIdHelper nodeIdHelper)
+                                          [NotNull] INodeModelCreator nodeModelCreator)
         {
             m_MemoryBus = memoryBus;
-            m_NodeIdHelper = nodeIdHelper;
+            m_NodeModelCreator = nodeModelCreator;
 
             memoryBus.SubscribeAsync <ColonyBestTrailMessage>(GetType().FullName,
                                                               ColonyBestTrailHandler);
@@ -28,6 +22,18 @@ namespace Selkie.WPF.Models.Mapping
             memoryBus.SubscribeAsync <ColonyLineResponseMessage>(GetType().ToString(),
                                                                  ColonyLineResponsedHandler);
         }
+
+        public INodeIdHelper Helper
+        {
+            get
+            {
+                return m_NodeModelCreator.Helper;
+            }
+        }
+
+        private readonly ISelkieInMemoryBus m_MemoryBus;
+        private readonly INodeModelCreator m_NodeModelCreator;
+        private readonly List <INodeModel> m_Nodes = new List <INodeModel>();
 
         public IEnumerable <INodeModel> Nodes
         {
@@ -37,14 +43,14 @@ namespace Selkie.WPF.Models.Mapping
             }
         }
 
-        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
-        {
-            UpdateNodes(new int[0]);
-        }
-
         internal void ColonyBestTrailHandler(ColonyBestTrailMessage message)
         {
             Update(message);
+        }
+
+        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
+        {
+            UpdateNodes(new int[0]);
         }
 
         internal void Update(ColonyBestTrailMessage message)
@@ -58,45 +64,15 @@ namespace Selkie.WPF.Models.Mapping
 
             foreach ( int nodeId in trail )
             {
-                int lineId = m_NodeIdHelper.NodeToLine(nodeId);
+                int lineId = Helper.NodeToLine(nodeId);
 
-                INodeModel model = CreateNodeModel(lineId,
-                                                   nodeId);
+                INodeModel model = m_NodeModelCreator.CreateNodeModel(lineId,
+                                                                      nodeId);
 
                 m_Nodes.Add(model);
             }
 
             m_MemoryBus.Publish(new ShortestPathDirectionModelChangedMessage());
-        }
-
-        internal INodeModel CreateNodeModel(int lineId,
-                                            int nodeId)
-        {
-            INodeModel nodeModel = NodeModel.Unknown;
-
-            ILine line = m_NodeIdHelper.GetLine(lineId);
-
-            if ( line != null )
-            {
-                bool isForwardNode = m_NodeIdHelper.IsForwardNode(nodeId);
-
-                double x = isForwardNode
-                               ? line.X1
-                               : line.X2;
-                double y = isForwardNode
-                               ? line.Y1
-                               : line.Y2;
-                Angle angle = isForwardNode
-                                  ? line.AngleToXAxis
-                                  : line.AngleToXAxis + Angle.For180Degrees;
-
-                nodeModel = new NodeModel(nodeId,
-                                          x,
-                                          y,
-                                          angle);
-            }
-
-            return nodeModel;
         }
     }
 }

@@ -8,12 +8,6 @@ namespace Selkie.WPF.Common.Converters
 {
     public class LinesToTransferPointsConverter : ILinesToTransferPointsConverter
     {
-        private readonly ILine m_From;
-        private readonly Constants.LineDirection m_FromDirection;
-        private readonly ILine m_To;
-        private readonly Constants.LineDirection m_ToDirection;
-        private IEnumerable <Point> m_Points = new List <Point>();
-
         public LinesToTransferPointsConverter([NotNull] ILine from,
                                               Constants.LineDirection fromDirection,
                                               [NotNull] ILine to,
@@ -64,6 +58,12 @@ namespace Selkie.WPF.Common.Converters
                 return m_Points;
             }
         }
+
+        private readonly ILine m_From;
+        private readonly Constants.LineDirection m_FromDirection;
+        private readonly ILine m_To;
+        private readonly Constants.LineDirection m_ToDirection;
+        private IEnumerable <Point> m_Points = new List <Point>();
 
         public void Convert()
         {

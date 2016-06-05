@@ -40,11 +40,32 @@ namespace Selkie.WPF.Application.Windsor
             }
         }
 
-        private static void RegisterWpfComponents(IWindsorContainer container)
+        protected virtual void InstallComponents([NotNull] IWindsorContainer container,
+                                                 [NotNull] IConfigurationStore store)
         {
-            container.AddFacility <ViewActivatorFacility>();
-            container.Register(Component.For <IWindsorContainer>().Instance(container),
-                               Component.For <IViewFactory>().ImplementedBy <WindsorViewFactory>());
+        }
+
+        private static void AddDllsToAssemblyList([NotNull] IEnumerable <FileInfo> dlls,
+                                                  [NotNull] ICollection <Assembly> allAssembly)
+        {
+            foreach ( FileInfo dllInfo in dlls )
+            {
+                if ( IsIgnored(dllInfo) )
+                {
+                    continue;
+                }
+
+                AssemblyName assemblyName = AssemblyName.GetAssemblyName(dllInfo.Name);
+
+                if ( assemblyName.Name == dllInfo.Name )
+                {
+                    continue;
+                }
+
+                Assembly assm = Assembly.Load(assemblyName);
+
+                allAssembly.Add(assm);
+            }
         }
 
         private static void DisplayAssemblies(IEnumerable <Assembly> all)
@@ -57,77 +78,17 @@ namespace Selkie.WPF.Application.Windsor
             }
         }
 
-        [NotNull]
-        private Assembly GetSelkieAssembly([NotNull] string assemblyName,
-                                           [NotNull] IEnumerable <Assembly> all)
+        private static bool IsIgnored([NotNull] FileInfo dllInfo)
         {
-            Assembly assembly = all.First(x => IsSelkieAssembly(assemblyName,
-                                                                x));
-
-            return assembly;
+            return dllInfo.Name.StartsWith("NSubstitute") || dllInfo.Name.StartsWith("NLog") ||
+                   dllInfo.Name.StartsWith("NUnit") || dllInfo.Name.StartsWith("XUnit");
         }
 
-        private bool IsSelkieAssembly([NotNull] string assemblyName,
-                                      [NotNull] Assembly assembly)
+        private static void RegisterWpfComponents(IWindsorContainer container)
         {
-            string name = assembly.ManifestModule.Name;
-
-            return IsSelkieAssemblyName(assemblyName,
-                                        name);
-        }
-
-        private bool IsSelkieAssemblyName([NotNull] string assemblyName,
-                                          string name)
-        {
-            return string.Compare(name,
-                                  assemblyName,
-                                  StringComparison.CurrentCultureIgnoreCase) == 0;
-        }
-
-        protected virtual void InstallComponents([NotNull] IWindsorContainer container,
-                                                 [NotNull] IConfigurationStore store)
-        {
-        }
-
-        private void CallAssemblyInstaller([NotNull] IWindsorContainer container,
-                                           [NotNull] Assembly assembly)
-        {
-            string name = assembly.ManifestModule.Name;
-
-            Console.WriteLine("{0} - Checking...",
-                              name);
-
-            if ( IsIgnoredAssemblyName(name) )
-            {
-                Console.WriteLine("{0} - Ignored!",
-                                  name);
-
-                return;
-            }
-
-            if ( name.StartsWith("Selkie.",
-                                 StringComparison.Ordinal) )
-            {
-                Console.WriteLine("{0} - Processing...",
-                                  name);
-
-                container.Install(FromAssembly.Instance(assembly));
-            }
-        }
-
-        private bool IsIgnoredAssemblyName(string name)
-        {
-            return name.IndexOf("Console",
-                                StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                   name.IndexOf("SpecFlow",
-                                StringComparison
-                                    .InvariantCultureIgnoreCase) >= 0 ||
-                   name.IndexOf("Selkie.Windsor",
-                                StringComparison
-                                    .InvariantCultureIgnoreCase) >= 0 ||
-                   name.IndexOf("Selkie.EasyNetQ",
-                                StringComparison
-                                    .InvariantCultureIgnoreCase) >= 0;
+            container.AddFacility <ViewActivatorFacility>();
+            container.Register(Component.For <IWindsorContainer>().Instance(container),
+                               Component.For <IViewFactory>().ImplementedBy <WindsorViewFactory>());
         }
 
         [NotNull]
@@ -148,33 +109,74 @@ namespace Selkie.WPF.Application.Windsor
             return allAssembly;
         }
 
-        private static void AddDllsToAssemblyList([NotNull] IEnumerable <FileInfo> dlls,
-                                                  [NotNull] ICollection <Assembly> allAssembly)
+        private void CallAssemblyInstaller([NotNull] IWindsorContainer container,
+                                           [NotNull] Assembly assembly)
         {
-            foreach ( FileInfo dllInfo in dlls )
+            string name = assembly.ManifestModule.Name;
+
+            Console.WriteLine("{0} - Checking...",
+                              name);
+
+            if ( IsIgnoredAssemblyName(name) )
             {
-                if ( IsIgnored(dllInfo) )
-                {
-                    continue;
-                }
+                Console.WriteLine("{0} - Ignored!",
+                                  name);
 
-                AssemblyName assemblyName = AssemblyName.GetAssemblyName(dllInfo.Name);
-
-                if ( assemblyName.Name != dllInfo.Name )
-                {
-                    Assembly assm = Assembly.Load(assemblyName);
-
-                    allAssembly.Add(assm);
-                }
+                return;
             }
+
+            if ( !name.StartsWith("Selkie.",
+                                  StringComparison.Ordinal) )
+            {
+                return;
+            }
+
+            Console.WriteLine("{0} - Processing...",
+                              name);
+
+            container.Install(FromAssembly.Instance(assembly));
         }
 
-        private static bool IsIgnored([NotNull] FileInfo dllInfo)
+        [NotNull]
+        private Assembly GetSelkieAssembly([NotNull] string assemblyName,
+                                           [NotNull] IEnumerable <Assembly> all)
         {
-            return dllInfo.Name.StartsWith("NSubstitute") || dllInfo.Name.StartsWith("NLog") ||
-                   dllInfo.Name.StartsWith("NUnit") || dllInfo.Name.StartsWith("XUnit");
+            Assembly assembly = all.First(x => IsSelkieAssembly(assemblyName,
+                                                                x));
+
+            return assembly;
+        }
+
+        private bool IsIgnoredAssemblyName(string name)
+        {
+            return name.IndexOf("Console",
+                                StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                   name.IndexOf("SpecFlow",
+                                StringComparison
+                                    .InvariantCultureIgnoreCase) >= 0 ||
+                   name.IndexOf("Selkie.Windsor",
+                                StringComparison
+                                    .InvariantCultureIgnoreCase) >= 0 ||
+                   name.IndexOf("Selkie.EasyNetQ",
+                                StringComparison
+                                    .InvariantCultureIgnoreCase) >= 0;
+        }
+
+        private bool IsSelkieAssembly([NotNull] string assemblyName,
+                                      [NotNull] Assembly assembly)
+        {
+            string name = assembly.ManifestModule.Name;
+
+            return IsSelkieAssemblyName(assemblyName,
+                                        name);
+        }
+
+        private bool IsSelkieAssemblyName([NotNull] string assemblyName,
+                                          string name)
+        {
+            return string.Compare(name,
+                                  assemblyName,
+                                  StringComparison.CurrentCultureIgnoreCase) == 0;
         }
     }
-
-    //ncrunch: no coverage end
 }

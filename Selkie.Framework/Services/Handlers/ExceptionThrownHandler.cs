@@ -7,12 +7,12 @@ namespace Selkie.Framework.Services.Handlers
 {
     public class ExceptionThrownHandler : SelkieMessageHandlerAsync <ExceptionThrownMessage>
     {
-        private readonly ISelkieInMemoryBus m_InMemoryBus;
-
         public ExceptionThrownHandler([NotNull] ISelkieInMemoryBus inMemoryBus)
         {
             m_InMemoryBus = inMemoryBus;
         }
+
+        private readonly ISelkieInMemoryBus m_InMemoryBus;
 
         public override void Handle(ExceptionThrownMessage message)
         {

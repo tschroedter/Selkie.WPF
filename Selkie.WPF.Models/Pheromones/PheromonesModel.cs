@@ -1,5 +1,5 @@
 ﻿using JetBrains.Annotations;
-using Selkie.Common;
+using Selkie.Common.Interfaces;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
 using Selkie.WPF.Models.Common.Messages;
@@ -9,11 +9,6 @@ namespace Selkie.WPF.Models.Pheromones
 {
     public class PheromonesModel : IPheromonesModel
     {
-        internal const int TwoSeconds = 2000;
-        internal const int TenSeconds = 10000;
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly object m_Padlock = new object();
-
         public PheromonesModel([NotNull] ISelkieInMemoryBus bus,
                                [NotNull] ITimer timer)
         {
@@ -51,12 +46,22 @@ namespace Selkie.WPF.Models.Pheromones
                              TwoSeconds);
         }
 
+        internal const int TwoSeconds = 2000;
+        internal const int TenSeconds = 10000;
+
         public bool IsRequestingEnabled { get; private set; }
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly object m_Padlock = new object();
         public double[][] Values { get; internal set; }
         public double Minimum { get; internal set; }
         public double Maximum { get; internal set; }
         public double Average { get; internal set; }
         public bool IsShowPheromones { get; internal set; }
+
+        internal void FinishedHandler(ColonyFinishedMessage message)
+        {
+            IsRequestingEnabled = false;
+        }
 
         internal void OnTimer(object state)
         {
@@ -67,16 +72,6 @@ namespace Selkie.WPF.Models.Pheromones
             }
 
             m_Bus.PublishAsync(new ColonyPheromonesRequestMessage());
-        }
-
-        internal void StartedHandler(ColonyStartedMessage message)
-        {
-            IsRequestingEnabled = true;
-        }
-
-        internal void StoppedHandler(ColonyStoppedMessage message)
-        {
-            IsRequestingEnabled = false;
         }
 
         internal void PheromonesHandler(ColonyPheromonesMessage message)
@@ -92,16 +87,21 @@ namespace Selkie.WPF.Models.Pheromones
             m_Bus.PublishAsync(new PheromonesModelChangedMessage());
         }
 
-        internal void FinishedHandler(ColonyFinishedMessage message)
-        {
-            IsRequestingEnabled = false;
-        }
-
         internal void SetHandler(PheromonesModelsSetMessage message)
         {
             IsShowPheromones = message.IsShowPheromones;
 
             m_Bus.PublishAsync(new PheromonesModelChangedMessage());
+        }
+
+        internal void StartedHandler(ColonyStartedMessage message)
+        {
+            IsRequestingEnabled = true;
+        }
+
+        internal void StoppedHandler(ColonyStoppedMessage message)
+        {
+            IsRequestingEnabled = false;
         }
     }
 }

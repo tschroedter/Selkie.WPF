@@ -9,11 +9,11 @@ namespace Selkie.Framework.Aco
         public ColonyParameters()
         {
             CostMatrix = new int[0][]; // todo use default matrix
-            CostPerLine = new int[0]; // todo use default cost per line
+            CostPerFeature = new int[0]; // todo use default cost per line
         }
 
         public int[][] CostMatrix { get; set; }
-        public int[] CostPerLine { get; set; }
+        public int[] CostPerFeature { get; set; }
         public bool IsFixedStartNode { get; set; }
         public int FixedStartNode { get; set; }
     }

@@ -10,15 +10,15 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
           IMapViewModelMessageHandler
         where T : class
     {
-        // todo testing
-        protected IMapViewModel MapViewModel;
-
         protected BaseMapViewModelMessageHandler([NotNull] ISelkieLogger logger,
                                                  [NotNull] ISelkieInMemoryBus bus)
             : base(logger,
                    bus)
         {
         }
+
+        // todo testing
+        protected IMapViewModel MapViewModel;
 
         public void SetMapViewModel(IMapViewModel mapViewModel)
         {

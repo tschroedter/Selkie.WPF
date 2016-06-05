@@ -13,11 +13,6 @@ namespace Selkie.WPF.ViewModels.TrailHistory
         : ViewModel,
           ITrailHistoryViewModel
     {
-        private readonly IApplicationDispatcher m_ApplicationDispatcher;
-        private readonly ITrailDetailsToDisplayHistoryRowsConverter m_Converter;
-        private readonly ITrailHistoryModel m_TrailHistoryModel;
-        private List <IDisplayHistoryRow> m_Rows = new List <IDisplayHistoryRow>();
-
         public TrailHistoryViewModel([NotNull] ISelkieInMemoryBus bus,
                                      [NotNull] IApplicationDispatcher applicationDispatcher,
                                      [NotNull] ITrailDetailsToDisplayHistoryRowsConverter converter,
@@ -30,6 +25,11 @@ namespace Selkie.WPF.ViewModels.TrailHistory
             bus.SubscribeAsync <TrailHistoryModelChangedMessage>(GetType().ToString(),
                                                                  TrailHistoryModelChangedHandler);
         }
+
+        private readonly IApplicationDispatcher m_ApplicationDispatcher;
+        private readonly ITrailDetailsToDisplayHistoryRowsConverter m_Converter;
+        private readonly ITrailHistoryModel m_TrailHistoryModel;
+        private List <IDisplayHistoryRow> m_Rows = new List <IDisplayHistoryRow>();
 
         public IEnumerable <IDisplayHistoryRow> Rows
         {

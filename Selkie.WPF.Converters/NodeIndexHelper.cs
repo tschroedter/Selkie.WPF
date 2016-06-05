@@ -13,16 +13,16 @@ namespace Selkie.WPF.Converters
     [ProjectComponent(Lifestyle.Transient)]
     public class NodeIndexHelper : INodeIndexHelper
     {
-        private const int ForwardAndReverse = 2;
-        private readonly ILinesSourceManager m_LinesSourceManager;
-        private readonly INodeIndexToLineConverter m_NodeIndexToLineConverter;
-
         public NodeIndexHelper([NotNull] ILinesSourceManager linesSourceManager,
                                [NotNull] INodeIndexToLineConverter nodeIndexToLineConverter)
         {
             m_LinesSourceManager = linesSourceManager;
             m_NodeIndexToLineConverter = nodeIndexToLineConverter;
         }
+
+        private const int ForwardAndReverse = 2;
+        private readonly ILinesSourceManager m_LinesSourceManager;
+        private readonly INodeIndexToLineConverter m_NodeIndexToLineConverter;
 
         public ILine NodeIndexToLine(int index)
         {

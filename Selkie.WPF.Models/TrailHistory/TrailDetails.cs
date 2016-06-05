@@ -7,6 +7,27 @@ namespace Selkie.WPF.Models.TrailHistory
     [ProjectComponent(Lifestyle.Transient)]
     public class TrailDetails : ITrailDetails
     {
+        public TrailDetails(int interation,
+                            IEnumerable <int> trail,
+                            double length,
+                            double lengthDelta,
+                            double lengthDeltaInPercent,
+                            string type,
+                            double alpha,
+                            double beta,
+                            double gamma)
+        {
+            m_Interation = interation;
+            m_Trail = trail;
+            m_Length = length;
+            m_LengthDelta = lengthDelta;
+            m_LengthDeltaInPercent = lengthDeltaInPercent;
+            m_Type = type;
+            m_Alpha = alpha;
+            m_Beta = beta;
+            m_Gamma = gamma;
+        }
+
         public static ITrailDetails Unknown = new TrailDetails(int.MaxValue,
                                                                new int[]
                                                                {
@@ -28,27 +49,6 @@ namespace Selkie.WPF.Models.TrailHistory
         private readonly double m_LengthDeltaInPercent;
         private readonly IEnumerable <int> m_Trail;
         private readonly string m_Type;
-
-        public TrailDetails(int interation,
-                            IEnumerable <int> trail,
-                            double length,
-                            double lengthDelta,
-                            double lengthDeltaInPercent,
-                            string type,
-                            double alpha,
-                            double beta,
-                            double gamma)
-        {
-            m_Interation = interation;
-            m_Trail = trail;
-            m_Length = length;
-            m_LengthDelta = lengthDelta;
-            m_LengthDeltaInPercent = lengthDeltaInPercent;
-            m_Type = type;
-            m_Alpha = alpha;
-            m_Beta = beta;
-            m_Gamma = gamma;
-        }
 
         public int Interation
         {

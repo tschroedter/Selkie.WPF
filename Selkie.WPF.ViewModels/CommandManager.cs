@@ -5,7 +5,6 @@ using Selkie.WPF.ViewModels.Interfaces;
 
 namespace Selkie.WPF.ViewModels
 {
-    //ncrunch: no coverage start
     [ExcludeFromCodeCoverage]
     [ProjectComponent(Lifestyle.Singleton)]
     public class CommandManager : ICommandManager

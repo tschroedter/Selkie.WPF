@@ -17,17 +17,6 @@ namespace Selkie.WPF.ViewModels.Control
         : ViewModel,
           IControlViewModel
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly ICommandManager m_CommandManager;
-        private readonly IControlModel m_ControlModel;
-        private readonly IApplicationDispatcher m_Dispatcher;
-        private ICommand m_ApplyCommand;
-        private ICommand m_ExitCommand;
-        private string m_SelectedTestLine = string.Empty;
-        private ICommand m_StartCommand;
-        private ICommand m_StopCommand;
-        private IEnumerable <string> m_TestLines = new string[0];
-
         public ControlViewModel([NotNull] ISelkieInMemoryBus bus,
                                 [NotNull] IApplicationDispatcher dispatcher,
                                 [NotNull] IControlModel controlModel,
@@ -71,6 +60,16 @@ namespace Selkie.WPF.ViewModels.Control
         internal bool IsApplying { get; private set; }
 
         public bool IsLinesWereApplied { get; private set; }
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly ICommandManager m_CommandManager;
+        private readonly IControlModel m_ControlModel;
+        private readonly IApplicationDispatcher m_Dispatcher;
+        private ICommand m_ApplyCommand;
+        private ICommand m_ExitCommand;
+        private string m_SelectedTestLine = string.Empty;
+        private ICommand m_StartCommand;
+        private ICommand m_StopCommand;
+        private IEnumerable <string> m_TestLines = new string[0];
 
         public ICommand StopCommand
         {
@@ -155,6 +154,29 @@ namespace Selkie.WPF.ViewModels.Control
             }
         }
 
+        internal bool CanExecuteApplyCommand()
+        {
+            return !string.IsNullOrEmpty(m_SelectedTestLine) &&
+                   !IsRunning &&
+                   !IsApplying;
+        }
+
+        internal bool CanExecuteExitCommand()
+        {
+            return true;
+        }
+
+        internal bool CanExecuteStartCommand()
+        {
+            return !IsRunning &&
+                   IsLinesWereApplied;
+        }
+
+        internal bool CanExecuteStopCommand()
+        {
+            return IsRunning;
+        }
+
         internal void ControlModelChangedHandler(ControlModelChangedMessage message)
         {
             IsRunning = message.IsRunning;
@@ -162,6 +184,13 @@ namespace Selkie.WPF.ViewModels.Control
 
             IsLinesWereApplied = !string.IsNullOrEmpty(SelectedTestLine);
             // todo a bit of a hack here we really don't know
+
+            m_Dispatcher.BeginInvoke(Update);
+        }
+
+        internal void ControlModelTestLinesResponseHandler(ControlModelTestLinesResponseMessage message)
+        {
+            m_TestLines = message.TestLineTypes;
 
             m_Dispatcher.BeginInvoke(Update);
         }
@@ -177,44 +206,11 @@ namespace Selkie.WPF.ViewModels.Control
             m_CommandManager.InvalidateRequerySuggested();
         }
 
-        //ncrunch: no coverage start
         [ExcludeFromCodeCoverage]
         private void ExitExecute()
         {
             Application.Current.Shutdown();
             Environment.Exit(0);
-        }
-
-        //ncrunch: no coverage end
-
-        internal bool CanExecuteApplyCommand()
-        {
-            return !string.IsNullOrEmpty(m_SelectedTestLine) &&
-                   !IsRunning &&
-                   !IsApplying;
-        }
-
-        internal bool CanExecuteStartCommand()
-        {
-            return !IsRunning &&
-                   IsLinesWereApplied;
-        }
-
-        internal bool CanExecuteStopCommand()
-        {
-            return IsRunning;
-        }
-
-        internal bool CanExecuteExitCommand()
-        {
-            return true;
-        }
-
-        internal void ControlModelTestLinesResponseHandler(ControlModelTestLinesResponseMessage message)
-        {
-            m_TestLines = message.TestLineTypes;
-
-            m_Dispatcher.BeginInvoke(Update);
         }
     }
 }

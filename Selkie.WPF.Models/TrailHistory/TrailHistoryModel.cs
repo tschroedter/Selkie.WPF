@@ -15,15 +15,6 @@ namespace Selkie.WPF.Models.TrailHistory
         : ITrailHistoryModel,
           IDisposable
     {
-        private readonly SortedDictionary <int, ITrailDetails> m_Dictionary =
-            new SortedDictionary <int, ITrailDetails>();
-
-        private readonly ITrailDetailsFactory m_Factory;
-        private readonly ISelkieLogger m_Logger;
-        private readonly ISelkieInMemoryBus m_MemoryBus;
-        private ITrailDetails m_FirstTrailDetails = TrailDetails.Unknown;
-        private List <ITrailDetails> m_TrailDetails = new List <ITrailDetails>();
-
         public TrailHistoryModel([NotNull] ISelkieLogger logger,
                                  [NotNull] ISelkieInMemoryBus memoryBus,
                                  [NotNull] ITrailDetailsFactory factory)
@@ -40,6 +31,15 @@ namespace Selkie.WPF.Models.TrailHistory
             m_MemoryBus.SubscribeAsync <ColonyStartRequestMessage>(subscriptionId,
                                                                    ColonyStartRequestHandler);
         }
+
+        private readonly SortedDictionary <int, ITrailDetails> m_Dictionary =
+            new SortedDictionary <int, ITrailDetails>();
+
+        private readonly ITrailDetailsFactory m_Factory;
+        private readonly ISelkieLogger m_Logger;
+        private readonly ISelkieInMemoryBus m_MemoryBus;
+        private ITrailDetails m_FirstTrailDetails = TrailDetails.Unknown;
+        private List <ITrailDetails> m_TrailDetails = new List <ITrailDetails>();
 
         public void Dispose()
         {
@@ -70,71 +70,6 @@ namespace Selkie.WPF.Models.TrailHistory
         internal void ColonyStartRequestHandler(ColonyStartRequestMessage message)
         {
             Started();
-        }
-
-        internal void Started()
-        {
-            lock ( this )
-            {
-                m_Logger.Info("Started called!");
-
-                ReleaseTrailDetails();
-
-                m_TrailDetails.Clear();
-                m_Dictionary.Clear();
-
-                m_FirstTrailDetails = TrailDetails.Unknown;
-            }
-        }
-
-        internal void Update(ColonyBestTrailMessage message)
-        {
-            lock ( this )
-            {
-                ITrailDetails details = CreateTrailDetails(message);
-
-                if ( m_Dictionary.ContainsKey(details.Interation) )
-                {
-                    m_Dictionary.Remove(details.Interation);
-                }
-
-                m_Dictionary.Add(details.Interation,
-                                 details);
-
-                m_TrailDetails = CreateTrailDetailsList(m_Dictionary.Values.ToArray());
-
-                m_Logger.Info("Update called! (Count: {0})".Inject(m_Dictionary.Count));
-
-                m_MemoryBus.PublishAsync(new TrailHistoryModelChangedMessage());
-            }
-        }
-
-        internal List <ITrailDetails> CreateTrailDetailsList(ITrailDetails[] values)
-        {
-            var list = new List <ITrailDetails>();
-
-            ITrailDetails firstDetails = TrailDetails.Unknown;
-
-            for ( var i = 0 ; i < values.Length ; i++ )
-            {
-                ITrailDetails current = values [ i ];
-                ITrailDetails trailDetails;
-
-                if ( i == 0 )
-                {
-                    firstDetails = current;
-                    trailDetails = current;
-                }
-                else
-                {
-                    trailDetails = CreateOtherTrailDetails(firstDetails,
-                                                           current);
-                }
-
-                list.Add(trailDetails);
-            }
-
-            return list;
         }
 
         internal ITrailDetails CreateOtherTrailDetails([NotNull] ITrailDetails relativeTo,
@@ -172,6 +107,34 @@ namespace Selkie.WPF.Models.TrailHistory
             return details;
         }
 
+        internal List <ITrailDetails> CreateTrailDetailsList(ITrailDetails[] values)
+        {
+            var list = new List <ITrailDetails>();
+
+            ITrailDetails firstDetails = TrailDetails.Unknown;
+
+            for ( var i = 0 ; i < values.Length ; i++ )
+            {
+                ITrailDetails current = values [ i ];
+                ITrailDetails trailDetails;
+
+                if ( i == 0 )
+                {
+                    firstDetails = current;
+                    trailDetails = current;
+                }
+                else
+                {
+                    trailDetails = CreateOtherTrailDetails(firstDetails,
+                                                           current);
+                }
+
+                list.Add(trailDetails);
+            }
+
+            return list;
+        }
+
         internal void ReleaseTrailDetails()
         {
             ITrailDetails[] trailDetails = m_TrailDetails.ToArray();
@@ -179,6 +142,43 @@ namespace Selkie.WPF.Models.TrailHistory
             foreach ( ITrailDetails trailDetail in trailDetails )
             {
                 m_Factory.Release(trailDetail);
+            }
+        }
+
+        internal void Started()
+        {
+            lock ( this )
+            {
+                m_Logger.Info("Started called!");
+
+                ReleaseTrailDetails();
+
+                m_TrailDetails.Clear();
+                m_Dictionary.Clear();
+
+                m_FirstTrailDetails = TrailDetails.Unknown;
+            }
+        }
+
+        internal void Update(ColonyBestTrailMessage message)
+        {
+            lock ( this )
+            {
+                ITrailDetails details = CreateTrailDetails(message);
+
+                if ( m_Dictionary.ContainsKey(details.Interation) )
+                {
+                    m_Dictionary.Remove(details.Interation);
+                }
+
+                m_Dictionary.Add(details.Interation,
+                                 details);
+
+                m_TrailDetails = CreateTrailDetailsList(m_Dictionary.Values.ToArray());
+
+                m_Logger.Info("Update called! (Count: {0})".Inject(m_Dictionary.Count));
+
+                m_MemoryBus.PublishAsync(new TrailHistoryModelChangedMessage());
             }
         }
     }

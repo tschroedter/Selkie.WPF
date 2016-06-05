@@ -7,12 +7,12 @@ namespace Selkie.WPF.Application.Windsor
     [ExcludeFromCodeCoverage]
     public class WindsorViewFactory : IViewFactory
     {
-        private readonly IWindsorContainer m_Container;
-
         public WindsorViewFactory(IWindsorContainer container)
         {
             m_Container = container;
         }
+
+        private readonly IWindsorContainer m_Container;
 
         public T CreateView <T>() where T : IView
         {

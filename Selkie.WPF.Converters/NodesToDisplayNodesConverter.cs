@@ -12,6 +12,11 @@ namespace Selkie.WPF.Converters
         : INodesToDisplayNodesConverter,
           IDisposable
     {
+        public NodesToDisplayNodesConverter([NotNull] IDisplayNodeFactory factory)
+        {
+            m_Factory = factory;
+        }
+
         internal const double DefaultRadius = 7.0;
         internal const double DefaultStrokeThickness = 1.0;
         internal static readonly SolidColorBrush DefaultFill = Brushes.Green;
@@ -22,11 +27,6 @@ namespace Selkie.WPF.Converters
         private IEnumerable <INodeModel> m_NodeModels = new INodeModel[]
                                                         {
                                                         };
-
-        public NodesToDisplayNodesConverter([NotNull] IDisplayNodeFactory factory)
-        {
-            m_Factory = factory;
-        }
 
         public void Dispose()
         {

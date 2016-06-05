@@ -9,8 +9,6 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
     public class LinesModelChangedHandler
         : BaseMapViewModelMessageHandler <LinesModelChangedMessage>
     {
-        private readonly ILinesModel m_LinesModel;
-
         public LinesModelChangedHandler([NotNull] ISelkieLogger logger,
                                         [NotNull] ISelkieInMemoryBus bus,
                                         [NotNull] ILinesModel linesModel)
@@ -19,6 +17,8 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
         {
             m_LinesModel = linesModel;
         }
+
+        private readonly ILinesModel m_LinesModel;
 
         public override void Handle(LinesModelChangedMessage message)
         {

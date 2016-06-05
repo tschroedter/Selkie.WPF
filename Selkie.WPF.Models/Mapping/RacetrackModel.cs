@@ -11,9 +11,6 @@ namespace Selkie.WPF.Models.Mapping
 {
     public class RacetrackModel : IRacetrackModel
     {
-        private readonly ISelkieInMemoryBus m_MemoryBus;
-        private readonly IPathToRacetracksConverter m_PathToRacetracksConverter;
-
         public RacetrackModel([NotNull] ISelkieInMemoryBus memoryBus,
                               [NotNull] IPathToRacetracksConverter pathToRacetracksConverter)
         {
@@ -27,6 +24,9 @@ namespace Selkie.WPF.Models.Mapping
                                                                  ColonyLineResponsedHandler);
         }
 
+        private readonly ISelkieInMemoryBus m_MemoryBus;
+        private readonly IPathToRacetracksConverter m_PathToRacetracksConverter;
+
         public IEnumerable <IPath> Paths
         {
             get
@@ -35,14 +35,14 @@ namespace Selkie.WPF.Models.Mapping
             }
         }
 
-        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
-        {
-            Update(new int[0]);
-        }
-
         internal void ColonyBestTrailHandler(ColonyBestTrailMessage message)
         {
             Update(message.Trail);
+        }
+
+        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
+        {
+            Update(new int[0]);
         }
 
         internal void Update(IEnumerable <int> trail)

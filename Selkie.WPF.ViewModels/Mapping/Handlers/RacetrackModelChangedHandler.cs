@@ -10,9 +10,6 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
     public class RacetrackModelChangedHandler
         : BaseMapViewModelMessageHandler <RacetrackModelChangedMessage>
     {
-        private readonly IRacetrackPathsToFiguresConverter m_Converter;
-        private readonly IRacetrackModel m_Model;
-
         public RacetrackModelChangedHandler([NotNull] ISelkieLogger logger,
                                             [NotNull] ISelkieInMemoryBus bus,
                                             [NotNull] IRacetrackPathsToFiguresConverter converter,
@@ -23,6 +20,9 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
             m_Converter = converter;
             m_Model = model;
         }
+
+        private readonly IRacetrackPathsToFiguresConverter m_Converter;
+        private readonly IRacetrackModel m_Model;
 
         public override void Handle(RacetrackModelChangedMessage message)
         {

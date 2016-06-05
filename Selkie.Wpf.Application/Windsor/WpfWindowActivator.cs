@@ -37,6 +37,27 @@ namespace Selkie.WPF.Application.Windsor
             return component;
         }
 
+        private void AssignParentView(FrameworkElement frameworkElement,
+                                      object dataContext)
+        {
+            var view = frameworkElement as IView;
+            if ( view == null )
+            {
+                return;
+            }
+
+            PropertyInfo viewProp =
+                dataContext.GetType()
+                           .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                           .FirstOrDefault(p => p.CanWrite && typeof( IView ).IsAssignableFrom(p.PropertyType));
+            if ( viewProp != null )
+            {
+                viewProp.SetValue(dataContext,
+                                  frameworkElement,
+                                  null);
+            }
+        }
+
         /// <summary>
         ///     Find the first ctor argument that implements IViewModel.
         ///     Assume it is the View Model and assign it to the component's
@@ -55,33 +76,14 @@ namespace Selkie.WPF.Application.Windsor
             }
 
             object vm = arguments.FirstOrDefault(a => a is IViewModel);
-            if ( vm != null )
-            {
-                frameworkElement.DataContext = vm;
-                AssignParentView(frameworkElement,
-                                 vm);
-            }
-        }
-
-        private void AssignParentView(FrameworkElement frameworkElement,
-                                      object dataContext)
-        {
-            var view = frameworkElement as IView;
-            if ( view == null )
+            if ( vm == null )
             {
                 return;
             }
 
-            PropertyInfo viewProp =
-                dataContext.GetType()
-                           .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                           .FirstOrDefault(p => p.CanWrite && typeof ( IView ).IsAssignableFrom(p.PropertyType));
-            if ( viewProp != null )
-            {
-                viewProp.SetValue(dataContext,
-                                  frameworkElement,
-                                  null);
-            }
+            frameworkElement.DataContext = vm;
+            AssignParentView(frameworkElement,
+                             vm);
         }
     }
 }

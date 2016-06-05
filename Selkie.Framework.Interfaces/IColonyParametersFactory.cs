@@ -8,7 +8,7 @@ namespace Selkie.Framework.Interfaces
         IColonyParameters Create();
 
         IColonyParameters Create([NotNull] int[][] costMatrix,
-                                 [NotNull] int[] costPerLine,
+                                 [NotNull] int[] costPerFeature,
                                  bool isFixedStartNode,
                                  int fixedStartNode);
 

@@ -13,12 +13,12 @@ namespace Selkie.WPF.Converters
     [ProjectComponent(Lifestyle.Transient)]
     public class PathSegmentHelper : IPathSegmentHelper
     {
-        private readonly IGeometryPointToWindowsPointConverter m_Converter;
-
         public PathSegmentHelper(IGeometryPointToWindowsPointConverter converter)
         {
             m_Converter = converter;
         }
+
+        private readonly IGeometryPointToWindowsPointConverter m_Converter;
 
         public LineSegment SegmentToLineSegment(ILine segment)
         {

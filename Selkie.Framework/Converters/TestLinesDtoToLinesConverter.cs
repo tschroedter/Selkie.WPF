@@ -45,8 +45,8 @@ namespace Selkie.Framework.Converters
                                 lineDto.Y1,
                                 lineDto.X2,
                                 lineDto.Y2,
-                                lineDto.IsUnknown,
-                                runDirection);
+                                runDirection,
+                                lineDto.IsUnknown);
             return line;
         }
 
@@ -57,12 +57,9 @@ namespace Selkie.Framework.Converters
                 return Constants.LineDirection.Forward;
             }
 
-            if ( Constants.LineDirection.Reverse.ToString() == runDirection )
-            {
-                return Constants.LineDirection.Reverse;
-            }
-
-            return Constants.LineDirection.Unknown;
+            return Constants.LineDirection.Reverse.ToString() == runDirection
+                       ? Constants.LineDirection.Reverse
+                       : Constants.LineDirection.Unknown;
         }
     }
 }

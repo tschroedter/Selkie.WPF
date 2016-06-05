@@ -9,12 +9,12 @@ namespace Selkie.Framework.Aco
     [ProjectComponent(Lifestyle.Transient)]
     public class AcoProxyLogger : IAcoProxyLogger
     {
-        private readonly ISelkieLogger m_Logger;
-
         public AcoProxyLogger([NotNull] ISelkieLogger logger)
         {
             m_Logger = logger;
         }
+
+        private readonly ISelkieLogger m_Logger;
 
         public void Error(string text)
         {
@@ -26,12 +26,12 @@ namespace Selkie.Framework.Aco
             m_Logger.Info(text);
         }
 
-        public void LogCostPerLine(int[] costPerLine)
+        public void LogCostPerFeature(int[] costPerFeature)
         {
             string text = string.Join(",",
-                                      costPerLine);
+                                      costPerFeature);
 
-            string message = "CostPerLine: {0}".Inject(text);
+            string message = "CostPerFeature: {0}".Inject(text);
 
             m_Logger.Info(message);
         }

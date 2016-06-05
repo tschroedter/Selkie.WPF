@@ -6,6 +6,11 @@ namespace Selkie.WPF.Converters
 {
     public class GrayscaleConverter : IGrayscaleConverter
     {
+        public GrayscaleConverter(IDoubleToIntegerConverter doubleToIntegerConverter)
+        {
+            m_DoubleToIntegerConverter = doubleToIntegerConverter;
+        }
+
         private readonly IDoubleToIntegerConverter m_DoubleToIntegerConverter;
         private double m_Maximum = 128.0;
         private double m_Minimum = -128.0;
@@ -17,11 +22,6 @@ namespace Selkie.WPF.Converters
             {
             }
         };
-
-        public GrayscaleConverter(IDoubleToIntegerConverter doubleToIntegerConverter)
-        {
-            m_DoubleToIntegerConverter = doubleToIntegerConverter;
-        }
 
         internal IEnumerable <int[]> ToInteger(double[][] pheromones,
                                                int numberOfPossibleValues)

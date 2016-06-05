@@ -10,9 +10,6 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
     public class NodesModelChangedHandler
         : BaseMapViewModelMessageHandler <NodesModelChangedMessage>
     {
-        private readonly ILineNodeToDisplayLineNodeConverter m_Converter;
-        private readonly INodesModel m_NodesModel;
-
         public NodesModelChangedHandler([NotNull] ISelkieLogger logger,
                                         [NotNull] ISelkieInMemoryBus bus,
                                         [NotNull] ILineNodeToDisplayLineNodeConverter converter,
@@ -23,6 +20,9 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
             m_NodesModel = nodesModel;
             m_Converter = converter;
         }
+
+        private readonly ILineNodeToDisplayLineNodeConverter m_Converter;
+        private readonly INodesModel m_NodesModel;
 
         public override void Handle(NodesModelChangedMessage message)
         {

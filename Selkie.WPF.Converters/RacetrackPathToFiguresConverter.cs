@@ -11,11 +11,6 @@ namespace Selkie.WPF.Converters
 {
     public class RacetrackPathToFiguresConverter : IRacetrackPathToFiguresConverter
     {
-        private readonly IRacetrackPathTurnToFiguresConverter m_RacetrackPathTurn;
-        private readonly IRacetrackPathUTurnToFiguresConverter m_RacetrackPathUTurn;
-        private PathFigureCollection m_FiguresCollection = new PathFigureCollection();
-        private IPath m_Path = Framework.Common.Path.Unknown;
-
         public RacetrackPathToFiguresConverter([NotNull] IRacetrackPathTurnToFiguresConverter racetrackPathTurn,
                                                [NotNull] IRacetrackPathUTurnToFiguresConverter racetrackPathUTurn)
         {
@@ -24,6 +19,10 @@ namespace Selkie.WPF.Converters
         }
 
         public ISelkieLogger Logger { get; set; }
+        private readonly IRacetrackPathTurnToFiguresConverter m_RacetrackPathTurn;
+        private readonly IRacetrackPathUTurnToFiguresConverter m_RacetrackPathUTurn;
+        private PathFigureCollection m_FiguresCollection = new PathFigureCollection();
+        private IPath m_Path = Framework.Common.Path.Unknown;
 
         public IPath Path
         {
@@ -75,20 +74,20 @@ namespace Selkie.WPF.Converters
             }
         }
 
-        internal PathFigureCollection ConvertUTurnPath([NotNull] IPath path)
-        {
-            m_RacetrackPathUTurn.Path = path;
-            m_RacetrackPathUTurn.Convert();
-
-            return m_RacetrackPathUTurn.FiguresCollection;
-        }
-
         internal PathFigureCollection ConvertTurnPath([NotNull] IPath path)
         {
             m_RacetrackPathTurn.Path = path;
             m_RacetrackPathTurn.Convert();
 
             return m_RacetrackPathTurn.FiguresCollection;
+        }
+
+        internal PathFigureCollection ConvertUTurnPath([NotNull] IPath path)
+        {
+            m_RacetrackPathUTurn.Path = path;
+            m_RacetrackPathUTurn.Convert();
+
+            return m_RacetrackPathUTurn.FiguresCollection;
         }
 
         internal bool IsNormalTurn([NotNull] IPolylineSegment segment)

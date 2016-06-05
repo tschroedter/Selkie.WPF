@@ -16,13 +16,6 @@ namespace Selkie.WPF.Models.Mapping
         : IShortestPathModel,
           IDisposable
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly ILineToLineNodeConverterToDisplayLineConverterFactory m_Factory;
-        private readonly ISelkieLogger m_Logger;
-        private readonly IPathToLineToLineNodeConverter m_PathToLineToLineNodeConverter;
-        private ILineToLineNodeConverterToDisplayLineConverter m_Converter;
-        private IEnumerable <ILineToLineNodeConverter> m_Nodes;
-
         public ShortestPathModel([NotNull] ISelkieLogger logger,
                                  [NotNull] ISelkieInMemoryBus bus,
                                  [NotNull] IPathToLineToLineNodeConverter pathToLineToLineNodeConverter,
@@ -38,6 +31,13 @@ namespace Selkie.WPF.Models.Mapping
             bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().FullName,
                                                         ColonyBestTrailHandler);
         }
+
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly ILineToLineNodeConverterToDisplayLineConverterFactory m_Factory;
+        private readonly ISelkieLogger m_Logger;
+        private readonly IPathToLineToLineNodeConverter m_PathToLineToLineNodeConverter;
+        private ILineToLineNodeConverterToDisplayLineConverter m_Converter;
+        private IEnumerable <ILineToLineNodeConverter> m_Nodes;
 
         public void Dispose()
         {
@@ -70,6 +70,12 @@ namespace Selkie.WPF.Models.Mapping
             Update(message);
         }
 
+        internal void ConvertPath(IEnumerable <int> trail)
+        {
+            m_PathToLineToLineNodeConverter.Path = trail;
+            m_PathToLineToLineNodeConverter.Convert();
+        }
+
         internal void Update(ColonyBestTrailMessage message)
         {
             lock ( this )
@@ -83,17 +89,6 @@ namespace Selkie.WPF.Models.Mapping
             m_Bus.Publish(new ShortestPathModelChangedMessage());
         }
 
-        internal void ConvertPath(IEnumerable <int> trail)
-        {
-            m_PathToLineToLineNodeConverter.Path = trail;
-            m_PathToLineToLineNodeConverter.Convert();
-        }
-
-        internal void UpdateNodes()
-        {
-            m_Nodes = m_PathToLineToLineNodeConverter.Nodes;
-        }
-
         internal void UpdateConverter()
         {
             ILineToLineNodeConverterToDisplayLineConverter oldConverter = m_Converter;
@@ -105,6 +100,11 @@ namespace Selkie.WPF.Models.Mapping
             m_Converter = converter;
 
             m_Factory.Release(oldConverter);
+        }
+
+        internal void UpdateNodes()
+        {
+            m_Nodes = m_PathToLineToLineNodeConverter.Nodes;
         }
     }
 }

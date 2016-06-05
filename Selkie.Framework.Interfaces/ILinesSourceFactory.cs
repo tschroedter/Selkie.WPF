@@ -7,7 +7,7 @@ namespace Selkie.Framework.Interfaces
 {
     public interface ILinesSourceFactory : ITypedFactory
     {
-        ILinesSource Create([NotNull] IEnumerable <ILine> lines);
-        void Release([NotNull] ILinesSource linesSource);
+        ISurveyFeatureSource Create([NotNull] IEnumerable <ILine> lines);
+        void Release([NotNull] ISurveyFeatureSource surveyFeatureSource);
     }
 }

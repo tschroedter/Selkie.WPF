@@ -7,8 +7,6 @@ namespace Selkie.Framework.Common.Messages
     [ExcludeFromCodeCoverage]
     public class ColonyBestTrailMessage
     {
-        private IEnumerable <int> m_Trail = new int[0];
-        private string m_Type = string.Empty;
         public double Alpha { get; set; }
         public double Beta { get; set; }
         public double Gamma { get; set; }
@@ -40,5 +38,8 @@ namespace Selkie.Framework.Common.Messages
                 m_Type = value;
             }
         }
+
+        private IEnumerable <int> m_Trail = new int[0];
+        private string m_Type = string.Empty;
     }
 }

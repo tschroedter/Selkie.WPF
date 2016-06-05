@@ -7,10 +7,6 @@ namespace Selkie.WPF.ViewModels
 {
     public class DelegateCommand : ICommand
     {
-        private readonly Func <bool> m_CanExecuteMethod;
-        private readonly ICommandManager m_CommandManager;
-        private readonly Action m_ExecuteMethod;
-
         public DelegateCommand(ICommandManager commandManager,
                                Action executeMethod)
             : this(commandManager,
@@ -27,6 +23,10 @@ namespace Selkie.WPF.ViewModels
             m_ExecuteMethod = executeMethod;
             m_CanExecuteMethod = canExecuteMethod;
         }
+
+        private readonly Func <bool> m_CanExecuteMethod;
+        private readonly ICommandManager m_CommandManager;
+        private readonly Action m_ExecuteMethod;
 
         #region ICommand Members
 

@@ -7,14 +7,14 @@ namespace Selkie.WPF.Converters
 {
     public class NodeIndexToLineConverter : INodeIndexToLineConverter
     {
-        private readonly ILinesSourceManager m_LinesSourceManager;
-        private ILine m_Line = Geometry.Shapes.Line.Unknown;
-        private int m_NodeIndex = int.MinValue;
-
         public NodeIndexToLineConverter(ILinesSourceManager linesSourceManager)
         {
             m_LinesSourceManager = linesSourceManager;
         }
+
+        private readonly ILinesSourceManager m_LinesSourceManager;
+        private ILine m_Line = Geometry.Shapes.Line.Unknown;
+        private int m_NodeIndex = int.MinValue;
 
         public int NodeIndex
         {

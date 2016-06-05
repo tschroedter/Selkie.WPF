@@ -17,12 +17,6 @@ namespace Selkie.WPF.Models.Mapping
         : ILinesModel,
           IDisposable
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly IDisplayLineFactory m_DisplayLineFactory;
-        private readonly List <IDisplayLine> m_DisplayLines;
-        private readonly ILinesSourceManager m_LinesSourceManager;
-        private readonly ISelkieLogger m_Logger;
-
         public LinesModel([NotNull] ISelkieLogger logger,
                           [NotNull] ISelkieInMemoryBus bus,
                           [NotNull] ILinesSourceManager linesSourceManager,
@@ -43,14 +37,15 @@ namespace Selkie.WPF.Models.Mapping
                                                                LinesModelLinesRequestHandler);
         }
 
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly IDisplayLineFactory m_DisplayLineFactory;
+        private readonly List <IDisplayLine> m_DisplayLines;
+        private readonly ILinesSourceManager m_LinesSourceManager;
+        private readonly ISelkieLogger m_Logger;
+
         public void Dispose()
         {
             ReleaseDisplayLines();
-        }
-
-        internal void LinesModelLinesRequestHandler(LinesModelLinesRequestMessage obj)
-        {
-            m_Bus.PublishAsync(new LinesModelChangedMessage());
         }
 
         internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
@@ -58,6 +53,11 @@ namespace Selkie.WPF.Models.Mapping
             m_Logger.Debug("Handling '{0}'...".Inject(message.GetType()));
 
             Update(m_LinesSourceManager.Lines);
+        }
+
+        internal void LinesModelLinesRequestHandler(LinesModelLinesRequestMessage obj)
+        {
+            m_Bus.PublishAsync(new LinesModelChangedMessage());
         }
 
         internal void Update([NotNull] IEnumerable <ILine> lines)

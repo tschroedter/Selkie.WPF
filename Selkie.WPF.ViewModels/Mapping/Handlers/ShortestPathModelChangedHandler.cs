@@ -11,8 +11,6 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
     public class ShortestPathModelChangedHandler
         : BaseMapViewModelMessageHandler <ShortestPathModelChangedMessage>
     {
-        private readonly IShortestPathModel m_ShortestPathModel;
-
         public ShortestPathModelChangedHandler([NotNull] ISelkieLogger logger,
                                                [NotNull] ISelkieInMemoryBus bus,
                                                [NotNull] IShortestPathModel shortestPathModel)
@@ -21,6 +19,8 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
         {
             m_ShortestPathModel = shortestPathModel;
         }
+
+        private readonly IShortestPathModel m_ShortestPathModel;
 
         public override void Handle(ShortestPathModelChangedMessage message)
         {

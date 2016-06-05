@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using Selkie.Common;
+using Selkie.Common.Interfaces;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
 
@@ -9,11 +9,6 @@ namespace Selkie.WPF.Converters
 {
     public sealed class LineToLineNodeConverterToDisplayLineConverter : ILineToLineNodeConverterToDisplayLineConverter
     {
-        private readonly IDisplayLineFactory m_DisplayLineFactory;
-        private readonly IDisposer m_Disposer;
-        private IEnumerable <ILineToLineNodeConverter> m_Converters = new ILineToLineNodeConverter[0];
-        private List <IDisplayLine> m_DisplayLines = new List <IDisplayLine>();
-
         public LineToLineNodeConverterToDisplayLineConverter([NotNull] IDisposer disposer,
                                                              [NotNull] IDisplayLineFactory factory)
         {
@@ -22,6 +17,11 @@ namespace Selkie.WPF.Converters
 
             m_Disposer.AddResource(ReleaseDisplayLines);
         }
+
+        private readonly IDisplayLineFactory m_DisplayLineFactory;
+        private readonly IDisposer m_Disposer;
+        private IEnumerable <ILineToLineNodeConverter> m_Converters = new ILineToLineNodeConverter[0];
+        private List <IDisplayLine> m_DisplayLines = new List <IDisplayLine>();
 
         public void Dispose()
         {
@@ -53,16 +53,6 @@ namespace Selkie.WPF.Converters
             m_DisplayLines = CreateDisplayLines(m_Converters);
         }
 
-        internal void ReleaseDisplayLines()
-        {
-            foreach ( IDisplayLine displayLine in m_DisplayLines )
-            {
-                m_DisplayLineFactory.Release(displayLine);
-            }
-
-            m_DisplayLines.Clear();
-        }
-
         internal List <IDisplayLine> CreateDisplayLines([NotNull] IEnumerable <ILineToLineNodeConverter> nodes)
         {
             ILineToLineNodeConverter[] nodesArray = nodes.ToArray();
@@ -86,12 +76,14 @@ namespace Selkie.WPF.Converters
                                                                     node.FromDirection);
                 lines.Add(fromLine);
 
-                if ( i == nodes.Length - 1 )
+                if ( i != nodes.Length - 1 )
                 {
-                    IDisplayLine toLine = m_DisplayLineFactory.Create(node.To,
-                                                                      node.ToDirection);
-                    lines.Add(toLine);
+                    continue;
                 }
+
+                IDisplayLine toLine = m_DisplayLineFactory.Create(node.To,
+                                                                  node.ToDirection);
+                lines.Add(toLine);
             }
 
             return lines;
@@ -112,6 +104,16 @@ namespace Selkie.WPF.Converters
             lines.Add(toLine);
 
             return lines;
+        }
+
+        internal void ReleaseDisplayLines()
+        {
+            foreach ( IDisplayLine displayLine in m_DisplayLines )
+            {
+                m_DisplayLineFactory.Release(displayLine);
+            }
+
+            m_DisplayLines.Clear();
         }
     }
 }

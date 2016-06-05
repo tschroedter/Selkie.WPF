@@ -12,14 +12,14 @@ namespace Selkie.WPF.Converters
 {
     public class RacetrackPathUTurnToFiguresConverter : IRacetrackPathUTurnToFiguresConverter
     {
-        private readonly IPathSegmentHelper m_Helper;
-        private PathFigureCollection m_FiguresCollection = new PathFigureCollection();
-        private IPath m_Path = Framework.Common.Path.Unknown;
-
         public RacetrackPathUTurnToFiguresConverter([NotNull] IPathSegmentHelper helper)
         {
             m_Helper = helper;
         }
+
+        private readonly IPathSegmentHelper m_Helper;
+        private PathFigureCollection m_FiguresCollection = new PathFigureCollection();
+        private IPath m_Path = Framework.Common.Path.Unknown;
 
         public IPath Path
         {

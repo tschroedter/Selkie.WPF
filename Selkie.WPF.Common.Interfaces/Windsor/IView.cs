@@ -2,8 +2,8 @@
 {
     public interface IView
     {
+        object GetContent();
         void Show();
         bool? ShowDialog();
-        object GetContent();
     }
 }

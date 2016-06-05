@@ -21,13 +21,13 @@ namespace Selkie.Framework
 
             container.Register(Classes.FromThisAssembly()
                                       .BasedOn <IConverter>()
-                                      .WithServiceFromInterface(typeof ( IConverter ))
+                                      .WithServiceFromInterface(typeof( IConverter ))
                                       .Configure(c => c.LifeStyle.Is(LifestyleType.Transient)));
 
             var consumers = container.Resolve <IRegisterMessageHandlers>();
 
             consumers.Register(container,
-                               Assembly.GetAssembly(typeof ( Installer )));
+                               Assembly.GetAssembly(typeof( Installer )));
 
             container.Release(consumers);
         }

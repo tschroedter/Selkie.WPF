@@ -13,14 +13,14 @@ namespace Selkie.WPF.Converters
 {
     public class RacetrackPathTurnToFiguresConverter : IRacetrackPathTurnToFiguresConverter
     {
-        private readonly IPathSegmentHelper m_Helper;
-        private PathFigureCollection m_FiguresCollection = new PathFigureCollection();
-        private IPath m_Path = Framework.Common.Path.Unknown;
-
         public RacetrackPathTurnToFiguresConverter(IPathSegmentHelper helper)
         {
             m_Helper = helper;
         }
+
+        private readonly IPathSegmentHelper m_Helper;
+        private PathFigureCollection m_FiguresCollection = new PathFigureCollection();
+        private IPath m_Path = Framework.Common.Path.Unknown;
 
         public IPath Path
         {
@@ -47,24 +47,6 @@ namespace Selkie.WPF.Converters
             m_FiguresCollection = CreateFigures(m_Path);
         }
 
-        internal PathFigureCollection CreateFigures([NotNull] IPath path)
-        {
-            List <PathSegment> pathSegments = path.Segments.Select(ConvertSegment).ToList();
-
-            Point startPoint = m_Helper.PointRelativeToOrigin(path.StartPoint);
-
-            var pathFigure = new PathFigure(startPoint,
-                                            pathSegments,
-                                            false);
-
-            var figures = new PathFigureCollection
-                          {
-                              pathFigure
-                          };
-
-            return figures;
-        }
-
         internal PathSegment ConvertSegment([NotNull] IPolylineSegment segment)
         {
             var arcSegment = segment as ITurnCircleArcSegment;
@@ -82,6 +64,24 @@ namespace Selkie.WPF.Converters
             }
 
             throw new ArgumentException("Unknown PolylineSegment '{0}'!".Inject(segment));
+        }
+
+        internal PathFigureCollection CreateFigures([NotNull] IPath path)
+        {
+            List <PathSegment> pathSegments = path.Segments.Select(ConvertSegment).ToList();
+
+            Point startPoint = m_Helper.PointRelativeToOrigin(path.StartPoint);
+
+            var pathFigure = new PathFigure(startPoint,
+                                            pathSegments,
+                                            false);
+
+            var figures = new PathFigureCollection
+                          {
+                              pathFigure
+                          };
+
+            return figures;
         }
     }
 }

@@ -5,11 +5,11 @@ namespace Selkie.WPF.Common.Interfaces
 {
     public interface INodeIdHelper
     {
-        int NodeToLine(int node);
-        bool IsForwardNode(int node);
-
         [CanBeNull]
         ILine GetLine(int lineId);
+
+        bool IsForwardNode(int node);
+        int NodeToLine(int node);
 
         int Reverse(int nodeId);
     }

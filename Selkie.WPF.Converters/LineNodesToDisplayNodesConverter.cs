@@ -10,6 +10,11 @@ namespace Selkie.WPF.Converters
         : ILineNodeToDisplayLineNodeConverter,
           IDisposable
     {
+        public LineNodesToDisplayNodesConverter(IDisplayNodeFactory factory)
+        {
+            m_Factory = factory;
+        }
+
         internal const double DefaultRadius = 5.0;
         internal const double DefaultStrokeThickness = 1.0;
         internal static readonly SolidColorBrush DefaultFill = Brushes.Gray;
@@ -17,11 +22,6 @@ namespace Selkie.WPF.Converters
         private readonly List <IDisplayNode> m_DisplayNodes = new List <IDisplayNode>();
         private readonly IDisplayNodeFactory m_Factory;
         private IEnumerable <INodeModel> m_NodeModels = new INodeModel[0];
-
-        public LineNodesToDisplayNodesConverter(IDisplayNodeFactory factory)
-        {
-            m_Factory = factory;
-        }
 
         public void Dispose()
         {
@@ -54,16 +54,6 @@ namespace Selkie.WPF.Converters
             LoadDisplayNodes();
         }
 
-        internal void ReleaseDisplayNodes()
-        {
-            foreach ( IDisplayNode displayNode in m_DisplayNodes )
-            {
-                m_Factory.Release(displayNode);
-            }
-
-            m_DisplayNodes.Clear();
-        }
-
         internal void LoadDisplayNodes()
         {
             foreach ( INodeModel nodeModel in NodeModels )
@@ -79,6 +69,16 @@ namespace Selkie.WPF.Converters
 
                 m_DisplayNodes.Add(displayNode);
             }
+        }
+
+        internal void ReleaseDisplayNodes()
+        {
+            foreach ( IDisplayNode displayNode in m_DisplayNodes )
+            {
+                m_Factory.Release(displayNode);
+            }
+
+            m_DisplayNodes.Clear();
         }
     }
 }

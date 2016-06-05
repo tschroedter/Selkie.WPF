@@ -13,11 +13,9 @@ namespace Selkie.WPF.ViewModels.Mapping
         : ViewModel,
           IMapViewModel
     {
-        private readonly IApplicationDispatcher m_Dispatcher;
-
         public MapViewModel([NotNull] ISelkieInMemoryBus bus,
                             [NotNull] IApplicationDispatcher dispatcher,
-                            [NotNull] IMapViewModelMessageHandler[] handlers)
+                            [NotNull] IEnumerable <IMapViewModelMessageHandler> handlers)
         {
             m_Dispatcher = dispatcher;
 
@@ -42,6 +40,7 @@ namespace Selkie.WPF.ViewModels.Mapping
         public IDisplayNode StartNode { get; private set; }
 
         public IDisplayNode EndNode { get; private set; }
+        private readonly IApplicationDispatcher m_Dispatcher;
 
         public void SetshortestPath(IEnumerable <IDisplayLine> shortestPath)
         {

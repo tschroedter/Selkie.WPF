@@ -4,8 +4,8 @@
     {
         bool IsRunning { get; }
         bool IsApplying { get; }
+        void Apply();
         void Start();
         void Stop();
-        void Apply();
     }
 }

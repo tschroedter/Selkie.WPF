@@ -8,7 +8,6 @@ using Selkie.WPF.Common.Interfaces;
 namespace Selkie.WPF.Common
 {
     // todo check latest in IOC/WPF solution
-    //ncrunch: no coverage start
     [ExcludeFromCodeCoverage]
     [ProjectComponent(Lifestyle.Transient)]
     public class ApplicationDispatcher : IApplicationDispatcher
@@ -50,27 +49,29 @@ namespace Selkie.WPF.Common
             }
         }
 
-        private Dispatcher GetDispatcher()
-        {
-            if ( m_Dispatcher == null )
-            {
-                Application application = Application.Current;
-
-                if ( application != null )
-                {
-                    m_Dispatcher = application.Dispatcher;
-                }
-            }
-
-            return m_Dispatcher;
-        }
-
         private void Execute(Action action)
         {
             action();
 
             // todo First!!!!
             // TaskRunner.RunTask(new DispatcherTask(action));
+        }
+
+        private Dispatcher GetDispatcher()
+        {
+            if ( m_Dispatcher != null )
+            {
+                return m_Dispatcher;
+            }
+
+            Application application = Application.Current;
+
+            if ( application != null )
+            {
+                m_Dispatcher = application.Dispatcher;
+            }
+
+            return m_Dispatcher;
         }
     }
 }

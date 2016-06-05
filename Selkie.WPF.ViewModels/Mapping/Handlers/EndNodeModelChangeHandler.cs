@@ -11,10 +11,6 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
     public class EndNodeModelChangeHandler
         : BaseMapViewModelMessageHandler <EndNodeModelChangedMessage>
     {
-        // todo testing
-        private readonly INodeModelToDisplayNodeConverter m_Converter;
-        private readonly IEndNodeModel m_Model;
-
         public EndNodeModelChangeHandler([NotNull] ISelkieLogger logger,
                                          [NotNull] ISelkieInMemoryBus bus,
                                          [NotNull] INodeModelToDisplayNodeConverter converter,
@@ -28,6 +24,10 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
             m_Converter.FillBrush = Brushes.Red;
             m_Converter.StrokeBrush = Brushes.DarkRed;
         }
+
+        // todo testing
+        private readonly INodeModelToDisplayNodeConverter m_Converter;
+        private readonly IEndNodeModel m_Model;
 
         public override void Handle(EndNodeModelChangedMessage message)
         {

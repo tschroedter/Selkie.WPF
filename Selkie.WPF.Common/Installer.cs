@@ -8,7 +8,6 @@ using Selkie.WPF.Common.Interfaces.Converters;
 
 namespace Selkie.WPF.Common
 {
-    //ncrunch: no coverage start
     [ExcludeFromCodeCoverage]
     public class Installer : SelkieInstaller <Installer>
     {
@@ -20,7 +19,7 @@ namespace Selkie.WPF.Common
 
             container.Register(Classes.FromThisAssembly()
                                       .BasedOn <IConverter>()
-                                      .WithServiceFromInterface(typeof ( IConverter ))
+                                      .WithServiceFromInterface(typeof( IConverter ))
                                       .Configure(c => c.LifeStyle.Is(LifestyleType.Transient)));
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using Selkie.Common;
+using Selkie.Common.Interfaces;
 using Selkie.WPF.Models.Interfaces;
 using Selkie.WPF.ViewModels.Interfaces;
 
@@ -11,11 +11,6 @@ namespace Selkie.WPF.ViewModels.TrailHistory.Converters
         : ITrailDetailsToDisplayHistoryRowsConverter,
           IDisposable
     {
-        private readonly IDisposer m_Disposer;
-        private readonly IDisplayHistoryRowFactory m_Factory;
-        private readonly List <IDisplayHistoryRow> m_Rows = new List <IDisplayHistoryRow>();
-        private IEnumerable <ITrailDetails> m_TrailDetails = new List <ITrailDetails>();
-
         public TrailDetailsToDisplayDisplayHistoryRowsConverter([NotNull] IDisposer disposer,
                                                                 [NotNull] IDisplayHistoryRowFactory factory)
         {
@@ -24,6 +19,11 @@ namespace Selkie.WPF.ViewModels.TrailHistory.Converters
 
             m_Disposer.AddResource(ReleaseDisplayHistoryRows);
         }
+
+        private readonly IDisposer m_Disposer;
+        private readonly IDisplayHistoryRowFactory m_Factory;
+        private readonly List <IDisplayHistoryRow> m_Rows = new List <IDisplayHistoryRow>();
+        private IEnumerable <ITrailDetails> m_TrailDetails = new List <ITrailDetails>();
 
         public void Dispose()
         {

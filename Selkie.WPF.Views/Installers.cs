@@ -8,7 +8,6 @@ using Selkie.WPF.Common.Interfaces.Windsor;
 
 namespace Selkie.WPF.Views
 {
-    //ncrunch: no coverage start
     [ExcludeFromCodeCoverage]
     public class Installer : SelkieInstaller <Installer>
     {
@@ -21,7 +20,7 @@ namespace Selkie.WPF.Views
             container.Register(
                                Classes.FromThisAssembly()
                                       .BasedOn <IView>()
-                                      .WithServiceFromInterface(typeof ( IView ))
+                                      .WithServiceFromInterface(typeof( IView ))
                                       .Configure(c => c.LifeStyle.Is(LifestyleType.Transient)));
         }
     }

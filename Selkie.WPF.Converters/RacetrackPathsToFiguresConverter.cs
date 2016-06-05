@@ -9,14 +9,14 @@ namespace Selkie.WPF.Converters
 {
     public class RacetrackPathsToFiguresConverter : IRacetrackPathsToFiguresConverter
     {
-        private readonly IRacetrackPathToFiguresConverter m_Converter;
-        private List <PathFigureCollection> m_Figures = new List <PathFigureCollection>();
-        private IEnumerable <IPath> m_Paths = new IPath[0];
-
         public RacetrackPathsToFiguresConverter([NotNull] IRacetrackPathToFiguresConverter converter)
         {
             m_Converter = converter;
         }
+
+        private readonly IRacetrackPathToFiguresConverter m_Converter;
+        private List <PathFigureCollection> m_Figures = new List <PathFigureCollection>();
+        private IEnumerable <IPath> m_Paths = new IPath[0];
 
         public IEnumerable <PathFigureCollection> Figures
         {

@@ -7,8 +7,8 @@ namespace Selkie.Framework.Interfaces.Aco
         bool IsRunning { get; }
         bool IsColonyCreated { get; }
         bool IsFinished { get; }
+        void CreateColony([NotNull] IColonyParameters colonyParameters);
         bool Start();
         void Stop();
-        void CreateColony([NotNull] IColonyParameters colonyParameters);
     }
 }

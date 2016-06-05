@@ -14,11 +14,6 @@ namespace Selkie.WPF.Models.Mapping
 {
     public class NodesModel : INodesModel
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly ILinesSourceManager m_LinesSourceManager;
-        private readonly ISelkieLogger m_Logger;
-        private readonly List <INodeModel> m_Nodes = new List <INodeModel>();
-
         public NodesModel([NotNull] ISelkieLogger logger,
                           [NotNull] ISelkieInMemoryBus bus,
                           [NotNull] ILinesSourceManager linesSourceManager)
@@ -33,6 +28,11 @@ namespace Selkie.WPF.Models.Mapping
                                                            ColonyLineResponseHandler);
         }
 
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly ILinesSourceManager m_LinesSourceManager;
+        private readonly ISelkieLogger m_Logger;
+        private readonly List <INodeModel> m_Nodes = new List <INodeModel>();
+
         public IEnumerable <INodeModel> Nodes
         {
             get
@@ -46,20 +46,6 @@ namespace Selkie.WPF.Models.Mapping
             m_Logger.Debug("Handling '{0}'...".Inject(message.GetType()));
 
             LoadNodes();
-        }
-
-        internal void LoadNodes()
-        {
-            m_Nodes.Clear();
-
-            foreach ( ILine line in m_LinesSourceManager.Lines )
-            {
-                IEnumerable <INodeModel> models = CreateNodeModels(line);
-
-                m_Nodes.AddRange(models);
-            }
-
-            m_Bus.Publish(new NodesModelChangedMessage());
         }
 
         internal IEnumerable <INodeModel> CreateNodeModels([NotNull] ILine line)
@@ -83,6 +69,20 @@ namespace Selkie.WPF.Models.Mapping
             models.Add(finish);
 
             return models;
+        }
+
+        internal void LoadNodes()
+        {
+            m_Nodes.Clear();
+
+            foreach ( ILine line in m_LinesSourceManager.Lines )
+            {
+                IEnumerable <INodeModel> models = CreateNodeModels(line);
+
+                m_Nodes.AddRange(models);
+            }
+
+            m_Bus.Publish(new NodesModelChangedMessage());
         }
     }
 }

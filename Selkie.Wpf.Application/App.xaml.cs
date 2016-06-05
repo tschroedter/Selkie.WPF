@@ -14,17 +14,12 @@ namespace Selkie.WPF.Application
     [ExcludeFromCodeCoverage]
     public partial class App
     {
-        private static readonly IWindsorContainer Container = new WindsorContainer();
-
         public App()
         {
             ConfigureContainer();
         }
 
-        private void ConfigureContainer()
-        {
-            Container.Install(FromAssembly.This());
-        }
+        private static readonly IWindsorContainer Container = new WindsorContainer();
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -59,6 +54,11 @@ namespace Selkie.WPF.Application
                                  exception);
                 }
             }
+        }
+
+        private void ConfigureContainer()
+        {
+            Container.Install(FromAssembly.This());
         }
 
         private string LogException(ISelkieLogger logger,

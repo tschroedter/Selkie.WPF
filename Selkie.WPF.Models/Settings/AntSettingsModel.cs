@@ -9,9 +9,6 @@ namespace Selkie.WPF.Models.Settings
 {
     public class AntSettingsModel : IAntSettingsModel
     {
-        private readonly IAntSettingsNodesManager m_AntSettingsNodesManager;
-        private readonly ISelkieInMemoryBus m_InMemoryBus;
-
         public AntSettingsModel([NotNull] ISelkieInMemoryBus inMemoryBus,
                                 [NotNull] IAntSettingsNodesManager antSettingsNodesManager)
         {
@@ -32,6 +29,9 @@ namespace Selkie.WPF.Models.Settings
             m_InMemoryBus.PublishAsync(new ColonyLinesRequestMessage());
         }
 
+        private readonly IAntSettingsNodesManager m_AntSettingsNodesManager;
+        private readonly ISelkieInMemoryBus m_InMemoryBus;
+
         public bool IsFixedStartNode { get; private set; }
         public int FixedStartNode { get; private set; }
 
@@ -43,32 +43,8 @@ namespace Selkie.WPF.Models.Settings
             }
         }
 
-        internal void ColonyAntSettingsResponseHandler(ColonyAntSettingsResponseMessage message)
+        internal void AntSettingsModelRequestHandler(AntSettingsModelRequestMessage message)
         {
-            IsFixedStartNode = message.IsFixedStartNode;
-            FixedStartNode = message.FixedStartNode;
-
-            SendAntSettingsModelChangedMessage();
-        }
-
-        private void SendAntSettingsModelChangedMessage()
-        {
-            var forward = new AntSettingsModelChangedMessage(IsFixedStartNode,
-                                                             FixedStartNode,
-                                                             Nodes);
-
-            m_InMemoryBus.PublishAsync(forward);
-        }
-
-        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
-        {
-            CreateNodesForCurrentLines();
-        }
-
-        private void CreateNodesForCurrentLines()
-        {
-            m_AntSettingsNodesManager.CreateNodesForCurrentLines();
-
             SendAntSettingsModelChangedMessage();
         }
 
@@ -83,9 +59,33 @@ namespace Selkie.WPF.Models.Settings
             m_InMemoryBus.PublishAsync(forward);
         }
 
-        internal void AntSettingsModelRequestHandler(AntSettingsModelRequestMessage message)
+        internal void ColonyAntSettingsResponseHandler(ColonyAntSettingsResponseMessage message)
         {
+            IsFixedStartNode = message.IsFixedStartNode;
+            FixedStartNode = message.FixedStartNode;
+
             SendAntSettingsModelChangedMessage();
+        }
+
+        internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
+        {
+            CreateNodesForCurrentLines();
+        }
+
+        private void CreateNodesForCurrentLines()
+        {
+            m_AntSettingsNodesManager.CreateNodesForCurrentLines();
+
+            SendAntSettingsModelChangedMessage();
+        }
+
+        private void SendAntSettingsModelChangedMessage()
+        {
+            var forward = new AntSettingsModelChangedMessage(IsFixedStartNode,
+                                                             FixedStartNode,
+                                                             Nodes);
+
+            m_InMemoryBus.PublishAsync(forward);
         }
     }
 }

@@ -8,15 +8,15 @@ namespace Selkie.WPF.Common.Converters
 {
     public class LineToWindowPointsConverter : ILineToWindowPointsConverter
     {
-        private readonly IGeometryPointToWindowsPointConverter m_Converter;
-        private ILine m_Line = Geometry.Shapes.Line.Unknown;
-        private Constants.LineDirection m_LineDirection = Constants.LineDirection.Forward;
-        private IEnumerable <Point> m_Points = new List <Point>();
-
         public LineToWindowPointsConverter(IGeometryPointToWindowsPointConverter converter)
         {
             m_Converter = converter;
         }
+
+        private readonly IGeometryPointToWindowsPointConverter m_Converter;
+        private ILine m_Line = Geometry.Shapes.Line.Unknown;
+        private Constants.LineDirection m_LineDirection = Constants.LineDirection.Forward;
+        private IEnumerable <Point> m_Points = new List <Point>();
 
         public ILine Line
         {
@@ -56,6 +56,27 @@ namespace Selkie.WPF.Common.Converters
                                            m_LineDirection);
         }
 
+        internal IEnumerable <Point> ConvertPoints(Geometry.Shapes.Point startPoint,
+                                                   Geometry.Shapes.Point endPoint)
+        {
+            var points = new List <Point>();
+
+            m_Converter.GeometryPoint = startPoint;
+            m_Converter.Convert();
+
+            Point pointStart = m_Converter.Point;
+
+            m_Converter.GeometryPoint = endPoint;
+            m_Converter.Convert();
+
+            Point pointEnd = m_Converter.Point;
+
+            points.Add(pointStart);
+            points.Add(pointEnd);
+
+            return points;
+        }
+
         internal IEnumerable <Point> CreatePointsForLine(ILine line,
                                                          Constants.LineDirection direction)
         {
@@ -75,27 +96,6 @@ namespace Selkie.WPF.Common.Converters
 
                 points.AddRange(reversePoints);
             }
-
-            return points;
-        }
-
-        internal IEnumerable <Point> ConvertPoints(Geometry.Shapes.Point startPoint,
-                                                   Geometry.Shapes.Point endPoint)
-        {
-            var points = new List <Point>();
-
-            m_Converter.GeometryPoint = startPoint;
-            m_Converter.Convert();
-
-            Point pointStart = m_Converter.Point;
-
-            m_Converter.GeometryPoint = endPoint;
-            m_Converter.Convert();
-
-            Point pointEnd = m_Converter.Point;
-
-            points.Add(pointStart);
-            points.Add(pointEnd);
 
             return points;
         }

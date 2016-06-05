@@ -6,9 +6,6 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Transient)]
     public class AntSettingsSource : IAntSettingsSource
     {
-        private readonly int m_FixedStartNode;
-        private readonly bool m_IsFixedStartNode;
-
         public AntSettingsSource(bool isFixedStartNode,
                                  int fixedStartNode)
 
@@ -16,6 +13,9 @@ namespace Selkie.Framework
             m_IsFixedStartNode = isFixedStartNode;
             m_FixedStartNode = fixedStartNode;
         }
+
+        private readonly int m_FixedStartNode;
+        private readonly bool m_IsFixedStartNode;
 
         public bool IsFixedStartNode
         {

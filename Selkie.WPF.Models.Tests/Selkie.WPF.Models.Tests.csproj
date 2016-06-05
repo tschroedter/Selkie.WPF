@@ -54,8 +54,8 @@
       <HintPath>..\packages\EasyNetQ.Management.Client.0.47.12.38\lib\net40\EasyNetQ.Management.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=10.1.4.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -66,40 +66,52 @@
       <HintPath>..\packages\NLog.4.1.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute, Version=1.8.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute, Version=1.10.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture, Version=3.46.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.3.46.0\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoNSubstitute, Version=3.46.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.AutoNSubstitute.3.46.0\lib\net40\Ploeh.AutoFixture.AutoNSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.NUnit3, Version=3.46.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.NUnit3.3.46.0\lib\net40\Ploeh.AutoFixture.NUnit3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RabbitMQ.Client, Version=3.5.4.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Aop, Version=0.6.31.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Aop.0.6.31.0\lib\net45\Selkie.Aop.dll</HintPath>
+    <Reference Include="Selkie.Aop, Version=0.6.45.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Aop.0.6.45.0\lib\net45\Selkie.Aop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Common, Version=0.6.232.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Common.0.6.232.0\lib\net45\Selkie.Common.dll</HintPath>
+    <Reference Include="Selkie.Common, Version=0.6.254.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Common.0.6.254\lib\net45\Selkie.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.EasyNetQ, Version=0.6.220.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.EasyNetQ.0.6.220.0\lib\net45\Selkie.EasyNetQ.dll</HintPath>
+    <Reference Include="Selkie.EasyNetQ, Version=0.6.246.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.EasyNetQ.0.6.246\lib\net45\Selkie.EasyNetQ.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Geometry, Version=0.6.141.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Geometry.0.6.141.0\lib\net45\Selkie.Geometry.dll</HintPath>
+    <Reference Include="Selkie.Geometry, Version=0.6.170.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Geometry.0.6.170.0\lib\net45\Selkie.Geometry.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.NUnit.Extensions, Version=0.6.113.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.NUnit.Extensions.0.6.113.0\lib\net45\Selkie.NUnit.Extensions.dll</HintPath>
+    <Reference Include="Selkie.NUnit.Extensions, Version=0.6.142.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.NUnit.Extensions.0.6.142\lib\net45\Selkie.NUnit.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Windsor, Version=0.6.257.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Windsor.0.6.257.0\lib\net45\Selkie.Windsor.dll</HintPath>
+    <Reference Include="Selkie.Windsor, Version=0.6.261.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Windsor.0.6.261\lib\net45\Selkie.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -111,29 +123,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Control\NUnit\ControlModelTests.cs" />
-    <Compile Include="Handlers\NUnit\ExceptionThrownHandlerTests.cs" />
-    <Compile Include="Handlers\NUnit\ExceptionThrownMessageToStringConverterTests.cs" />
-    <Compile Include="Mapping\NUnit\BaseNodeModelTests.cs" />
-    <Compile Include="Mapping\NUnit\EndNodeModelTests.cs" />
-    <Compile Include="Mapping\NUnit\LinesModelTests.cs" />
-    <Compile Include="Mapping\NUnit\NodeModelTests.cs" />
-    <Compile Include="Mapping\NUnit\NodesModelTests.cs" />
-    <Compile Include="Mapping\NUnit\RacetrackModelTests.cs" />
-    <Compile Include="Mapping\NUnit\ShortestPathDirectionModelTests.cs" />
-    <Compile Include="Mapping\NUnit\ShortestPathModelTests.cs" />
-    <Compile Include="Mapping\NUnit\StartNodeModelTests.cs" />
-    <Compile Include="Pheromones\NUnit\PheromonesModelTests.cs" />
+    <Compile Include="Control\ControlModelTests.cs" />
+    <Compile Include="Handlers\ExceptionThrownHandlerTests.cs" />
+    <Compile Include="Handlers\ExceptionThrownMessageToStringConverterTests.cs" />
+    <Compile Include="Mapping\BaseNodeModelTests.cs" />
+    <Compile Include="Mapping\EndNodeModelTests.cs" />
+    <Compile Include="Mapping\LinesModelTests.cs" />
+    <Compile Include="Mapping\NodeModelCreatorTests.cs" />
+    <Compile Include="Mapping\NodeModelTests.cs" />
+    <Compile Include="Mapping\NodesModelTests.cs" />
+    <Compile Include="Mapping\RacetrackModelTests.cs" />
+    <Compile Include="Mapping\ShortestPathDirectionModelTests.cs" />
+    <Compile Include="Mapping\ShortestPathModelTests.cs" />
+    <Compile Include="Mapping\StartNodeModelTests.cs" />
+    <Compile Include="Pheromones\PheromonesModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\NUnit\AntSettingsModelTests.cs" />
-    <Compile Include="Settings\NUnit\AntSettingsNodesManagerTests.cs" />
-    <Compile Include="Settings\NUnit\AntSettingsNodeTests.cs" />
-    <Compile Include="Settings\NUnit\LinesToNodesConverterTests.cs" />
-    <Compile Include="Settings\NUnit\RacetrackSettingsModelTests.cs" />
-    <Compile Include="Status\NUnit\ExceptionThrownModelTests.cs" />
-    <Compile Include="Status\NUnit\StatusModelTests.cs" />
-    <Compile Include="TrailHistory\NUnit\TrailDetailsTests.cs" />
-    <Compile Include="TrailHistory\NUnit\TrailHistoryModelTests.cs" />
+    <Compile Include="Settings\AntSettingsModelTests.cs" />
+    <Compile Include="Settings\AntSettingsNodesManagerTests.cs" />
+    <Compile Include="Settings\AntSettingsNodeTests.cs" />
+    <Compile Include="Settings\LinesToNodesConverterTests.cs" />
+    <Compile Include="Settings\RacetrackSettingsModelTests.cs" />
+    <Compile Include="Status\ExceptionThrownModelTests.cs" />
+    <Compile Include="Status\StatusModelTests.cs" />
+    <Compile Include="TrailHistory\TrailDetailsTests.cs" />
+    <Compile Include="TrailHistory\TrailHistoryModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Selkie.Framework.Common.Tests\Selkie.Framework.Common.Tests.csproj">

@@ -16,22 +16,6 @@ namespace Selkie.WPF.ViewModels.Settings
         : ViewModel,
           IRacetrackSettingsViewModel
     {
-        public enum PossibleTurns
-        {
-            Port,
-            StarPort,
-            Both
-        }
-
-        internal const int PeriodInMs = 500;
-        internal const int DueTimeInMs = 1000;
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly ICommandManager m_CommandManager;
-        private readonly IApplicationDispatcher m_Dispatcher;
-        private ICommand m_ApplyCommand;
-        private double m_TurnRadiusForPort;
-        private double m_TurnRadiusForStarboard;
-
         public RacetrackSettingsViewModel([NotNull] ISelkieLogger logger,
                                           [NotNull] ISelkieInMemoryBus bus,
                                           [NotNull] IApplicationDispatcher dispatcher,
@@ -58,6 +42,16 @@ namespace Selkie.WPF.ViewModels.Settings
 
             bus.PublishAsync(new RacetrackSettingsRequestMessage());
         }
+
+        public enum PossibleTurns
+        {
+            Port,
+            StarPort,
+            Both
+        }
+
+        internal const int PeriodInMs = 500;
+        internal const int DueTimeInMs = 1000;
 
         public double TurnRadiusForPort
         {
@@ -95,6 +89,13 @@ namespace Selkie.WPF.ViewModels.Settings
             }
         }
 
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly ICommandManager m_CommandManager;
+        private readonly IApplicationDispatcher m_Dispatcher;
+        private ICommand m_ApplyCommand;
+        private double m_TurnRadiusForPort;
+        private double m_TurnRadiusForStarboard;
+
         public bool IsPortTurnAllowed { get; set; }
         public bool IsStarboardTurnAllowed { get; set; }
         public bool IsApplying { get; private set; }
@@ -107,11 +108,6 @@ namespace Selkie.WPF.ViewModels.Settings
                                                                                 Apply,
                                                                                 ApplyCommandCanExecute) );
             }
-        }
-
-        internal bool ApplyCommandCanExecute()
-        {
-            return !IsApplying;
         }
 
         internal void Apply()
@@ -133,6 +129,11 @@ namespace Selkie.WPF.ViewModels.Settings
             NotifyPropertyChanged("IsApplyEnabled");
         }
 
+        internal bool ApplyCommandCanExecute()
+        {
+            return !IsApplying;
+        }
+
         internal PossibleTurns DetermineAllowedTurns(bool isPortTurnAllowed,
                                                      bool isStarPortTurnAllowed)
         {
@@ -141,31 +142,14 @@ namespace Selkie.WPF.ViewModels.Settings
                 return PossibleTurns.Both;
             }
 
-            if ( isPortTurnAllowed )
-            {
-                return PossibleTurns.Port;
-            }
-
-            return PossibleTurns.StarPort;
+            return isPortTurnAllowed
+                       ? PossibleTurns.Port
+                       : PossibleTurns.StarPort;
         }
 
         internal void RacetrackSettingsResponseHandler(RacetrackSettingsResponseMessage message)
         {
             m_Dispatcher.BeginInvoke(() => UpdateAndNotify(message));
-        }
-
-        private void UpdateAndNotify(RacetrackSettingsResponseMessage message)
-        {
-            Update(message.TurnRadiusForPort,
-                   message.TurnRadiusForStarboard,
-                   message.IsPortTurnAllowed,
-                   message.IsStarboardTurnAllowed);
-
-            IsApplying = false;
-
-            NotifyPropertyChanged("IsApplyEnabled");
-
-            m_CommandManager.InvalidateRequerySuggested();
         }
 
         internal void Update(double turnRadiusForPort,
@@ -201,6 +185,20 @@ namespace Selkie.WPF.ViewModels.Settings
                 default:
                     throw new ArgumentException("Unknown PossibleTurns! - {0}".Inject(AllowedTurns));
             }
+        }
+
+        private void UpdateAndNotify(RacetrackSettingsResponseMessage message)
+        {
+            Update(message.TurnRadiusForPort,
+                   message.TurnRadiusForStarboard,
+                   message.IsPortTurnAllowed,
+                   message.IsStarboardTurnAllowed);
+
+            IsApplying = false;
+
+            NotifyPropertyChanged("IsApplyEnabled");
+
+            m_CommandManager.InvalidateRequerySuggested();
         }
     }
 }

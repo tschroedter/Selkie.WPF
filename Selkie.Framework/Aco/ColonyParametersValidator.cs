@@ -17,14 +17,14 @@ namespace Selkie.Framework.Aco
                 throw new ArgumentException("Cost Matrix is not set!");
             }
 
-            if ( colonyParameters.CostPerLine.Length == 0 )
+            if ( colonyParameters.CostPerFeature.Length == 0 )
             {
-                throw new ArgumentException("CostPerLine array is not set!");
+                throw new ArgumentException("CostPerFeature array is not set!");
             }
 
-            if ( colonyParameters.CostPerLine.Length != colonyParameters.CostMatrix.Length )
+            if ( colonyParameters.CostPerFeature.Length != colonyParameters.CostMatrix.Length )
             {
-                throw new ArgumentException("CostMatrix and CostPerLine do not match!");
+                throw new ArgumentException("CostMatrix and CostPerFeature do not match!");
             }
 
             if ( colonyParameters.FixedStartNode < 0 )
@@ -33,14 +33,15 @@ namespace Selkie.Framework.Aco
                     "FixedStartNode '{0}' is less than zero!".Inject(colonyParameters.FixedStartNode));
             }
 
-            if ( colonyParameters.FixedStartNode > colonyParameters.CostPerLine.Length - 1 )
+            if ( colonyParameters.FixedStartNode > colonyParameters.CostPerFeature.Length - 1 )
             {
                 throw new ArgumentException(
                     "FixedStartNode '{0}' is greater than maximum line index '{1}'!".Inject(
                                                                                             colonyParameters
                                                                                                 .FixedStartNode,
-                                                                                            colonyParameters.CostPerLine
-                                                                                                            .Length - 1));
+                                                                                            colonyParameters
+                                                                                                .CostPerFeature
+                                                                                                .Length - 1));
             }
         }
     }

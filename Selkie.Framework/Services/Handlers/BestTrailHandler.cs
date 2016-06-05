@@ -8,16 +8,16 @@ using Selkie.Windsor;
 
 namespace Selkie.Framework.Services.Handlers
 {
-    [Interceptor(typeof ( StatusAspect ))]
+    [Interceptor(typeof( StatusAspect ))]
     [ProjectComponent(Lifestyle.Startable)]
     public class BestTrailHandler : SelkieMessageHandlerAsync <BestTrailMessage>
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-
         public BestTrailHandler([NotNull] ISelkieInMemoryBus bus)
         {
             m_Bus = bus;
         }
+
+        private readonly ISelkieInMemoryBus m_Bus;
 
         [Status("Colony found a new best trail!")]
         public override void Handle(BestTrailMessage message)

@@ -11,15 +11,14 @@ namespace Selkie.WPF.ViewModels
     [ProjectComponent(Lifestyle.Singleton)]
     public sealed class MainViewModel : IMainViewModel
     {
-        private readonly ICommandManager m_CommandManager;
-        private ICommand m_ClosingCommand;
-
         public MainViewModel(ICommandManager commandManager)
         {
             m_CommandManager = commandManager;
         }
 
         public IMainView ParentView { get; set; }
+        private readonly ICommandManager m_CommandManager;
+        private ICommand m_ClosingCommand;
 
         public ICommand ClosingCommand
         {
@@ -31,7 +30,6 @@ namespace Selkie.WPF.ViewModels
             }
         }
 
-        //ncrunch: no coverage start
         [ExcludeFromCodeCoverage]
         public void ShutDown()
         {
@@ -39,20 +37,15 @@ namespace Selkie.WPF.ViewModels
             Environment.Exit(0);
         }
 
-        //ncrunch: no coverage end
+        internal bool ClosingCommandCanExecute()
+        {
+            return true;
+        }
 
-        //ncrunch: no coverage start
         [ExcludeFromCodeCoverage]
         private void ClosingExecute()
         {
             ShutDown();
-        }
-
-        //ncrunch: no coverage end
-
-        internal bool ClosingCommandCanExecute()
-        {
-            return true;
         }
     }
 }

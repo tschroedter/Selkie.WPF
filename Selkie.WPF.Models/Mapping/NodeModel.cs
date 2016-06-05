@@ -5,6 +5,17 @@ namespace Selkie.WPF.Models.Mapping
 {
     public class NodeModel : INodeModel
     {
+        public NodeModel(int id,
+                         double x,
+                         double y,
+                         Angle directionAngle)
+        {
+            m_Id = id;
+            m_X = x;
+            m_Y = y;
+            m_DirectionAngle = directionAngle;
+        }
+
         internal const int UnknownId = -1;
 
         internal static INodeModel Unknown = new NodeModel(UnknownId,
@@ -16,17 +27,6 @@ namespace Selkie.WPF.Models.Mapping
         private readonly int m_Id;
         private readonly double m_X;
         private readonly double m_Y;
-
-        public NodeModel(int id,
-                         double x,
-                         double y,
-                         Angle directionAngle)
-        {
-            m_Id = id;
-            m_X = x;
-            m_Y = y;
-            m_DirectionAngle = directionAngle;
-        }
 
         public int Id
         {

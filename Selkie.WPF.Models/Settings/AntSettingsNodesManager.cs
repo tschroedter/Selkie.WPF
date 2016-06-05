@@ -9,10 +9,6 @@ namespace Selkie.WPF.Models.Settings
     [ProjectComponent(Lifestyle.Transient)]
     public class AntSettingsNodesManager : IAntSettingsNodesManager
     {
-        private readonly IAntSettingsNodeFactory m_AntSettingsNodeFactory;
-        private readonly ILinesSourceManager m_LinesSourceManager;
-        private readonly ILinesToNodesConverter m_LinesToNodesConverter;
-
         public AntSettingsNodesManager([NotNull] IAntSettingsNodeFactory antSettingsNodeFactory,
                                        [NotNull] ILinesSourceManager linesSourceManager,
                                        [NotNull] ILinesToNodesConverter linesToNodesConverter)
@@ -23,6 +19,10 @@ namespace Selkie.WPF.Models.Settings
 
             Nodes = new IAntSettingsNode[0];
         }
+
+        private readonly IAntSettingsNodeFactory m_AntSettingsNodeFactory;
+        private readonly ILinesSourceManager m_LinesSourceManager;
+        private readonly ILinesToNodesConverter m_LinesToNodesConverter;
 
         [NotNull]
         public IEnumerable <IAntSettingsNode> Nodes { get; private set; }

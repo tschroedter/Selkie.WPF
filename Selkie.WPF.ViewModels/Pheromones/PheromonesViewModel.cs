@@ -15,18 +15,6 @@ namespace Selkie.WPF.ViewModels.Pheromones
         : ViewModel,
           IPheromonesViewModel
     {
-        private readonly IBitmapSourceConverter m_BitmapSourceConverter;
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly IApplicationDispatcher m_Dispatcher;
-        private readonly IGrayscaleConverter m_GrayscaleConverter;
-        private readonly IPheromonesModel m_Model;
-        private readonly object m_Padlock = new object();
-        private string m_Average = string.Empty;
-        private ImageSource m_ImageSource = new BitmapImage();
-        private bool m_IsShowPheromones;
-        private string m_Maximum = string.Empty;
-        private string m_Minimum = string.Empty;
-
         public PheromonesViewModel([NotNull] ISelkieInMemoryBus bus,
                                    [NotNull] IApplicationDispatcher dispatcher,
                                    [NotNull] IPheromonesModel model,
@@ -52,6 +40,18 @@ namespace Selkie.WPF.ViewModels.Pheromones
                 return m_ImageSource;
             }
         }
+
+        private readonly IBitmapSourceConverter m_BitmapSourceConverter;
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly IApplicationDispatcher m_Dispatcher;
+        private readonly IGrayscaleConverter m_GrayscaleConverter;
+        private readonly IPheromonesModel m_Model;
+        private readonly object m_Padlock = new object();
+        private string m_Average = string.Empty;
+        private ImageSource m_ImageSource = new BitmapImage();
+        private bool m_IsShowPheromones;
+        private string m_Maximum = string.Empty;
+        private string m_Minimum = string.Empty;
 
         public string Minimum
         {
@@ -94,6 +94,20 @@ namespace Selkie.WPF.ViewModels.Pheromones
             }
         }
 
+        internal void GenerateImageSource()
+        {
+            lock ( m_Padlock )
+            {
+                m_GrayscaleConverter.Minimum = m_Model.Minimum;
+                m_GrayscaleConverter.Maximum = m_Model.Maximum;
+                m_GrayscaleConverter.Pheromones = m_Model.Values;
+                m_GrayscaleConverter.Convert();
+
+                m_BitmapSourceConverter.Data = m_GrayscaleConverter.Grayscale;
+                m_BitmapSourceConverter.Convert();
+            }
+        }
+
         internal void PheromonesHandler(PheromonesModelChangedMessage message)
         {
             GenerateImageSource();
@@ -111,20 +125,6 @@ namespace Selkie.WPF.ViewModels.Pheromones
             m_ImageSource = m_BitmapSourceConverter.ImageSource;
 
             NotifyPropertyChanged("");
-        }
-
-        internal void GenerateImageSource()
-        {
-            lock ( m_Padlock )
-            {
-                m_GrayscaleConverter.Minimum = m_Model.Minimum;
-                m_GrayscaleConverter.Maximum = m_Model.Maximum;
-                m_GrayscaleConverter.Pheromones = m_Model.Values;
-                m_GrayscaleConverter.Convert();
-
-                m_BitmapSourceConverter.Data = m_GrayscaleConverter.Grayscale;
-                m_BitmapSourceConverter.Convert();
-            }
         }
     }
 }

@@ -11,9 +11,6 @@ namespace Selkie.WPF.Models.Control
 {
     public class ControlModel : IControlModel
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly ISelkieLogger m_Logger;
-
         public ControlModel([NotNull] ISelkieLogger logger,
                             [NotNull] ISelkieInMemoryBus bus)
         {
@@ -55,6 +52,8 @@ namespace Selkie.WPF.Models.Control
         public string SelectedTestLine { get; private set; }
         public bool IsFinished { get; private set; }
         public IEnumerable <string> TestLineTypes { get; private set; }
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly ISelkieLogger m_Logger;
         public bool IsApplying { get; private set; }
 
         public void Start()
@@ -95,8 +94,51 @@ namespace Selkie.WPF.Models.Control
 
         public bool IsRunning { get; private set; }
 
+        internal void ColonyAvailableTestLinesResponseHandler(ColonyAvailableTestLinesResponseMessage message)
+        {
+            TestLineTypes = message.Types;
+
+            m_Bus.PublishAsync(new ControlModelTestLinesResponseMessage
+                               {
+                                   TestLineTypes = message.Types
+                               });
+        }
+
+        internal void ColonyFinishedHandler(ColonyFinishedMessage message)
+        {
+            IsRunning = false;
+            IsFinished = true;
+            IsApplying = false;
+
+            SendChangedMessage(IsRunning,
+                               IsFinished,
+                               IsApplying);
+        }
+
         internal void ColonyLinesResponsedHandler(ColonyLinesResponseMessage message)
         {
+            IsApplying = false;
+
+            SendChangedMessage(IsRunning,
+                               IsFinished,
+                               IsApplying);
+        }
+
+        internal void ColonyStartedHandler(ColonyStartedMessage message)
+        {
+            IsRunning = true;
+            IsFinished = false;
+            IsApplying = false;
+
+            SendChangedMessage(IsRunning,
+                               IsFinished,
+                               IsApplying);
+        }
+
+        internal void ColonyStoppedHandler(ColonyStoppedMessage message)
+        {
+            IsRunning = false;
+            IsFinished = false;
             IsApplying = false;
 
             SendChangedMessage(IsRunning,
@@ -123,17 +165,6 @@ namespace Selkie.WPF.Models.Control
             m_Bus.PublishAsync(new ColonyAvailabeTestLinesRequestMessage());
         }
 
-        internal void ColonyFinishedHandler(ColonyFinishedMessage message)
-        {
-            IsRunning = false;
-            IsFinished = true;
-            IsApplying = false;
-
-            SendChangedMessage(IsRunning,
-                               IsFinished,
-                               IsApplying);
-        }
-
         private void SendChangedMessage(bool isRunning,
                                         bool isFinished,
                                         bool isApplying)
@@ -147,38 +178,6 @@ namespace Selkie.WPF.Models.Control
 
             m_Logger.Info("IsRunning: {0} IsFinished: {1}".Inject(isRunning,
                                                                   isFinished));
-        }
-
-        internal void ColonyStartedHandler(ColonyStartedMessage message)
-        {
-            IsRunning = true;
-            IsFinished = false;
-            IsApplying = false;
-
-            SendChangedMessage(IsRunning,
-                               IsFinished,
-                               IsApplying);
-        }
-
-        internal void ColonyStoppedHandler(ColonyStoppedMessage message)
-        {
-            IsRunning = false;
-            IsFinished = false;
-            IsApplying = false;
-
-            SendChangedMessage(IsRunning,
-                               IsFinished,
-                               IsApplying);
-        }
-
-        internal void ColonyAvailableTestLinesResponseHandler(ColonyAvailableTestLinesResponseMessage message)
-        {
-            TestLineTypes = message.Types;
-
-            m_Bus.PublishAsync(new ControlModelTestLinesResponseMessage
-                               {
-                                   TestLineTypes = message.Types
-                               });
         }
     }
 }

@@ -11,12 +11,6 @@ namespace Selkie.WPF.Common
     [ProjectComponent(Lifestyle.Transient)]
     public class DisplayLine : IDisplayLine
     {
-        private readonly double m_DirectionAngle;
-        private readonly Point m_EndPoint;
-        private readonly int m_Id;
-        private readonly string m_Name;
-        private readonly Point m_StartPoint;
-
         public DisplayLine(ILineToWindowPointsConverter converter,
                            ILine line)
         {
@@ -41,6 +35,12 @@ namespace Selkie.WPF.Common
 
             m_Name = "Line " + m_Id + position;
         }
+
+        private readonly double m_DirectionAngle;
+        private readonly Point m_EndPoint;
+        private readonly int m_Id;
+        private readonly string m_Name;
+        private readonly Point m_StartPoint;
 
         internal double CalculateAngle(Point startPoint,
                                        Point endPoint,

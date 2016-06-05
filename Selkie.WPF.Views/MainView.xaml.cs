@@ -13,8 +13,6 @@ namespace Selkie.WPF.Views
 {
     public partial class MainView : IMainView
     {
-        private readonly IMainViewModel m_MainViewModel;
-
         public MainView([NotNull] ISelkieLogger logger,
                         [NotNull] IMainViewModel mainViewModel,
                         [NotNull] IViewFactory viewFactory,
@@ -60,15 +58,11 @@ namespace Selkie.WPF.Views
             }
         }
 
+        private readonly IMainViewModel m_MainViewModel;
+
         public object GetContent()
         {
             return Content;
-        }
-
-        private void MainView_Closing(object sender,
-                                      CancelEventArgs e)
-        {
-            m_MainViewModel.ShutDown();
         }
 
         private string LogException(ISelkieLogger logger,
@@ -86,6 +80,12 @@ namespace Selkie.WPF.Views
             }
 
             return message;
+        }
+
+        private void MainView_Closing(object sender,
+                                      CancelEventArgs e)
+        {
+            m_MainViewModel.ShutDown();
         }
     }
 }

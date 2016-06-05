@@ -10,9 +10,6 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
     public class StartNodeModelChangeHandler
         : BaseMapViewModelMessageHandler <StartNodeModelChangedMessage>
     {
-        private readonly INodeModelToDisplayNodeConverter m_Converter;
-        private readonly IStartNodeModel m_Model;
-
         public StartNodeModelChangeHandler([NotNull] ISelkieLogger logger,
                                            [NotNull] ISelkieInMemoryBus bus,
                                            [NotNull] INodeModelToDisplayNodeConverter converter,
@@ -23,6 +20,9 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
             m_Converter = converter;
             m_Model = model;
         }
+
+        private readonly INodeModelToDisplayNodeConverter m_Converter;
+        private readonly IStartNodeModel m_Model;
 
         public override void Handle(StartNodeModelChangedMessage message)
         {

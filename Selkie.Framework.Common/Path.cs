@@ -10,13 +10,6 @@ namespace Selkie.Framework.Common
 {
     public class Path : IPath
     {
-        public static readonly IPath Unknown = new Path(Point.Unknown);
-
-        private readonly IPolyline m_Polyline = new Polyline(0,
-                                                             Constants.LineDirection.Forward);
-
-        private readonly Point m_StartPoint;
-
         public Path([NotNull] Point startPoint) // todo check who is using it
         {
             m_StartPoint = startPoint;
@@ -40,6 +33,13 @@ namespace Selkie.Framework.Common
             Add(line);
             Add(endArcSegment);
         }
+
+        public static readonly IPath Unknown = new Path(Point.Unknown);
+
+        private readonly IPolyline m_Polyline = new Polyline(0,
+                                                             Constants.LineDirection.Forward);
+
+        private readonly Point m_StartPoint;
 
         public override string ToString()
         {

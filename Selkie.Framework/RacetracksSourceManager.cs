@@ -14,12 +14,6 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Singleton)]
     public class RacetracksSourceManager : IRacetracksSourceManager
     {
-        private readonly ISelkieBus m_Bus;
-        private readonly IRacetracksDtoToRacetracksConverter m_Converter;
-        private readonly ISelkieLogger m_Logger;
-        private readonly object m_Padlock = new object();
-        private IRacetracks m_Racetracks = RacetracksSource.Unknown;
-
         public RacetracksSourceManager([NotNull] ISelkieLogger logger,
                                        [NotNull] ISelkieBus bus,
                                        [NotNull] IRacetracksDtoToRacetracksConverter converter)
@@ -38,6 +32,12 @@ namespace Selkie.Framework
 
             m_Bus.PublishAsync(new RacetracksGetMessage()); // todo rename message to ...Request...
         }
+
+        private readonly ISelkieBus m_Bus;
+        private readonly IRacetracksDtoToRacetracksConverter m_Converter;
+        private readonly ISelkieLogger m_Logger;
+        private readonly object m_Padlock = new object();
+        private IRacetracks m_Racetracks = RacetracksSource.Unknown;
 
         public IRacetracks Racetracks
         {

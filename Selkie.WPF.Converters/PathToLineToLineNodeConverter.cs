@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Selkie.Common;
+using Selkie.Common.Interfaces;
 using Selkie.Geometry.Shapes;
 using Selkie.WPF.Converters.Interfaces;
 
@@ -14,15 +15,6 @@ namespace Selkie.WPF.Converters
         : IPathToLineToLineNodeConverter,
           IDisposable
     {
-        private readonly IConverterFactory m_ConverterFactory;
-        private readonly IDisposer m_Disposer;
-        private readonly INodeIndexHelper m_NodeIndexHelper;
-        private List <ILineToLineNodeConverter> m_Nodes = new List <ILineToLineNodeConverter>();
-
-        private IEnumerable <int> m_Path = new int[]
-                                           {
-                                           };
-
         public PathToLineToLineNodeConverter([NotNull] IDisposer disposer,
                                              [NotNull] IConverterFactory converterFactory,
                                              [NotNull] INodeIndexHelper nodeIndexHelper)
@@ -33,6 +25,15 @@ namespace Selkie.WPF.Converters
 
             m_Disposer.AddResource(ReleaseConverters);
         }
+
+        private readonly IConverterFactory m_ConverterFactory;
+        private readonly IDisposer m_Disposer;
+        private readonly INodeIndexHelper m_NodeIndexHelper;
+        private List <ILineToLineNodeConverter> m_Nodes = new List <ILineToLineNodeConverter>();
+
+        private IEnumerable <int> m_Path = new int[]
+                                           {
+                                           };
 
         public void Dispose()
         {
@@ -79,16 +80,6 @@ namespace Selkie.WPF.Converters
             }
         }
 
-        internal void ReleaseConverters()
-        {
-            foreach ( ILineToLineNodeConverter converter in m_Nodes )
-            {
-                m_ConverterFactory.Release(converter);
-            }
-
-            m_Nodes.Clear();
-        }
-
         internal ILineToLineNodeConverter CreateLineToLineNode(int fromIndex,
                                                                int toIndex)
         {
@@ -109,6 +100,16 @@ namespace Selkie.WPF.Converters
             node.Convert();
 
             return node;
+        }
+
+        internal void ReleaseConverters()
+        {
+            foreach ( ILineToLineNodeConverter converter in m_Nodes )
+            {
+                m_ConverterFactory.Release(converter);
+            }
+
+            m_Nodes.Clear();
         }
     }
 }

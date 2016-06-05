@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Selkie.WPF.Common.Converters
 {
-    [ValueConversion(typeof ( bool ), typeof ( bool ))]
+    [ValueConversion(typeof( bool ), typeof( bool ))]
     public class InverseBooleanConverter : IValueConverter
     {
         public object Convert(object value,
@@ -12,7 +12,7 @@ namespace Selkie.WPF.Common.Converters
                               object parameter,
                               CultureInfo culture)
         {
-            if ( targetType != typeof ( bool ) )
+            if ( targetType != typeof( bool ) )
             {
                 throw new InvalidOperationException("The target must be a boolean");
             }
@@ -25,7 +25,7 @@ namespace Selkie.WPF.Common.Converters
                                   object parameter,
                                   CultureInfo culture)
         {
-            if ( targetType != typeof ( bool ) )
+            if ( targetType != typeof( bool ) )
             {
                 throw new InvalidOperationException("The target must be a boolean");
             }

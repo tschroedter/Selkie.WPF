@@ -17,24 +17,13 @@ namespace Selkie.WPF.Converters
         private ILine m_To = Line.Unknown;
         private Constants.LineDirection m_ToDirection = Constants.LineDirection.Forward;
 
-        internal void Convert(ILine from,
-                              Constants.LineDirection fromDirection,
-                              ILine to,
-                              Constants.LineDirection toDirection)
+        public override string ToString()
         {
-            Cost = CalculateCost(from,
-                                 fromDirection,
-                                 to,
-                                 toDirection);
+            string text = From.Id + " (" + FromDirection + ")" +
+                          " - " +
+                          To.Id + " (" + ToDirection + ")";
 
-            var converter = new LinesToTransferPointsConverter(from,
-                                                               fromDirection,
-                                                               to,
-                                                               toDirection);
-
-            converter.Convert();
-
-            m_Points = converter.Points;
+            return text;
         }
 
         internal double CalculateCost(ILine from,
@@ -71,13 +60,24 @@ namespace Selkie.WPF.Converters
             return length;
         }
 
-        public override string ToString()
+        internal void Convert(ILine from,
+                              Constants.LineDirection fromDirection,
+                              ILine to,
+                              Constants.LineDirection toDirection)
         {
-            string text = From.Id + " (" + FromDirection + ")" +
-                          " - " +
-                          To.Id + " (" + ToDirection + ")";
+            Cost = CalculateCost(from,
+                                 fromDirection,
+                                 to,
+                                 toDirection);
 
-            return text;
+            var converter = new LinesToTransferPointsConverter(from,
+                                                               fromDirection,
+                                                               to,
+                                                               toDirection);
+
+            converter.Convert();
+
+            m_Points = converter.Points;
         }
 
         #region ILineToLineNodeConverter Members
@@ -184,11 +184,7 @@ namespace Selkie.WPF.Converters
             {
                 return true;
             }
-            if ( obj.GetType() != typeof ( LineToLineNodeConverter ) )
-            {
-                return false;
-            }
-            return Equals(( LineToLineNodeConverter ) obj);
+            return obj.GetType() == typeof( LineToLineNodeConverter ) && Equals(( LineToLineNodeConverter ) obj);
         }
 
         public override int GetHashCode()

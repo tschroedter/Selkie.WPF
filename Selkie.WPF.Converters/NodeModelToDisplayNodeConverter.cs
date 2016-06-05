@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 using JetBrains.Annotations;
-using Selkie.Common;
+using Selkie.Common.Interfaces;
 using Selkie.WPF.Common.Interfaces;
 using Selkie.WPF.Converters.Interfaces;
 
@@ -11,6 +11,13 @@ namespace Selkie.WPF.Converters
         : INodeModelToDisplayNodeConverter,
           IDisposable
     {
+        public NodeModelToDisplayNodeConverter([NotNull] IDisposer disposer,
+                                               [NotNull] IDisplayNodeFactory factory)
+        {
+            m_Disposer = disposer;
+            m_Factory = factory;
+        }
+
         internal const double DefaultRadius = 7.0;
         internal const double DefaultStrokeThickness = 1.0;
         internal static readonly SolidColorBrush DefaultFill = Brushes.Green;
@@ -20,13 +27,6 @@ namespace Selkie.WPF.Converters
         private IDisplayNode m_DisplayNode = Common.DisplayNode.Unknown;
         private SolidColorBrush m_FillBrush = DefaultFill;
         private SolidColorBrush m_StrokeBrush = DefaultStroke;
-
-        public NodeModelToDisplayNodeConverter([NotNull] IDisposer disposer,
-                                               [NotNull] IDisplayNodeFactory factory)
-        {
-            m_Disposer = disposer;
-            m_Factory = factory;
-        }
 
         public void Dispose()
         {

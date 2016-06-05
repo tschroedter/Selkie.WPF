@@ -39,7 +39,7 @@ namespace Selkie.WPF.Application.Windsor
 
             if ( model.CustomComponentActivator == null )
             {
-                model.CustomComponentActivator = typeof ( WpfWindowActivator );
+                model.CustomComponentActivator = typeof( WpfWindowActivator );
             }
         }
     }

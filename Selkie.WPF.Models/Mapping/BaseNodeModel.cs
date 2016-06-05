@@ -3,23 +3,18 @@ using System.Linq;
 using JetBrains.Annotations;
 using Selkie.EasyNetQ;
 using Selkie.Framework.Common.Messages;
-using Selkie.Geometry.Primitives;
-using Selkie.Geometry.Shapes;
 using Selkie.WPF.Common.Interfaces;
+using Selkie.WPF.Models.Interfaces.Mapping;
 
 namespace Selkie.WPF.Models.Mapping
 {
     public abstract class BaseNodeModel
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-        private readonly INodeIdHelper m_NodeIdHelper;
-        private INodeModel m_NodeModel = NodeModel.Unknown;
-
         protected BaseNodeModel([NotNull] ISelkieInMemoryBus bus,
-                                [NotNull] INodeIdHelper nodeIdHelper)
+                                [NotNull] INodeModelCreator nodeModelCreator)
         {
             m_Bus = bus;
-            m_NodeIdHelper = nodeIdHelper;
+            m_NodeModelCreator = nodeModelCreator;
 
             m_Bus.SubscribeAsync <ColonyBestTrailMessage>(GetType().ToString(),
                                                           ColonyBestTrailHandler);
@@ -48,18 +43,25 @@ namespace Selkie.WPF.Models.Mapping
         {
             get
             {
-                return m_NodeIdHelper;
+                return m_NodeModelCreator.Helper;
             }
+        }
+
+        private readonly ISelkieInMemoryBus m_Bus;
+        private readonly INodeModelCreator m_NodeModelCreator;
+        private INodeModel m_NodeModel = NodeModel.Unknown;
+
+        public abstract int DetermineNodeId(IEnumerable <int> trail);
+        public abstract void SendMessage();
+
+        internal void ColonyBestTrailHandler(ColonyBestTrailMessage message)
+        {
+            Update(message.Trail);
         }
 
         internal void ColonyLineResponsedHandler(ColonyLineResponseMessage message)
         {
             Update(new int[0]);
-        }
-
-        internal void ColonyBestTrailHandler(ColonyBestTrailMessage message)
-        {
-            Update(message.Trail);
         }
 
         internal void Update(IEnumerable <int> trail)
@@ -73,46 +75,13 @@ namespace Selkie.WPF.Models.Mapping
             else
             {
                 int nodeId = DetermineNodeId(enumerable);
-                int lineId = m_NodeIdHelper.NodeToLine(nodeId);
+                int lineId = Helper.NodeToLine(nodeId);
 
-                m_NodeModel = CreateNodeModel(lineId,
-                                              nodeId);
+                m_NodeModel = m_NodeModelCreator.CreateNodeModel(lineId,
+                                                                 nodeId);
             }
 
             SendMessage();
-        }
-
-        public abstract int DetermineNodeId(IEnumerable <int> trail);
-        public abstract void SendMessage();
-
-        internal INodeModel CreateNodeModel(int lineId,
-                                            int nodeId)
-        {
-            INodeModel nodeModel = NodeModel.Unknown;
-
-            ILine line = m_NodeIdHelper.GetLine(lineId);
-
-            if ( line != null )
-            {
-                bool isForwardNode = m_NodeIdHelper.IsForwardNode(nodeId);
-
-                double x = isForwardNode
-                               ? line.X1
-                               : line.X2;
-                double y = isForwardNode
-                               ? line.Y1
-                               : line.Y2;
-                Angle angle = isForwardNode
-                                  ? line.AngleToXAxis
-                                  : line.AngleToXAxis + Angle.For180Degrees;
-
-                nodeModel = new NodeModel(nodeId,
-                                          x,
-                                          y,
-                                          angle);
-            }
-
-            return nodeModel;
         }
     }
 }

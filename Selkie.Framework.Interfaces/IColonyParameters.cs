@@ -8,7 +8,7 @@ namespace Selkie.Framework.Interfaces
         int[][] CostMatrix { get; set; }
 
         [NotNull]
-        int[] CostPerLine { get; set; }
+        int[] CostPerFeature { get; set; }
 
         bool IsFixedStartNode { get; set; }
         int FixedStartNode { get; set; }

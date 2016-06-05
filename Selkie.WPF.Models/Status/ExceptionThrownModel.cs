@@ -8,8 +8,6 @@ namespace Selkie.WPF.Models.Status
 {
     public class ExceptionThrownModel : IExceptionThrownModel
     {
-        private readonly ISelkieInMemoryBus m_Bus;
-
         public ExceptionThrownModel([NotNull] ISelkieInMemoryBus bus)
         {
             m_Bus = bus;
@@ -27,6 +25,8 @@ namespace Selkie.WPF.Models.Status
 
         [NotNull]
         public string LastError { get; set; }
+
+        private readonly ISelkieInMemoryBus m_Bus;
 
         internal void ClearExceptionThrownHandler(ExceptionThrownClearErrorMessage obj)
         {

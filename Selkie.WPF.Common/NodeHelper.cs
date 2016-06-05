@@ -10,12 +10,12 @@ namespace Selkie.WPF.Common
     [ProjectComponent(Lifestyle.Transient)]
     public sealed class NodeIdHelper : INodeIdHelper
     {
-        private readonly ILinesSourceManager m_LinesSourceManager;
-
         public NodeIdHelper(ILinesSourceManager linesSourceManager)
         {
             m_LinesSourceManager = linesSourceManager;
         }
+
+        private readonly ILinesSourceManager m_LinesSourceManager;
 
         public int NodeToLine(int node)
         {
@@ -30,19 +30,17 @@ namespace Selkie.WPF.Common
 
         public bool IsForwardNode(int node)
         {
-            if ( node == 0 )
+            switch ( node )
             {
-                return true;
+                case 0:
+                    return true;
+                case 1:
+                    return false;
+                default:
+                    int condition = node % 2;
+
+                    return condition == 0;
             }
-
-            if ( node == 1 )
-            {
-                return false;
-            }
-
-            int condition = node % 2;
-
-            return condition == 0;
         }
 
         public ILine GetLine(int lineId)

@@ -9,14 +9,14 @@ namespace Selkie.Framework.Converters
     [ProjectComponent(Lifestyle.Transient)]
     public class RacetracksDtoToRacetracksConverter : IRacetracksDtoToRacetracksConverter
     {
-        private readonly IPathDtoToPath m_PathDtoToPath;
-
         public RacetracksDtoToRacetracksConverter(IPathDtoToPath pathDtoToPath)
         {
             m_PathDtoToPath = pathDtoToPath;
             Dto = CreateUnknownRacetracksDto();
             Racetracks = Framework.Racetracks.Unknown;
         }
+
+        private readonly IPathDtoToPath m_PathDtoToPath;
 
         public RacetracksDto Dto { get; set; }
         public IRacetracks Racetracks { get; private set; }
@@ -37,16 +37,12 @@ namespace Selkie.Framework.Converters
                          };
         }
 
-        private static RacetracksDto CreateUnknownRacetracksDto()
+        internal IPath ConvertPathDto([NotNull] PathDto pathDto)
         {
-            return new RacetracksDto
-                   {
-                       ForwardToForward = new PathDto[0][],
-                       ForwardToReverse = new PathDto[0][],
-                       ReverseToForward = new PathDto[0][],
-                       ReverseToReverse = new PathDto[0][],
-                       IsUnknown = true
-                   };
+            m_PathDtoToPath.Dto = pathDto;
+            m_PathDtoToPath.Convert();
+
+            return m_PathDtoToPath.Path;
         }
 
         internal IPath[][] ConvertPathDtos(PathDto[][] pathDtos)
@@ -62,12 +58,16 @@ namespace Selkie.Framework.Converters
             return paths;
         }
 
-        internal IPath ConvertPathDto([NotNull] PathDto pathDto)
+        private static RacetracksDto CreateUnknownRacetracksDto()
         {
-            m_PathDtoToPath.Dto = pathDto;
-            m_PathDtoToPath.Convert();
-
-            return m_PathDtoToPath.Path;
+            return new RacetracksDto
+                   {
+                       ForwardToForward = new PathDto[0][],
+                       ForwardToReverse = new PathDto[0][],
+                       ReverseToForward = new PathDto[0][],
+                       ReverseToReverse = new PathDto[0][],
+                       IsUnknown = true
+                   };
         }
     }
 }

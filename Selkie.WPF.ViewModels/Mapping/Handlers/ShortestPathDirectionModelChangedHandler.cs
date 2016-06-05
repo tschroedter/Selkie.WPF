@@ -10,9 +10,6 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
     public class ShortestPathDirectionModelChangedHandler
         : BaseMapViewModelMessageHandler <ShortestPathDirectionModelChangedMessage>
     {
-        private readonly INodesToDisplayNodesConverter m_Converter;
-        private readonly IShortestPathDirectionModel m_Model;
-
         public ShortestPathDirectionModelChangedHandler([NotNull] ISelkieLogger logger,
                                                         [NotNull] ISelkieInMemoryBus bus,
                                                         [NotNull] INodesToDisplayNodesConverter converter,
@@ -23,6 +20,9 @@ namespace Selkie.WPF.ViewModels.Mapping.Handlers
             m_Converter = converter;
             m_Model = model;
         }
+
+        private readonly INodesToDisplayNodesConverter m_Converter;
+        private readonly IShortestPathDirectionModel m_Model;
 
         public override void Handle(ShortestPathDirectionModelChangedMessage message)
         {

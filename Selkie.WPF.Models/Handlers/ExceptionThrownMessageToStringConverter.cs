@@ -19,6 +19,17 @@ namespace Selkie.WPF.Models.Handlers
             return text;
         }
 
+        private static string ExceptionInformationToString([NotNull] ExceptionInformation information)
+        {
+            var builder = new StringBuilder();
+
+            builder.AppendLine("Invocation: {0}".Inject(information.Invocation));
+            builder.AppendLine("Message: {0}".Inject(information.Message));
+            builder.AppendLine("StackTrace: {0}".Inject(information.StackTrace));
+
+            return builder.ToString();
+        }
+
         private static string InnerException(ExceptionInformation[] informationArray)
         {
             if ( informationArray == null )
@@ -35,17 +46,6 @@ namespace Selkie.WPF.Models.Handlers
             }
 
             return innerExceptions;
-        }
-
-        private static string ExceptionInformationToString([NotNull] ExceptionInformation information)
-        {
-            var builder = new StringBuilder();
-
-            builder.AppendLine("Invocation: {0}".Inject(information.Invocation));
-            builder.AppendLine("Message: {0}".Inject(information.Message));
-            builder.AppendLine("StackTrace: {0}".Inject(information.StackTrace));
-
-            return builder.ToString();
         }
     }
 }

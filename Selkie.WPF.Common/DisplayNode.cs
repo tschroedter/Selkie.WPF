@@ -9,23 +9,6 @@ namespace Selkie.WPF.Common
     [ProjectComponent(Lifestyle.Transient)]
     public class DisplayNode : IDisplayNode
     {
-        public const int UnknownId = -1;
-        internal const double DefaultRadius = 5.0;
-        internal const double DefaultStrokeThickness = 1.0;
-        public static IDisplayNode Unknown = new DisplayNode();
-        internal static readonly SolidColorBrush DefaultFill = Brushes.DodgerBlue;
-        internal static readonly SolidColorBrush DefaultStroke = Brushes.Black;
-        private readonly Point m_CentrePoint;
-        private readonly double m_DirectionAngle;
-        private readonly SolidColorBrush m_FillValue;
-        private readonly int m_Id;
-        private readonly string m_Name;
-        private readonly Point m_OriginalCentrePoint;
-        private readonly Point m_Point;
-        private readonly double m_Radius;
-        private readonly double m_StrokeThicknessValue;
-        private readonly SolidColorBrush m_StrokeValue;
-
         private DisplayNode()
         {
             m_Id = UnknownId;
@@ -57,6 +40,23 @@ namespace Selkie.WPF.Common
                                 m_CentrePoint.Y - m_Radius);
             m_Name = "Node " + m_Id;
         }
+
+        public const int UnknownId = -1;
+        internal const double DefaultRadius = 5.0;
+        internal const double DefaultStrokeThickness = 1.0;
+        public static IDisplayNode Unknown = new DisplayNode();
+        internal static readonly SolidColorBrush DefaultFill = Brushes.DodgerBlue;
+        internal static readonly SolidColorBrush DefaultStroke = Brushes.Black;
+        private readonly Point m_CentrePoint;
+        private readonly double m_DirectionAngle;
+        private readonly SolidColorBrush m_FillValue;
+        private readonly int m_Id;
+        private readonly string m_Name;
+        private readonly Point m_OriginalCentrePoint;
+        private readonly Point m_Point;
+        private readonly double m_Radius;
+        private readonly double m_StrokeThicknessValue;
+        private readonly SolidColorBrush m_StrokeValue;
 
         public int Id
         {

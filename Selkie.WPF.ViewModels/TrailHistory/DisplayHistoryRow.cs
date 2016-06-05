@@ -8,17 +8,6 @@ namespace Selkie.WPF.ViewModels.TrailHistory
     [ProjectComponent(Lifestyle.Transient)]
     public class DisplayHistoryRow : IDisplayHistoryRow
     {
-        private readonly double m_Alpha;
-        private readonly double m_Beta;
-        private readonly double m_Gamma;
-        private readonly int m_Interation;
-        private readonly double m_Length;
-        private readonly double m_LengthDelta;
-        private readonly double m_LengthDeltaInPercent;
-        private readonly IEnumerable <int> m_Trail;
-        private readonly string m_TrailRaw;
-        private readonly string m_Type;
-
         public DisplayHistoryRow(int interation,
                                  IEnumerable <int> trail,
                                  double length,
@@ -40,6 +29,17 @@ namespace Selkie.WPF.ViewModels.TrailHistory
             m_Gamma = gamma;
             m_Type = type;
         }
+
+        private readonly double m_Alpha;
+        private readonly double m_Beta;
+        private readonly double m_Gamma;
+        private readonly int m_Interation;
+        private readonly double m_Length;
+        private readonly double m_LengthDelta;
+        private readonly double m_LengthDeltaInPercent;
+        private readonly IEnumerable <int> m_Trail;
+        private readonly string m_TrailRaw;
+        private readonly string m_Type;
 
         public double LengthDelta
         {

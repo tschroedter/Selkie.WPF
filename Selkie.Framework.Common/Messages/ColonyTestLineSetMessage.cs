@@ -6,8 +6,6 @@ namespace Selkie.Framework.Common.Messages
     [ExcludeFromCodeCoverage]
     public class ColonyTestLineSetMessage
     {
-        private string m_Type = string.Empty;
-
         [NotNull]
         public string Type
         {
@@ -20,5 +18,7 @@ namespace Selkie.Framework.Common.Messages
                 m_Type = value;
             }
         }
+
+        private string m_Type = string.Empty;
     }
 }

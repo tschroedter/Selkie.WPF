@@ -9,11 +9,6 @@ namespace Selkie.Framework
     [ProjectComponent(Lifestyle.Singleton)]
     public class AntSettingsSourceManager : IAntSettingsSourceManager
     {
-        private const bool UseRandomStartNode = false;
-        private const int FixedStartNodeZero = 0;
-        private readonly ISelkieBus m_Bus;
-        private readonly IAntSettingsSourceFactory m_Factory;
-
         public AntSettingsSourceManager([NotNull] ISelkieInMemoryBus bus,
                                         [NotNull] IAntSettingsSourceFactory factory)
         {
@@ -37,29 +32,23 @@ namespace Selkie.Framework
             SendResponseMessage();
         }
 
+        private const bool UseRandomStartNode = false;
+        private const int FixedStartNodeZero = 0;
+        private readonly ISelkieBus m_Bus;
+        private readonly IAntSettingsSourceFactory m_Factory;
+
         public IAntSettingsSource Source { get; private set; }
+
+        internal void ColonyAntSettingsRequestHandler(ColonyAntSettingsRequestMessage message)
+        {
+            SendResponseMessage();
+        }
 
         internal void ColonyAntSettingsSetHandler(ColonyAntSettingsSetMessage message)
         {
             UpdateSource(message.IsFixedStartNode,
                          message.FixedStartNode);
 
-            SendResponseMessage();
-        }
-
-        private void UpdateSource(bool isFixedStartNode,
-                                  int fixedStartNode)
-        {
-            IAntSettingsSource oldSource = Source;
-
-            Source = m_Factory.Create(isFixedStartNode,
-                                      fixedStartNode);
-
-            m_Factory.Release(oldSource);
-        }
-
-        internal void ColonyAntSettingsRequestHandler(ColonyAntSettingsRequestMessage message)
-        {
             SendResponseMessage();
         }
 
@@ -80,6 +69,17 @@ namespace Selkie.Framework
                         };
 
             m_Bus.PublishAsync(reply);
+        }
+
+        private void UpdateSource(bool isFixedStartNode,
+                                  int fixedStartNode)
+        {
+            IAntSettingsSource oldSource = Source;
+
+            Source = m_Factory.Create(isFixedStartNode,
+                                      fixedStartNode);
+
+            m_Factory.Release(oldSource);
         }
     }
 }
