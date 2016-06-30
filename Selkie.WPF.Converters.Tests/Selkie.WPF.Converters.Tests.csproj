@@ -58,6 +58,10 @@
       <HintPath>..\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NLog, Version=4.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.1.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
@@ -87,24 +91,56 @@
       <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Common, Version=0.6.254.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Common.0.6.254\lib\net45\Selkie.Common.dll</HintPath>
+    <Reference Include="Selkie.Aop, Version=0.7.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Aop.0.7.17\lib\net45\Selkie.Aop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.EasyNetQ, Version=0.6.246.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.EasyNetQ.0.6.246\lib\net45\Selkie.EasyNetQ.dll</HintPath>
+    <Reference Include="Selkie.Common, Version=0.7.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Common.0.7.26\lib\net45\Selkie.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Geometry, Version=0.6.170.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Geometry.0.6.170.0\lib\net45\Selkie.Geometry.dll</HintPath>
+    <Reference Include="Selkie.EasyNetQ, Version=0.7.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.EasyNetQ.0.7.8\lib\net45\Selkie.EasyNetQ.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Framework, Version=0.7.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Framework.0.7.24\lib\net45\Selkie.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Framework.Common, Version=0.7.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Framework.0.7.24\lib\net45\Selkie.Framework.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Framework.Interfaces, Version=0.7.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Framework.0.7.24\lib\net45\Selkie.Framework.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Geometry, Version=0.7.41.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Geometry.0.7.41.0\lib\net45\Selkie.Geometry.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Selkie.NUnit.Extensions, Version=0.6.142.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Selkie.NUnit.Extensions.0.6.142\lib\net45\Selkie.NUnit.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Selkie.Windsor, Version=0.6.261.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selkie.Windsor.0.6.261\lib\net45\Selkie.Windsor.dll</HintPath>
+    <Reference Include="Selkie.Services.Aco.Common, Version=0.7.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Aco.Common.0.7.12.0\lib\net45\Selkie.Services.Aco.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Services.Common.Dto, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Common.Dto.0.7.4\lib\net45\Selkie.Services.Common.Dto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Services.Lines.Common, Version=0.7.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Lines.Common.0.7.11.0\lib\net45\Selkie.Services.Lines.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Services.Racetracks.Common, Version=0.7.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Services.Racetracks.Common.0.7.9.0\lib\net45\Selkie.Services.Racetracks.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selkie.Windsor, Version=0.7.39.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selkie.Windsor.0.7.39\lib\net45\Selkie.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -141,14 +177,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Selkie.Framework.Common\Selkie.Framework.Common.csproj">
-      <Project>{8268B7DA-E3F9-4383-B9AB-BA426DB83161}</Project>
-      <Name>Selkie.Framework.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Selkie.Framework.Interfaces\Selkie.Framework.Interfaces.csproj">
-      <Project>{3617609c-cb6a-4bf7-881f-d428b6eef2d4}</Project>
-      <Name>Selkie.Framework.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Selkie.WPF.Common.Interfaces\Selkie.WPF.Common.Interfaces.csproj">
       <Project>{A9DAE5C9-8C6D-4028-AC4C-0A48763EC527}</Project>
       <Name>Selkie.WPF.Common.Interfaces</Name>
